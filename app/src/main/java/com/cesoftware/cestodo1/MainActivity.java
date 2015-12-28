@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
 		SugarContext.init(this);
-//datos();
+datos();
 		cargarLista();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
@@ -73,8 +73,7 @@ public class MainActivity extends AppCompatActivity
 	//______________________________________________________________________________________________
 	private void cargarLista()
 	{
-		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		ArrayList<Objeto> lista = Objeto.conectarHijos(it);
+		ArrayList<Objeto> lista = Objeto.conectarHijos(Objeto.findAll(Objeto.class));
 		ActEdit.setLista(lista);
 		//Objeto[] ao = new Objeto[lista.size()];lista.toArray(ao);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));

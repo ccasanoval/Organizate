@@ -46,9 +46,9 @@ public class ActEdit extends AppCompatActivity
 	private static final String SEP = "::";
 
 	private static ArrayList<Objeto> _lista;
-	public static void setLista(ArrayList<Objeto> lista){_lista = lista;}
+		public static void setLista(ArrayList<Objeto> lista){_lista = lista;}
 	private static MainActivity _act;
-	public static void setParentAct(MainActivity act){_act = act;}
+		public static void setParentAct(MainActivity act){_act = act;}
 
 	//______________________________________________________________________________________________
 	private String		_popUpContents[];
@@ -61,6 +61,7 @@ public class ActEdit extends AppCompatActivity
 	private boolean _isNuevo=false;
 	private long _idPadre = TOP_NODE;
 	private Objeto _o;
+	private int _iO=-1;
 	private EditText _txtNombre;
 	private EditText _txtDescripcion;
 	private RatingBar _rbPrioridad;
@@ -83,6 +84,7 @@ public class ActEdit extends AppCompatActivity
 		_txtDescripcion = (EditText)findViewById(R.id.txtDescripcion);
 		_rbPrioridad = (RatingBar)findViewById(R.id.rbPrioridad);
 
+		_rbPrioridad.setNumStars(5);
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
 		ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
 
@@ -149,8 +151,8 @@ public class ActEdit extends AppCompatActivity
 		}
 
 		List<String> lst = new ArrayList<>();
-		lst.add("*TOP NODE*"+SEP+TOP_NODE);
-		for(Objeto o : _lista)
+		lst.add(getResources().getString(R.string.nodo_padre) +SEP+TOP_NODE);
+		for(Objeto o : Objeto.filtroN(_lista, Objeto.NIVEL1))
 		{
 			lst.add(PADRE + o.getNombre() + SEP + o.getId());
 			if(o.getHijos().length > 0)
@@ -197,19 +199,19 @@ public class ActEdit extends AppCompatActivity
     }
 
 	//____________________________________________________________________________________________________________________________________________________
+
 	//______________________________________________________________________________________________
 	private void setValoresNuevo()
 	{
 		_isNuevo = true;
 		_o = new Objeto();
 		_btnEliminar.setVisibility(View.INVISIBLE);
-		_rbPrioridad.setNumStars(5);
 System.err.println("-----------------" + _o.getId());
 	}
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("-----------------"+_o);
+System.err.println("-----------------" + _o);
 		_isNuevo = false;
 		_txtNombre.setText(_o.getNombre());
 		_txtDescripcion.setText(_o.getDescripcion());
@@ -231,7 +233,6 @@ System.err.println("-----------------"+_o);
 	// DB SAVE
 	private void saveValores()
 	{
-		_lista.add(_o);
 		_o.setNombre(_txtNombre.getText().toString());
 		_o.setDescripcion(_txtDescripcion.getText().toString());
 		_o.setPrioridad((int) _rbPrioridad.getRating());
@@ -243,38 +244,25 @@ Objeto.printLista(_lista);
 		_o.setModificado(new Date());
 		if(_isNuevo)
 		{
-			if(_o.getPadre() == null)
-			{
-				_lista.add(_o);
-			}
+			if(_o.getPadre() == null)_lista.add(_o);
 			_o.setCreacion(new Date());
 		}
 		else
 		{
-		}
+			_lista.set(_lista.indexOf(_o), _o);
+			/*for(Objeto o : _lista)
+				if(o.getId().equals(_o.getId()))
+					_lista.set();*/
 
+		}
+//TODO:Cuando cambia padre deja el hijo en el antiguo padre TAMBIEN
 System.err.println("O-----------" + _o);
 
 		//BBDD---------------------------------------------------------
 		//TODO: borrar y salvar solo lo necesario : mejora?
 		clearDataBase();
-		for(int i=0; i < _lista.size(); i++)//for(Objeto o : _lista)
-		{
-			Objeto o = _lista.get(i);
-			o.save();
-			if(o.equals(_o))
-			{
-				_lista.set(i, _o);		//_lista.remove(i);			_lista.add(i, _o);
-			}
-			System.err.println("---" + o.toString());
-		}
+		for(Objeto o : _lista)o.save();
 
-		/*if(oPadreCambioOri != oPadreCambioDes)
-		{
-			if(oPadreCambioOri != null)oPadreCambioOri.save();
-			if(oPadreCambioDes != null)oPadreCambioDes.save();
-		}
-		_o.save();*/
 		_act.refrescarLista(_lista);
 		ActEdit.this.finish();
 	}

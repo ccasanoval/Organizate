@@ -36,7 +36,7 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
         _topExpList = topExpList;
 		_inflater = LayoutInflater.from(context);
 
-		ArrayList<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);
+		ArrayList<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);//TODO: aclarar tema de niveles....que nivel de lista en que lugar?
         _lista = nivel1;
 		_listViewCache = new CesExpandableListView[nivel1.size()];
 		NivelDosListAdapter.setLista(nivel1);
@@ -202,7 +202,7 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("objeto", _lista.get(groupPosition));
+				intent.putExtra("objeto", _lista.get(groupPosition));//TODO: pasar solo el id del objeto o la posicion dentro de la lista global. Hacer servicio que almacene lista global
     			_context.startActivity(intent);
 			}
 		});
@@ -231,7 +231,7 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 					rowCtr[2] += ao[j].getHijos().length;
 			}
 		}
-System.err.println("calculateRowCount---------------------" + level1 + " / " + level2view + "------------" + rowCtr[0]+":"+rowCtr[1]+":"+rowCtr[2] + "::::" + (level2view != null ? level2view.getCount() : 0));
+//System.err.println("calculateRowCount---------------------" + level1 + " / " + level2view + "------------" + rowCtr[0]+":"+rowCtr[1]+":"+rowCtr[2] + "::::" + (level2view != null ? level2view.getCount() : 0));
 		return rowCtr;
     }
 }

@@ -22,11 +22,11 @@ public class Objeto extends SugarRecord implements Parcelable
 	public static final int NIVEL2 = 2;
 	public static final int NIVEL3 = 3;
 
-	private Long _idUsr = new Long(0);
+	private Long _idUsr = Long.valueOf(0);
 	private Date _dtCreacion = new Date();
 	private Date _dtModificado = new Date();
 	private Date _dtLimite = new Date();
-	private Integer _iPrioridad = new Integer(0);
+	private Integer _iPrioridad = Integer.valueOf(0);
 	private String _sNombre = "";
 	private String _sDescripcion = "";
 	private Objeto _padre = null;
@@ -39,7 +39,7 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	@Override
-	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos+"}";}
+	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos+"}";}
 	public static void printLista(ArrayList<Objeto> lista){for(Objeto o : lista)System.out.println(o);}
 
 	//______________________________________________________________________________________________
@@ -76,13 +76,17 @@ public class Objeto extends SugarRecord implements Parcelable
 	{
 		boolean isEliminado = false;
 		int len = _hijos.length;
+System.err.println("\n"+this+"********************************"+len + " ::: "+hijo);
 		if(len < 1)return;
 		Objeto[] hijos = new Objeto[len-1];
-		for(int i=0; i < len; i++)
+		for(int i=0, j=0; i < len; i++)
 			if(_hijos[i].equals(hijo))
+			{
 				isEliminado = true;
+				System.err.println(this+"------------delHijo"+hijo);
+			}
 			else
-				hijos[i] = _hijos[i];
+				hijos[j++] = _hijos[i];
 		if(isEliminado)
 			_hijos = hijos;
 	}
@@ -235,7 +239,7 @@ public class Objeto extends SugarRecord implements Parcelable
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
-	static class Iterador implements Iterable<Objeto>
+/*	static class Iterador implements Iterable<Objeto>
 	{
 		private ArrayList<Objeto> _lista;
 		public Iterador(ArrayList<Objeto> lista, boolean bPadres)

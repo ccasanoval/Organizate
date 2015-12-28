@@ -1,0 +1,20 @@
+<resources>
+	<string name="app_name">Organízate</string>
+
+	<string name="editar">Editar</string>
+	<string name="eliminar">Eliminar</string>
+	<string name="nuevo">Añadir</string>
+
+	<string name="nombre">Nombre</string>
+	<string name="descripcion">Descripción</string>
+	<string name="nodo_padre">*Nodo Padre*</string>
+	<string name="prioridad">Prioridad</string>
+	<string name="fec_creado">Creado</string>
+	<string name="fec_modificado">Modificado</string>
+	<string name="fec_limite">Límite</string>
+
+	<string name="usuario">Usuario</string>
+	<string name="clave">Clave</string>
+
+	<string name="seguro_eliminar">¿Seguro que desea eliminar?</string>
+</resources>

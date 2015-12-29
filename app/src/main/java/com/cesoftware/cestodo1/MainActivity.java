@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
 		SugarContext.init(this);
-datos();
+datosTEST();
 		cargarLista();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
@@ -82,14 +82,32 @@ datos();
 	public void refrescarLista(ArrayList<Objeto> lista)
 	{
 		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada?????
+		lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 		_expListView.refreshDrawableState();
 	}
+	//______________________________________________________________________________________________
+	public void selectObjeto(Objeto o)
+	{
+		if(o.getNivel() == Objeto.NIVEL1)
+		{
+			for()
+			_expListView.setSelectedGroup();
+		}
+		else if(o.getNivel() == Objeto.NIVEL2)
+		{
+		}
+		else
+		{
+		}
+
+		//_expListView.setSelectedChild(groupPosition, childPosition, true);
+	}
 
 
-//______________________________________________________________________________________________
-	private static void datos()
+
+	//______________________________________________________________________________________________
+	private static void datosTEST()
 	{
 		int i=0;
 		Objeto[] lista = new Objeto[13];
@@ -97,56 +115,60 @@ datos();
 
 		Objeto.deleteAll(Objeto.class);
 
-		o0 = new Objeto("VIDA SANA", null);
-			o1 = new Objeto("Dormir más", o0);
+		o0 = new Objeto("HEALTH", null);
+			o1 = new Objeto("SLEEP WELL", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("No pierdas tiempo", o1);
+				o2 = new Objeto("Don't loose time No TV", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Despues de cena a dormir o leer!", o1);
+				o2 = new Objeto("After diner go bed", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Calcula horas de sueño y planifica", o1);
+				o2 = new Objeto("Count & Plan sleep hours", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("No duermas demasiado de mas para compensar", o1);
+				o2 = new Objeto("Don't waste daytime 4 recover", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("bbb", o0);
+			o1 = new Objeto("EXERCISE", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("444------55555", o1);
+				o2 = new Objeto("GYM 2-3 times a week", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("555------66666", o1);
+				o2 = new Objeto("Home weights once", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("ccc", o0);
+			o1 = new Objeto("EAT WELL", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("66666---12667", o1);
+				o2 = new Objeto("Fresh Vegs & Fruit", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("7777", o1);
+				o2 = new Objeto("No shitty food!", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("zzz", o0);
+				o2 = new Objeto("Protein shakes", o1);
+				o1.addHijo(o2);
+			o1 = new Objeto("METRO", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("444------55555", o1);
+				o2 = new Objeto("Care 4ur clothes", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("555------66666", o1);
+				o2 = new Objeto("Care 4ur skin", o1);
 				o1.addHijo(o2);
 		lista[i++]=o0;
 
-		o0 = new Objeto("DINERO", null);
+		o0 = new Objeto("WEALTH", null);
 			o1 = new Objeto("RENT T HOUSE", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("555", o1);
+				o2 = new Objeto("Change Sofa", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("666", o1);
+				o2 = new Objeto("Clean terrace", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("777", o1);
+				o2 = new Objeto("Sell bike parts", o1);
 				o1.addHijo(o2);
 			o1 = new Objeto("DONT SPEND WITHOUT NEED", o0);
 			o0.addHijo(o1);
+				o2 = new Objeto("Don't abuse AliExpress", o1);
+				o1.addHijo(o2);
 		lista[i++]=o0;
 
-		o0 = new Objeto("TIEMPO", null);
-			o1 = new Objeto("dddd", o0);
+		o0 = new Objeto("TIME", null);
+			o1 = new Objeto("PLAN ACTIVITIES", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("666", o1);
+				o2 = new Objeto("Day, Week, Month schedules", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("eeeee", o0);
+			o1 = new Objeto("MULTITASKING", o0);
 			o0.addHijo(o1);
 		lista[i++]=o0;
 		o0 = new Objeto("CUATRO", null);

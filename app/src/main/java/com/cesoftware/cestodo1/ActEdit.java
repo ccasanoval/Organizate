@@ -1,6 +1,5 @@
 package com.cesoftware.cestodo1;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -61,7 +60,6 @@ public class ActEdit extends AppCompatActivity
 	private boolean _isNuevo=false;
 	private long _idPadre = TOP_NODE;
 	private Objeto _o;
-	private int _iO=-1;
 	private EditText _txtNombre;
 	private EditText _txtDescripcion;
 	private RatingBar _rbPrioridad;
@@ -255,19 +253,13 @@ Objeto.printLista(_lista);
 					_lista.set();*/
 
 		}
-//TODO:Cuando cambia padre deja el hijo en el antiguo padre TAMBIEN
-System.err.println("O-----------" + _o);
 
 		//BBDD---------------------------------------------------------
 		//TODO: borrar y salvar solo lo necesario : mejora?
 		clearDataBase();
-		for(Objeto o : _lista)
-		{
-			o.save();
-			System.err.println("o2---------------------"+o);
-		}
-Objeto.printLista(_lista);
-		_act.refrescarLista(_lista);
+		for(Objeto o : _lista)o.save();
+		_act.refrescarLista(_lista);//TODO:dejar abierto el nodo modificado
+		_act.selectObjeto(_o);
 		ActEdit.this.finish();
 	}
 

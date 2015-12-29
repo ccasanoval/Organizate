@@ -18,9 +18,19 @@ import java.util.NoSuchElementException;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Objeto extends SugarRecord implements Parcelable
 {
-	public static final int NIVEL1 = 1;
+	/*public static final int NIVEL1 = 1;
 	public static final int NIVEL2 = 2;
-	public static final int NIVEL3 = 3;
+	public static final int NIVEL3 = 3;*/
+	//public static enum NIVELES {NIVEL1(0), NIVEL2, NIVEL3};
+	public enum NIVEL
+	{
+	    NIVEL1(0), NIVEL2(1), NIVEL3(2);
+	    private int nivel=0;
+    	private NIVEL(int value){nivel = value;}
+	    public int getValue(){return nivel;}
+		public void setValue(int value){nivel=value;}
+	}
+
 
 	private Long _idUsr = Long.valueOf(0);
 	private Date _dtCreacion = new Date();
@@ -32,6 +42,27 @@ public class Objeto extends SugarRecord implements Parcelable
 	private Objeto _padre = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
+	@Ignore
+	private int nivel1, nivel2, nivel3;
+	public int getNivel(NIVEL nivel)
+	{
+		switch(nivel)
+		{
+		case NIVEL1:return nivel1;
+		case NIVEL2:return nivel2;
+		case NIVEL3:return nivel3;
+		default:return -1;
+		}
+	}
+	public void setNivel(NIVEL nivel, int valor)
+	{
+		switch(nivel)
+		{
+		case NIVEL1:nivel1=valor;
+		case NIVEL2:nivel2=valor;
+		case NIVEL3:nivel3=valor;
+		}
+	}
 
 	//______________________________________________________________________________________________
 	public Objeto(){}
@@ -55,9 +86,9 @@ public class Objeto extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	//TODO: prevenir bucle
 	public void addHijo(Objeto hijo)
 	{
+		if(equals(hijo))return;
 		boolean isRepetido = false;
 		int len = _hijos.length;
 		Objeto[] hijos = new Objeto[len+1];
@@ -98,16 +129,18 @@ System.err.println("\n"+this+"********************************"+len + " ::: "+hi
 	}
 
 	//______________________________________________________________________________________________
-	public int getNivel()
+	public NIVEL getNivel()
 	{
-		int i=NIVEL1;
+		int i = NIVEL.NIVEL1.getValue();
 		Objeto o = _padre;
 		while(o != null)
 		{
 			i++;
 			o = o._padre;
 		}
-		return i;
+		NIVEL n = NIVEL.NIVEL1;//TODO: feo....
+		n.setValue(i);
+		return n;
 	}
 
 	//______________________________________________________________________________________________

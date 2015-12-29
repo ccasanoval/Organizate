@@ -18,19 +18,10 @@ import java.util.NoSuchElementException;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Objeto extends SugarRecord implements Parcelable
 {
-	/*public static final int NIVEL1 = 1;
-	public static final int NIVEL2 = 2;
-	public static final int NIVEL3 = 3;*/
-	//public static enum NIVELES {NIVEL1(0), NIVEL2, NIVEL3};
-	public enum NIVEL
-	{
-	    NIVEL1(0), NIVEL2(1), NIVEL3(2);
-	    private int nivel=0;
-    	private NIVEL(int value){nivel = value;}
-	    public int getValue(){return nivel;}
-		public void setValue(int value){nivel=value;}
-	}
-
+	public static final int NIVEL1 = 0;
+	public static final int NIVEL2 = 1;
+	public static final int NIVEL3 = 2;
+	public static final int NIVEL_MAX = 3;
 
 	private Long _idUsr = Long.valueOf(0);
 	private Date _dtCreacion = new Date();
@@ -42,27 +33,19 @@ public class Objeto extends SugarRecord implements Parcelable
 	private Objeto _padre = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
-	@Ignore
-	private int nivel1, nivel2, nivel3;
-	public int getNivel(NIVEL nivel)
+	//TODO:hacer esto por id
+	/*@Ignore
+	private int _posicion[] = new int[NIVEL_MAX];//TODO: anadir posicion absoluta en _lista (para editar elementos mas rapido?)
+	public int getPosicion(int nivel)
 	{
-		switch(nivel)
-		{
-		case NIVEL1:return nivel1;
-		case NIVEL2:return nivel2;
-		case NIVEL3:return nivel3;
-		default:return -1;
-		}
+		if(nivel >= NIVEL_MAX)return -1;
+		return _posicion[nivel];
 	}
-	public void setNivel(NIVEL nivel, int valor)
+	public void setPosicion(int nivel, int posicion)
 	{
-		switch(nivel)
-		{
-		case NIVEL1:nivel1=valor;
-		case NIVEL2:nivel2=valor;
-		case NIVEL3:nivel3=valor;
-		}
-	}
+		if(nivel >= NIVEL_MAX)return;
+		_posicion[nivel] = posicion;
+	}*/
 
 	//______________________________________________________________________________________________
 	public Objeto(){}
@@ -123,24 +106,22 @@ System.err.println("\n"+this+"********************************"+len + " ::: "+hi
 	}
 
 	//______________________________________________________________________________________________
-	public void delHijos()
+	/*public void delHijos()
 	{
 		_hijos = new Objeto[0];
-	}
+	}*/
 
 	//______________________________________________________________________________________________
-	public NIVEL getNivel()
+	public int getNivel()
 	{
-		int i = NIVEL.NIVEL1.getValue();
+		int i=NIVEL1;
 		Objeto o = _padre;
 		while(o != null)
 		{
 			i++;
 			o = o._padre;
 		}
-		NIVEL n = NIVEL.NIVEL1;//TODO: feo....
-		n.setValue(i);
-		return n;
+		return i;
 	}
 
 	//______________________________________________________________________________________________
@@ -255,6 +236,7 @@ System.err.println("\n"+this+"********************************"+len + " ::: "+hi
 			}
 			System.err.println("---"+o.toString());
 		}
+		//calcPosiciones(lista);
 		//return nivel1;
 		return lista;
 	}
@@ -269,6 +251,25 @@ System.err.println("\n"+this+"********************************"+len + " ::: "+hi
 		return aNivel;
 	}
 
+	//______________________________________________________________________________________________
+	/*public static void calcPosiciones(ArrayList<Objeto> lista)
+	{
+		ArrayList<Objeto> n1 = filtroN(lista, NIVEL1);
+		ArrayList<Objeto> n2 = filtroN(lista, NIVEL1);
+		ArrayList<Objeto> n3 = filtroN(lista, NIVEL1);
+
+		int i = 0;
+		for(Objeto o1 : n1)
+		{
+			o1.setPosicion(NIVEL1, i++);
+			if(o1.getHijos().length > 0)
+			{
+				for(Objeto o2 : n1)
+				{
+				}
+			}
+		}
+	}*/
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

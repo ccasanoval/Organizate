@@ -15,6 +15,9 @@ import com.orm.SugarContext;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+//TODO: Hacer _lista accesible desde servicio para widget?
+//TODO: Eliminar espaciado extra en nivel2
+//TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainActivity extends AppCompatActivity
 {
@@ -89,9 +92,10 @@ datosTEST();
 	//______________________________________________________________________________________________
 	public void selectObjeto(Objeto o)
 	{
+		//TODO: Guardar es estados visible de los objetos para dejarlos luego igual???
+		/*
 		if(o.getNivel() == Objeto.NIVEL1)
 		{
-			for()
 			_expListView.setSelectedGroup();
 		}
 		else if(o.getNivel() == Objeto.NIVEL2)
@@ -99,7 +103,7 @@ datosTEST();
 		}
 		else
 		{
-		}
+		}*/
 
 		//_expListView.setSelectedChild(groupPosition, childPosition, true);
 	}

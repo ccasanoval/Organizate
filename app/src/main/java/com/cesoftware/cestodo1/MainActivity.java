@@ -81,10 +81,8 @@ datos();
 	//______________________________________________________________________________________________
 	public void refrescarLista(ArrayList<Objeto> lista)
 	{
-		//TODO: setRows !!
-		//Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		//ArrayList<Objeto> lista = Objeto.conectarHijos(it);
-		ActEdit.setLista(lista);
+		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
+		lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada?????
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 		_expListView.refreshDrawableState();
 	}

@@ -261,8 +261,12 @@ System.err.println("O-----------" + _o);
 		//BBDD---------------------------------------------------------
 		//TODO: borrar y salvar solo lo necesario : mejora?
 		clearDataBase();
-		for(Objeto o : _lista)o.save();
-
+		for(Objeto o : _lista)
+		{
+			o.save();
+			System.err.println("o2---------------------"+o);
+		}
+Objeto.printLista(_lista);
 		_act.refrescarLista(_lista);
 		ActEdit.this.finish();
 	}

@@ -3,6 +3,7 @@ package com.cesoftware.cestodo1;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import android.os.Handler;
 import android.widget.RemoteViews;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -18,71 +19,31 @@ import com.cesoftware.cestodo1.models.Objeto;
  */
 public class UpdateWidgetService extends Service
 {
+	private Runnable r = null;
+	private static final int _DELAY = 60000;
 	private static Long _id = -1L;
 
 	//______________________________________________________________________________________________
 	@Override
 	//public void onStart(Intent intent, int startId)
-	public int onStartCommand(Intent intent, int flags, int startId)
+	public int onStartCommand(final Intent intent, int flags, int startId)
 	{
-		try{
-		String s="";
-		ArrayList<Objeto> lista = new ArrayList<>();
-		//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);
-		//while(it.hasNext())lista.add(it.next());
-		lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
-		if(lista == null || lista.size() < 1)
-			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null order by _i_prioridad desc");
-		if(lista == null || lista.size() < 1)
-			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto order by _i_prioridad desc");
-
-		if(lista != null && lista.size() > 0)
+		if(r == null)
 		{
-			Objeto o = lista.get(0);
-			if(lista.size() > 1)
+			final Handler mHandler = new Handler();
+			r = new Runnable()
 			{
-				for(int i=0; i < lista.size()-1; i++)
+				@Override
+				public void run()
 				{
-					if(lista.get(i).getId().equals(_id))
-					{
-						o = lista.get(i+1);
-						break;
-					}
+					cambiarTextoWidget(intent);
+					mHandler.postDelayed(r, _DELAY);
 				}
-			}
-			_id = o.getId();
-			s = o.getNombre();
+			};
+			mHandler.postDelayed(r, _DELAY);
 		}
 
-		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
-		int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-
-//    ComponentName thisWidget = new ComponentName(getApplicationContext(), CesWidgetProvider.class);
-//    int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
-		for(int widgetId : allWidgetIds)
-		{
-			RemoteViews remoteViews = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
-
-			//int number = (new Random().nextInt(100));
-			remoteViews.setTextViewText(R.id.update, s);//"Random: " + String.valueOf(number));
-
-			// Register an onClickListener
-			Intent clickIntent = new Intent(this.getApplicationContext(), CesWidgetProvider.class);
-			clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-			clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-			remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
-			appWidgetManager.updateAppWidget(widgetId, remoteViews);
-		}
-		stopSelf();
-
-		}
-		catch(Exception e)
-		{
-			System.err.println("UpdateWidgetService: onStartCommand: ERROR: "+e);
-		}
-
+		cambiarTextoWidget(intent);
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -91,6 +52,68 @@ public class UpdateWidgetService extends Service
 	public IBinder onBind(Intent intent)
 	{
 		return null;
+	}
+
+	//______________________________________________________________________________________________
+	private void cambiarTextoWidget(Intent intent)
+	{
+		try
+		{
+			String s="";
+			ArrayList<Objeto> lista = new ArrayList<>();
+			//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);
+			//while(it.hasNext())lista.add(it.next());
+			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
+			if(lista == null || lista.size() < 1)
+				lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null order by _i_prioridad desc");
+			if(lista == null || lista.size() < 1)
+				lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto order by _i_prioridad desc");
+
+			if(lista != null && lista.size() > 0)
+			{
+				Objeto o = lista.get(0);
+				if(lista.size() > 1)
+				{
+					for(int i=0; i < lista.size()-1; i++)
+					{
+						if(lista.get(i).getId().equals(_id))
+						{
+							o = lista.get(i+1);
+							break;
+						}
+					}
+				}
+				_id = o.getId();
+				s = o.getNombre();
+			}
+
+			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
+			int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
+
+	//    ComponentName thisWidget = new ComponentName(getApplicationContext(), CesWidgetProvider.class);
+	//    int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
+			for(int widgetId : allWidgetIds)
+			{
+				RemoteViews remoteViews = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
+
+				//int number = (new Random().nextInt(100));
+				remoteViews.setTextViewText(R.id.update, s);//"Random: " + String.valueOf(number));
+
+				// Register an onClickListener
+				Intent clickIntent = new Intent(this.getApplicationContext(), CesWidgetProvider.class);
+				clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+				clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
+
+				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
+				appWidgetManager.updateAppWidget(widgetId, remoteViews);
+			}
+			stopSelf();
+		}
+		catch(Exception e)
+		{
+			System.err.println("UpdateWidgetService: onStartCommand: ERROR: "+e);
+		}
 	}
 }
 

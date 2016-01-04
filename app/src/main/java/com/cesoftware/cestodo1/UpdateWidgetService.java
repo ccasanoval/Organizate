@@ -26,11 +26,16 @@ public class UpdateWidgetService extends Service
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
 		try{
-		String s="Lista de tareas vacía";
+		String s="";
 		ArrayList<Objeto> lista = new ArrayList<>();
-		Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);
-		while(it.hasNext())lista.add(it.next());
-		//lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
+		//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);
+		//while(it.hasNext())lista.add(it.next());
+		lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
+		if(lista == null || lista.size() < 1)
+			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null order by _i_prioridad desc");
+		if(lista == null || lista.size() < 1)
+			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto order by _i_prioridad desc");
+
 		if(lista != null && lista.size() > 0)
 		{
 			Objeto o = lista.get(0);
@@ -43,16 +48,11 @@ public class UpdateWidgetService extends Service
 						o = lista.get(i+1);
 						break;
 					}
-					else
-						o = lista.get(i);
 				}
 			}
 			_id = o.getId();
 			s = o.getNombre();
-			System.err.println("---------lista : "+_id+" : "+s);
 		}
-		else
-			System.err.println("---------lista vacia");
 
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
 		int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);

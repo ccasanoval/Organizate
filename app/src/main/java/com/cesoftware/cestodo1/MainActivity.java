@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity
 	protected  void onDestroy()
 	{
 		super.onDestroy();
-		SugarContext.terminate();//look at manifest
+		//SugarContext.terminate();//look at manifest//No lo llamamos si queremos que widget pueda consultar bbdd
 	}
 
 	//______________________________________________________________________________________________
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
 		SugarContext.init(this);
-datosTEST();
+//datosTEST();
 		cargarLista();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview

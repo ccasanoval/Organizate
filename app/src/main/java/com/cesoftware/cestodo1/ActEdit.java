@@ -1,9 +1,12 @@
 package com.cesoftware.cestodo1;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -28,14 +31,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.cesoftware.cestodo1.models.Objeto;
-
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+
+import com.cesoftware.cestodo1.models.Objeto;
 
 //TODO: Check support libraries : need, do i use it?
-//TODO: en la principal, si tiene seleccionado alguno(el ultimo clickado).. es el padre de este
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {
@@ -53,7 +57,6 @@ public class ActEdit extends AppCompatActivity
 	private String		_popUpContents[];
     private PopupWindow	_popupPadre;
     private Button		_btnPadre;
-
 	private ImageButton _btnEliminar;
 
 		//Si no mueves de lugar guarda solo _o, pero si no, guarda tanto origen como destino
@@ -84,6 +87,7 @@ public class ActEdit extends AppCompatActivity
 
 		_rbPrioridad.setNumStars(5);
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
+		ImageButton	btnHablar = (ImageButton)findViewById(R.id.btnHablar);
 		ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -129,6 +133,14 @@ public class ActEdit extends AppCompatActivity
 					}
 				});*/
 				dialog.create().show();
+			}
+		});
+		btnHablar.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				hablar();
 			}
 		});
 		btnGuardar.setOnClickListener(new View.OnClickListener()
@@ -411,4 +423,47 @@ Objeto.printLista(_lista);
 		saveValores();
 		return super.onOptionsItemSelected(item);
     }
+
+
+	//______________________________________________________________________________________________
+	private static TextToSpeech tts = null;
+	private void hablar()
+	{
+		String texto = String.format("Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion());
+
+		if(tts == null)
+		tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener()
+		{
+   			@Override
+   			public void onInit(int status)
+			{
+				if(status != TextToSpeech.ERROR)tts.setLanguage(new Locale("es", "ES"));
+			}
+		});
+		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+    		ttsGreater21(tts, texto);
+		else
+    		ttsUnder20(tts, texto);
+
+	}
+	//______________________________________________________________________________________________
+	@SuppressWarnings("deprecation")
+	private void ttsUnder20(TextToSpeech tts, String texto)
+	{
+		System.err.println("------ttsUnder20");
+		//tts.setLanguage(new Locale("es", "ES"));
+    	HashMap<String, String> map = new HashMap<>();
+    	map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
+    	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, map);
+	}
+	//______________________________________________________________________________________________
+	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+	private void ttsGreater21(TextToSpeech tts, String texto)
+	{
+		System.err.println("------ttsGreater21");
+		//tts.setLanguage(Locale.forLanguageTag("ES"));
+    	String utteranceId=this.hashCode() + "";
+    	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+	}
 }

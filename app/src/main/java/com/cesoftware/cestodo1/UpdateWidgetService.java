@@ -19,7 +19,8 @@ import com.cesoftware.cestodo1.models.Objeto;
  */
 public class UpdateWidgetService extends Service
 {
-	private Runnable r = null;
+	private static Handler _h = null;
+	private static Runnable _r = null;
 	private static final int _DELAY = 60000;
 	private static Long _id = -1L;
 
@@ -28,22 +29,22 @@ public class UpdateWidgetService extends Service
 	//public void onStart(Intent intent, int startId)
 	public int onStartCommand(final Intent intent, int flags, int startId)
 	{
-		if(r == null)
+		if(_h == null)
 		{
-			final Handler mHandler = new Handler();
-			r = new Runnable()
+			_h = new Handler();
+			_r = new Runnable()
 			{
 				@Override
 				public void run()
 				{
+					System.err.println("-----RUN WIDGET-----");
 					cambiarTextoWidget(intent);
-					mHandler.postDelayed(r, _DELAY);
+					_h.postDelayed(_r, _DELAY);
 				}
 			};
-			mHandler.postDelayed(r, _DELAY);
+			_h.postDelayed(_r, _DELAY);
+			cambiarTextoWidget(intent);
 		}
-
-		cambiarTextoWidget(intent);
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -60,9 +61,8 @@ public class UpdateWidgetService extends Service
 		try
 		{
 			String s="";
-			ArrayList<Objeto> lista = new ArrayList<>();
-			//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);
-			//while(it.hasNext())lista.add(it.next());
+			ArrayList<Objeto> lista;// = new ArrayList<>();
+			//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);while(it.hasNext())lista.add(it.next());
 			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
 			if(lista == null || lista.size() < 1)
 				lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null order by _i_prioridad desc");
@@ -89,17 +89,13 @@ public class UpdateWidgetService extends Service
 
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
 			int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);
-
 	//    ComponentName thisWidget = new ComponentName(getApplicationContext(), CesWidgetProvider.class);
 	//    int[] allWidgetIds2 = appWidgetManager.getAppWidgetIds(thisWidget);
 			for(int widgetId : allWidgetIds)
 			{
 				RemoteViews remoteViews = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
+				remoteViews.setTextViewText(R.id.update, s);
 
-				//int number = (new Random().nextInt(100));
-				remoteViews.setTextViewText(R.id.update, s);//"Random: " + String.valueOf(number));
-
-				// Register an onClickListener
 				Intent clickIntent = new Intent(this.getApplicationContext(), CesWidgetProvider.class);
 				clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 				clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
@@ -116,28 +112,3 @@ public class UpdateWidgetService extends Service
 		}
 	}
 }
-
-/*
-@Override
-public int onStartCommand(Intent intent, int flags, int startId) {
-
-    final Handler mHandler = new Handler();
-    mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            MyDBHelper myDBHelper = new MyDBHelper(getApplicationContext());
-            boolean isInfoAvailable = myDBHelper.isAnyInfoAvailable(getApplicationContext());
-            Toast.makeText(getApplicationContext(), String.valueOf(isInfoAvailable), Toast.LENGTH_LONG).show();
-            mHandler.postDelayed(mRunnable, 10 * 1000);
-        }
-    };
-    mHandler.postDelayed(mRunnable, 10 * 1000);
-    return super.onStartCommand(intent, flags, startId);
-}
-<service
-    android:name=".MyService"
-    android:enabled="true"
-    android:exported="true"
-    android:stopWithTask="false">
-</service>
-* */

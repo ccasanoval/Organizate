@@ -58,6 +58,7 @@ public class ActEdit extends AppCompatActivity
     private PopupWindow	_popupPadre;
     private Button		_btnPadre;
 	private ImageButton _btnEliminar;
+	private ImageButton _btnHablar;
 
 		//Si no mueves de lugar guarda solo _o, pero si no, guarda tanto origen como destino
 	private boolean _isNuevo=false;
@@ -87,7 +88,7 @@ public class ActEdit extends AppCompatActivity
 
 		_rbPrioridad.setNumStars(5);
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
-		ImageButton	btnHablar = (ImageButton)findViewById(R.id.btnHablar);
+		_btnHablar = (ImageButton)findViewById(R.id.btnHablar);
 		ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -135,7 +136,7 @@ public class ActEdit extends AppCompatActivity
 				dialog.create().show();
 			}
 		});
-		btnHablar.setOnClickListener(new View.OnClickListener()
+		_btnHablar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
@@ -161,7 +162,7 @@ public class ActEdit extends AppCompatActivity
 		}
 
 		List<String> lst = new ArrayList<>();
-		lst.add(getResources().getString(R.string.nodo_padre) +SEP+TOP_NODE);
+		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+TOP_NODE);
 		for(Objeto o : Objeto.filtroN(_lista, Objeto.NIVEL1))
 		{
 			lst.add(PADRE + o.getNombre() + SEP + o.getId());
@@ -215,13 +216,14 @@ public class ActEdit extends AppCompatActivity
 	{
 		_isNuevo = true;
 		_o = new Objeto();
+		_btnHablar.setVisibility(View.INVISIBLE);
 		_btnEliminar.setVisibility(View.INVISIBLE);
-System.err.println("-----------------" + _o.getId());
+System.err.println("setValoresNuevo-----------------getId=" + _o.getId());
 	}
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("-----------------" + _o);
+System.err.println("setValores-----------------_o=" + _o);
 		_isNuevo = false;
 		_txtNombre.setText(_o.getNombre());
 		_txtDescripcion.setText(_o.getDescripcion());
@@ -246,16 +248,12 @@ System.err.println("-----------------" + _o);
 		_o.setNombre(_txtNombre.getText().toString());
 		_o.setDescripcion(_txtDescripcion.getText().toString());
 		_o.setPrioridad((int) _rbPrioridad.getRating());
-//System.err.println("------------el id padre es " + _idPadre);
-
-		fixPadres();
-Objeto.printLista(_lista);
-
 		_o.setModificado(new Date());
 		if(_isNuevo)
 		{
-			if(_o.getPadre() == null)_lista.add(_o);
+			//if(_o.getPadre() == null)_lista.add(_o);
 			_o.setCreacion(new Date());
+			_lista.add(_o);
 		}
 		else
 		{
@@ -263,13 +261,16 @@ Objeto.printLista(_lista);
 			/*for(Objeto o : _lista)
 				if(o.getId().equals(_o.getId()))
 					_lista.set();*/
-
 		}
+
+System.err.println("TO ADD------------o=" + _o);
+		fixPadres();
+Objeto.printLista(_lista);
 
 		//BBDD---------------------------------------------------------
 		//TODO: borrar y salvar solo lo necesario : mejora?
 		clearDataBase();
-		for(Objeto o : _lista)o.save();
+		for(Objeto o : _lista)o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
 		_act.refrescarLista(_lista);//TODO:dejar abierto el nodo modificado
 		_act.selectObjeto(_o);
 		ActEdit.this.finish();
@@ -437,7 +438,8 @@ Objeto.printLista(_lista);
    			@Override
    			public void onInit(int status)
 			{
-				if(status != TextToSpeech.ERROR)tts.setLanguage(new Locale("es", "ES"));
+				if(status != TextToSpeech.ERROR)
+					tts.setLanguage(getResources().getConfiguration().locale);//new Locale("es", "ES");Locale.forLanguageTag("ES")
 			}
 		});
 		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
@@ -452,7 +454,6 @@ Objeto.printLista(_lista);
 	private void ttsUnder20(TextToSpeech tts, String texto)
 	{
 		System.err.println("------ttsUnder20");
-		//tts.setLanguage(new Locale("es", "ES"));
     	HashMap<String, String> map = new HashMap<>();
     	map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, map);
@@ -462,7 +463,6 @@ Objeto.printLista(_lista);
 	private void ttsGreater21(TextToSpeech tts, String texto)
 	{
 		System.err.println("------ttsGreater21");
-		//tts.setLanguage(Locale.forLanguageTag("ES"));
     	String utteranceId=this.hashCode() + "";
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
 	}

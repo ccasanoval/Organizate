@@ -1,0 +1,21 @@
+<resources>
+	<string name="app_name">Organize!</string>
+
+	<string name="editar">Edit</string>
+	<string name="eliminar">Remove</string>
+	<string name="nuevo">Add</string>
+
+	<string name="nombre">Name</string>
+	<string name="descripcion">Description</string>
+	<string name="nodo_padre">*Top Node*</string>
+	<string name="prioridad">Priority</string>
+	<string name="fec_creado">Created</string>
+	<string name="fec_modificado">Modified</string>
+	<string name="fec_limite">Due time</string>
+
+	<string name="usuario">User</string>
+	<string name="clave">Password</string>
+
+	<string name="seguro_eliminar">Are you sure you want to delete it?</string>
+	<string name="sintareas">No tasks</string>
+</resources>

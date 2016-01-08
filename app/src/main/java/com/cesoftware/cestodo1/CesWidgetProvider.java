@@ -22,9 +22,8 @@ import java.util.Random;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesWidgetProvider extends AppWidgetProvider
 {
-	//private static final String ACTION_CLICK = "ACTION_CLICK";
-	//private static ArrayList<Objeto> _lista;
-	//private static int _i = 0;
+	public static String ACTION_WIDGET_SHOWAPP = "ActionReceiverShowApp";
+	public static String ACTION_WIDGET_CHANGE = "ActionReceiverChange";
 
 	//______________________________________________________________________________________________
 	@Override
@@ -43,54 +42,53 @@ public class CesWidgetProvider extends AppWidgetProvider
 	//______________________________________________________________________________________________
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
+		// Update the widgets via the service and user click
 		ComponentName thisWidget = new ComponentName(context, CesWidgetProvider.class);
 		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-		// Build the intent to call the service
 		Intent intent = new Intent(context.getApplicationContext(), UpdateWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
-		// Update the widgets via the service
 		context.startService(intent);
+
+		// Open the app
+		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+		Intent intent2 = new Intent(context.getApplicationContext(), MainActivity.class);
+		PendingIntent actionPendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
+		remoteViews.setOnClickPendingIntent(R.id.lblNomApp, actionPendingIntent);
+		appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
+	}
+
+/*
+	// Update the widgets via user click
+		PendingIntent actionPendingIntent;
+		RemoteViews widView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+
+		Intent intent1 = new Intent(context, CesWidgetProvider.class);
+		actionPendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+		intent1.setAction(ACTION_WIDGET_SHOWAPP);
+		widView.setOnClickPendingIntent(R.id.txtTarea, actionPendingIntent);
+
+		Intent intent2 = new Intent(context, CesWidgetProvider.class);
+		intent2.setAction(ACTION_WIDGET_SHOWAPP);
+		actionPendingIntent = PendingIntent.getBroadcast(context, 0, intent2, 0);
+		widView.setOnClickPendingIntent(R.id.lblNomApp, actionPendingIntent);
+
+		appWidgetManager.updateAppWidget(appWidgetIds, widView);
 	}
 
 	//______________________________________________________________________________________________
-/*	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
+	@Override
+	public void onReceive(Context context, Intent intent)
 	{
-		//TODO: Buscar tareas nivel 3 o 2 con fecha limite cercana o con prioridad alta....
-		//TODO: Add button to open app
-		ComponentName thisWidget = new ComponentName(context, CesWidgetProvider.class);
-		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-		for(int widgetId : allWidgetIds)
+    	if(intent.getAction().equals(ACTION_WIDGET_SHOWAPP))
 		{
-			Bundle options = appWidgetManager.getAppWidgetOptions(widgetId);
-			int category = options.getInt(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1);
-			boolean isLockScreen = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;//Es un widget en la pantalla de bloqueo
-System.err.println("isLockScreen----------"+isLockScreen);
+        	System.err.println("onReceive:" + ACTION_WIDGET_SHOWAPP);
+    	}
+		else
+		{
+			System.err.println("onReceive:OTRO");
+        	super.onReceive(context, intent);
+    	}
+	}
+	*/
 
-			RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-
-			if(_lista == null || _lista.size() < 1)
-			{
-				remoteViews.setTextViewText(R.id.update, "Lista de tareas vacía");//TODO: a recursos
-System.err.println("onUpdate----------_lista.size()<1" + _i);
-			}
-			else
-			{
-System.err.println("onUpdate----------" + _i+":::"+_lista.size());
-				_i = _i++ % _lista.size();
-System.err.println("onUpdate----------" + _i + " : " + _lista.size() +" : "+ _lista.get(_i).getNombre());
-
-				remoteViews.setTextViewText(R.id.update, _lista.get(_i).getNombre());
-
-				// Register an onClickListener
-				Intent intent = new Intent(context, CesWidgetProvider.class);
-				intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-				intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds);
-
-				PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-				remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
-				appWidgetManager.updateAppWidget(widgetId, remoteViews);
-			}
-		}
-	}*/
 }

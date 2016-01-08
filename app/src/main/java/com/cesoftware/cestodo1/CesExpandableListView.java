@@ -7,13 +7,11 @@ import android.widget.ExpandableListView;
 public class CesExpandableListView extends ExpandableListView
 {
 	//TODO: try this with diferent mobiles/resolutions
-	private static final int ROW_HEIGHT1 = 120;//
-	private static final int ROW_HEIGHT2 = 120;//
-	private static final int ROW_HEIGHT3 = 110;//  x4!!
-//	private static final int ROW_HEIGHT1 = 30;
-//	private static final int ROW_HEIGHT2 = 36;
-//	private static final int ROW_HEIGHT3 = 23;
-	private int rows1, rows2, rows3;
+	private static final int ROW_HEIGHT2 = 100;//
+	private static final int ROW_HEIGHT3 = 90;//  x4!!
+//	private static final int ROW_HEIGHT2 = 36;//24
+//	private static final int ROW_HEIGHT3 = 23;//22
+	private int rows2, rows3;
 
 	//______________________________________________________________________________________________
     public CesExpandableListView(Context context){super( context );}
@@ -21,7 +19,6 @@ public class CesExpandableListView extends ExpandableListView
 	//______________________________________________________________________________________________
 	public void setRows(int[] rows)
 	{
-		this.rows1 = rows[0];
 		this.rows2 = rows[1];
 		this.rows3 = rows[2];
 //System.err.println("BBB"+this+"--------"+rows1+".." + rows2+"..."+rows3+"-------" + (rows1 * ROW_HEIGHT1 + rows2*ROW_HEIGHT2 + rows3*ROW_HEIGHT3));
@@ -34,9 +31,8 @@ public class CesExpandableListView extends ExpandableListView
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		//this.getChildVisibleRect();
 //+this.getClipBounds()
-		System.err.println("AAA" + this + "--------------------" + rows1 + ".." + rows2 + ".." + rows3 + "------" + (rows1 * ROW_HEIGHT1 + rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "-------" + heightMeasureSpec + "::::" + getBottom());
-		System.err.println("BBB" + (getBottom()>0 ? getBottom() : rows1*ROW_HEIGHT1)+"---"+rows2*ROW_HEIGHT2);
-		setMeasuredDimension(getMeasuredWidth(), rows1 * ROW_HEIGHT1 + rows2 * ROW_HEIGHT2 + rows3*ROW_HEIGHT3);
+		System.err.println("AAA" + this + "--------------------" + rows2 + ".." + rows3 + "------" + (rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "-------" + heightMeasureSpec + "::::" + getBottom());
+		setMeasuredDimension(getMeasuredWidth(), rows2 * ROW_HEIGHT2 + rows3*ROW_HEIGHT3);
 		//DisplayMetrics metrics = getResources().getDisplayMetrics();
  		//getWindowManager().getDefaultDisplay().getMetrics(metrics);
     }

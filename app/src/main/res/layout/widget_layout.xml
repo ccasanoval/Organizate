@@ -8,7 +8,7 @@
 	android:background="@drawable/widget">
 
 	<TextView
-		android:id="@+id/lbl"
+		android:id="@+id/lblNomApp"
 		style="@android:style/TextAppearance.Small"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
 	</TextView>
 
 	<TextView
-		android:id="@+id/update"
+		android:id="@+id/txtTarea"
 		style="@android:style/TextAppearance.Medium"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"

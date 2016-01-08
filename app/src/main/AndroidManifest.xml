@@ -37,7 +37,8 @@
 		<receiver android:name="CesWidgetProvider" >
 			<intent-filter >
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-			</intent-filter>
+				<action android:name="com.cesoftware.cestodo1.CesWidgetProvider.ACTION_WIDGET_SHOWAPP"/>
+        	</intent-filter>
 			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_info" />
 		</receiver>
 		<service android:name=".UpdateWidgetService"></service>

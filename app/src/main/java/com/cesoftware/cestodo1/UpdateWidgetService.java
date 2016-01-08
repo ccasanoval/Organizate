@@ -43,8 +43,8 @@ public class UpdateWidgetService extends Service
 				}
 			};
 			_h.postDelayed(_r, _DELAY);
-			cambiarTextoWidget(intent);
 		}
+		cambiarTextoWidget(intent);
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -94,14 +94,14 @@ public class UpdateWidgetService extends Service
 			for(int widgetId : allWidgetIds)
 			{
 				RemoteViews remoteViews = new RemoteViews(this.getApplicationContext().getPackageName(), R.layout.widget_layout);
-				remoteViews.setTextViewText(R.id.update, s);
+				remoteViews.setTextViewText(R.id.txtTarea, s);
 
 				Intent clickIntent = new Intent(this.getApplicationContext(), CesWidgetProvider.class);
 				clickIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 				clickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
 
 				PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, clickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-				remoteViews.setOnClickPendingIntent(R.id.update, pendingIntent);
+				remoteViews.setOnClickPendingIntent(R.id.txtTarea, pendingIntent);
 				appWidgetManager.updateAppWidget(widgetId, remoteViews);
 			}
 			stopSelf();

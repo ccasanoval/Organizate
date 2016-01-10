@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.cesoftware.cestodo1"
+<manifest package="com.cesoftware.Organizate"
 		  xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<application
@@ -20,28 +20,28 @@
 			android:value="true"/>
 		<meta-data
 			android:name="DOMAIN_PACKAGE_NAME"
-			android:value="com.cesoftware.cestodo1"/>
+			android:value="com.cesoftware.Organizate"/>
 
-		<activity android:name=".MainActivity">
+		<activity android:name="com.cesoftware.Organizate.MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ActEdit"
+			android:name="com.cesoftware.Organizate.ActEdit"
 			android:label="@string/editar"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 
-		<receiver android:name="CesWidgetProvider" >
+		<receiver android:name="com.cesoftware.Organizate.CesWidgetProvider" >
 			<intent-filter >
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 				<action android:name="com.cesoftware.cestodo1.CesWidgetProvider.ACTION_WIDGET_SHOWAPP"/>
         	</intent-filter>
 			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_info" />
 		</receiver>
-		<service android:name=".UpdateWidgetService"></service>
+		<service android:name="com.cesoftware.Organizate.UpdateWidgetService"></service>
 	</application>
 
 </manifest>

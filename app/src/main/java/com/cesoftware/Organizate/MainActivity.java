@@ -1,4 +1,4 @@
-package com.cesoftware.cestodo1;
+package com.cesoftware.Organizate;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ExpandableListView;
 
-import com.cesoftware.cestodo1.models.Objeto;
+import com.cesoftware.Organizate.models.Objeto;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
@@ -76,7 +76,15 @@ public class MainActivity extends AppCompatActivity
 	//______________________________________________________________________________________________
 	private void cargarLista()
 	{
-		ArrayList<Objeto> lista = Objeto.conectarHijos(Objeto.findAll(Objeto.class));
+		ArrayList<Objeto> lista;
+		try
+		{
+			lista = Objeto.conectarHijos(Objeto.findAll(Objeto.class));
+		}
+		catch(Exception e)
+		{
+			lista = new ArrayList<>();
+		}
 		ActEdit.setLista(lista);
 		//Objeto[] ao = new Objeto[lista.size()];lista.toArray(ao);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));

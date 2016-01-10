@@ -1,7 +1,6 @@
-package com.cesoftware.cestodo1;
+package com.cesoftware.Organizate;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import android.os.Handler;
 import android.widget.RemoteViews;
@@ -12,7 +11,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.cesoftware.cestodo1.models.Objeto;
+import com.cesoftware.Organizate.models.Objeto;
 
 /**
  * Created by Cesar_Casanova on 04/01/2016.

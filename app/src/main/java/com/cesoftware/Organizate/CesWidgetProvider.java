@@ -1,22 +1,14 @@
-package com.cesoftware.cestodo1;
+package com.cesoftware.Organizate;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.widget.RemoteViews;
 
-import com.cesoftware.cestodo1.models.Objeto;
 import com.orm.SugarContext;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 //http://www.vogella.com/tutorials/AndroidWidgets/article.html
 ////////////////////////////////////////////////////////////////////////////////////////////////////

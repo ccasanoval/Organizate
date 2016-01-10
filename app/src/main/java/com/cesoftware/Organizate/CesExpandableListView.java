@@ -1,4 +1,4 @@
-package com.cesoftware.cestodo1;
+package com.cesoftware.Organizate;
 
 import android.content.Context;
 import android.widget.ExpandableListView;
@@ -7,10 +7,10 @@ import android.widget.ExpandableListView;
 public class CesExpandableListView extends ExpandableListView
 {
 	//TODO: try this with diferent mobiles/resolutions
-	private static final int ROW_HEIGHT2 = 100;//
-	private static final int ROW_HEIGHT3 = 90;//  x4!!
-//	private static final int ROW_HEIGHT2 = 36;//24
-//	private static final int ROW_HEIGHT3 = 23;//22
+//	private static final int ROW_HEIGHT2 = 100;//
+//	private static final int ROW_HEIGHT3 = 90;//  x4!!
+	private static final int ROW_HEIGHT2 = 66;//24
+	private static final int ROW_HEIGHT3 = 62;//22
 	private int rows2, rows3;
 
 	//______________________________________________________________________________________________

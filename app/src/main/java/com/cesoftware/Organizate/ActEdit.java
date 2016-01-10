@@ -1,4 +1,4 @@
-package com.cesoftware.cestodo1;
+package com.cesoftware.Organizate;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -29,17 +29,16 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
-import com.cesoftware.cestodo1.models.Objeto;
+import com.cesoftware.Organizate.models.Objeto;
 
 //TODO: Check support libraries : need, do i use it?
+//TODO: al borrarlo todo y crear de nuevo siguen los antiguos ... borrar de lista?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {
@@ -154,15 +153,16 @@ public class ActEdit extends AppCompatActivity
 		});
 
 		//------------------------------------------------------------------------------------------
-		if(_lista == null)
+		/*if(_lista == null)
 		{
 			//Avisar
 			System.err.println("ActEdit:onCreate:ERROR: Sin lista de objetos");
 			finish();
-		}
+		}*/
 
 		List<String> lst = new ArrayList<>();
 		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+TOP_NODE);
+		if(_lista != null &&_lista.size()>0)
 		for(Objeto o : Objeto.filtroN(_lista, Objeto.NIVEL1))
 		{
 			lst.add(PADRE + o.getNombre() + SEP + o.getId());
@@ -268,9 +268,12 @@ System.err.println("TO ADD------------o=" + _o);
 Objeto.printLista(_lista);
 
 		//BBDD---------------------------------------------------------
-		//TODO: borrar y salvar solo lo necesario : mejora?
 		clearDataBase();
-		for(Objeto o : _lista)o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
+		if(_lista != null && _lista.size() > 0)
+		for(Objeto o : _lista)
+		{
+			o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
+		}
 		_act.refrescarLista(_lista);//TODO:dejar abierto el nodo modificado
 		_act.selectObjeto(_o);
 		ActEdit.this.finish();

@@ -20,14 +20,14 @@ import java.util.Map;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class NivelUnoListAdapter extends BaseExpandableListAdapter
 {
+	private static final String NIVEL2 = "NIVEL2";
+	private static final String NIVEL3 = "NIVEL3";
+
 	private Context _context;
 	private ArrayList<Objeto> _lista;
 	private LayoutInflater _inflater;
 	private ExpandableListView _topExpList;
 	private CesExpandableListView _listViewCache[];
-
-	private static final String NIVEL2 = "NIVEL2";
-	private static final String NIVEL3 = "NIVEL3";
 
 	//______________________________________________________________________________________________
     public NivelUnoListAdapter(Context context, ExpandableListView topExpList, ArrayList<Objeto> lista)
@@ -101,16 +101,19 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 				createGroupList(groupPosition),		// groupData describes the first-level entries
 				R.layout.nivel2,				// Layout for the first-level entries
 				new String[]{NIVEL2},				// Key in the groupData maps to display
-				new int[]{R.id.childname},			// Data under "colorName" key goes into this TextView
+				new int[]{R.id.txtNivel2},			// Data under "colorName" key goes into this TextView
 				createChildList(groupPosition),		// childData describes second-level entries
 				R.layout.nivel3,				// Layout for second-level entries
 				new String[]{NIVEL3},				// Keys in childData maps to display
-				new int[]{R.id.childname},			// Data under the keys above go into these TextViews
+				new int[]{R.id.txtNivel3},			// Data under the keys above go into these TextViews
 				groupPosition
 			));
 		dev.setOnGroupClickListener(new Level2GroupExpandListener(groupPosition));
 		_listViewCache[groupPosition] = dev;
-
+/*
+dev.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+int height = dev.getMeasuredHeight();
+System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 		/* NADIE LO LLAMA ¿?
 		dev.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
 		{
@@ -189,12 +192,12 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
         else
 			v = _inflater.inflate(R.layout.nivel1, parent, false);
         String gt = (String)getGroup(groupPosition).toString();
-		TextView colorGroup = (TextView)v.findViewById( R.id.groupname );
+		TextView colorGroup = (TextView)v.findViewById( R.id.txtNivel1 );
 		if( gt != null )
 			colorGroup.setText( gt );
 
 		/// NIVEL 1 --------------------------------------------------------------------------------
-		ImageButton btnEditar = (ImageButton)v.findViewById(R.id.btn_editar);
+		ImageButton btnEditar = (ImageButton)v.findViewById(R.id.btnEditar);
 		btnEditar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -203,11 +206,19 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra("objeto", _lista.get(groupPosition));//TODO: pasar solo el id del objeto o la posicion dentro de la lista global. Hacer servicio que almacene lista global
-    			_context.startActivity(intent);
+				_context.startActivity(intent);
 			}
 		});
 		btnEditar.setFocusable(false);//NO HACE CASO EN LAYOUT XML
 
+		/*if(_bIniRowHeight)
+		{
+			_bIniRowHeight = false;
+			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+			int height = v.getMeasuredHeight();
+			CesExpandableListView.setRowHeight2(height);//TODO:eliminar, esto seria para poner height1
+System.err.println("zzzzzzzzzzzzzzzzzzzzzz n1.1:" + height);
+		}*/
         return v;
     }
 

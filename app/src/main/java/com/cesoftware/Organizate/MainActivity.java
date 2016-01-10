@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		//------ Medir dimensiones submenus
+		//findViewById(R.id.elv_todo);
 		//------
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);

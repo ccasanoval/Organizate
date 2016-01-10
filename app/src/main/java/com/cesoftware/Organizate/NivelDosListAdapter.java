@@ -19,6 +19,7 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 	//______________________________________________________________________________________________
 	private static ArrayList<Objeto> _lista;
 	public static void setLista(ArrayList<Objeto> lista){_lista=lista;}
+	private static boolean _bIniRowHeight2 = true, _bIniRowHeight3 = true;
 
 	private Context _context;
 	private int _seccion = 0;
@@ -32,13 +33,13 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
     }
 
 	//______________________________________________________________________________________________
+	/// NIVEL 3 --------------------------------------------------------------------------------
 	@Override
     public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
 	{
-        View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent );
+		View v = super.getChildView(groupPosition, childPosition, isLastChild, convertView, parent );
 
-		/// NIVEL 3 --------------------------------------------------------------------------------
-		TextView txtChild = (TextView)v.findViewById(R.id.childname);
+		TextView txtChild = (TextView)v.findViewById(R.id.txtNivel3);
 		txtChild.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -51,6 +52,15 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 			}
 		});
 
+		if(_bIniRowHeight3)
+		{
+			_bIniRowHeight3 = false;
+			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+			int height = v.getMeasuredHeight();
+			CesExpandableListView.setRowHeight3(height);
+System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.3:"+height);
+		}
+
         return v;
     }
 
@@ -58,10 +68,10 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 	@Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, final ViewGroup parent)
 	{
-        View v = super.getGroupView( groupPosition, isExpanded, convertView, parent );
+        View v = super.getGroupView(groupPosition, isExpanded, convertView, parent);
 
 		/// NIVEL 2 --------------------------------------------------------------------------------
-		ImageButton btnEditar = (ImageButton)v.findViewById(R.id.btn_editar);
+		ImageButton btnEditar = (ImageButton)v.findViewById(R.id.btnEditarNivel2);
 		btnEditar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -69,11 +79,20 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       			intent.putExtra("objeto", _lista.get(_seccion).getHijos()[groupPosition]);
-    			_context.startActivity(intent);
+				intent.putExtra("objeto", _lista.get(_seccion).getHijos()[groupPosition]);
+				_context.startActivity(intent);
 			}
 		});
 		btnEditar.setFocusable(false);//NO HACE CASO EN LAYOUT XML
+
+		if(_bIniRowHeight2)
+		{
+			_bIniRowHeight2 = false;
+			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
+			int height = v.getMeasuredHeight();
+			CesExpandableListView.setRowHeight2(height);
+System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.2:"+height);
+		}
 
         return v;
     }

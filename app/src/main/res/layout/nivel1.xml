@@ -7,7 +7,7 @@
 	>
 
 	<TextView
-		android:id="@+id/groupname"
+		android:id="@+id/txtNivel1"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:paddingLeft="35dp"
@@ -24,7 +24,7 @@
 		/>
 
 	<ImageButton
-		android:id="@+id/btn_editar"
+		android:id="@+id/btnEditar"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"

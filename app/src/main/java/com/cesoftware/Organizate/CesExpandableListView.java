@@ -9,8 +9,10 @@ public class CesExpandableListView extends ExpandableListView
 	//TODO: try this with diferent mobiles/resolutions
 //	private static final int ROW_HEIGHT2 = 100;//
 //	private static final int ROW_HEIGHT3 = 90;//  x4!!
-	private static final int ROW_HEIGHT2 = 66;//24
-	private static final int ROW_HEIGHT3 = 62;//22
+//	private static final int ROW_HEIGHT2 = 66;//24
+//	private static final int ROW_HEIGHT3 = 62;//22
+    private static int ROW_HEIGHT2 = 100;   public static void setRowHeight2(int v){ROW_HEIGHT2=v+1;ROW_HEIGHT3=v+1;}//TODO:tnenr la dimensin 3 antes de mostrar
+    private static int ROW_HEIGHT3 = 100;   public static void setRowHeight3(int v){ROW_HEIGHT3=v+1;}
 	private int rows2, rows3;
 
 	//______________________________________________________________________________________________
@@ -21,7 +23,6 @@ public class CesExpandableListView extends ExpandableListView
 	{
 		this.rows2 = rows[1];
 		this.rows3 = rows[2];
-//System.err.println("BBB"+this+"--------"+rows1+".." + rows2+"..."+rows3+"-------" + (rows1 * ROW_HEIGHT1 + rows2*ROW_HEIGHT2 + rows3*ROW_HEIGHT3));
 	}
 
 	//______________________________________________________________________________________________
@@ -29,51 +30,14 @@ public class CesExpandableListView extends ExpandableListView
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-		//this.getChildVisibleRect();
-//+this.getClipBounds()
-		System.err.println("AAA" + this + "--------------------" + rows2 + ".." + rows3 + "------" + (rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "-------" + heightMeasureSpec + "::::" + getBottom());
+	System.err.println("AAA" + "-----------" + rows2 + " ("+ROW_HEIGHT2+")..." + rows3+ " ("+ROW_HEIGHT3+") ------" + (rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "---" + heightMeasureSpec + "::::" + getBottom());
 		setMeasuredDimension(getMeasuredWidth(), rows2 * ROW_HEIGHT2 + rows3*ROW_HEIGHT3);
-		//DisplayMetrics metrics = getResources().getDisplayMetrics();
- 		//getWindowManager().getDefaultDisplay().getMetrics(metrics);
     }
 
 	//______________________________________________________________________________________________
 	@Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
-    {
-        super.onLayout(changed, left, top, right, bottom);
-    }
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+	{
+		super.onLayout(changed, left, top, right, bottom);
+	}
 }
-
-/*
-TextView textView = (TextView)findViewById(R.id.my_textview);
-ViewTreeObserver observer = textView.getViewTreeObserver();
-observer.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-    @Override
-    public void onGlobalLayout() {
-        //in here, place the code that requires you to know the dimensions.
-        //this will be called as the layout is finished, prior to displaying.
-    }
-}
-*
-*
-*
-final TextView tv = (TextView)findViewById(R.id.image_test);
-ViewTreeObserver vto = tv.getViewTreeObserver();
-vto.addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-
-    @Override
-    public void onGlobalLayout() {
-        LayerDrawable ld = (LayerDrawable)tv.getBackground();
-        ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-        ViewTreeObserver obs = tv.getViewTreeObserver();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            obs.removeOnGlobalLayoutListener(this);
-        } else {
-            obs.removeGlobalOnLayoutListener(this);
-        }
-    }
-
-});*
-* */

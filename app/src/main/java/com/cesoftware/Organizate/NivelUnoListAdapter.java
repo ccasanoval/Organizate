@@ -36,7 +36,7 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
         _topExpList = topExpList;
 		_inflater = LayoutInflater.from(context);
 
-		ArrayList<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);//TODO: aclarar tema de niveles....que nivel de lista en que lugar?
+		ArrayList<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);
         _lista = nivel1;
 		_listViewCache = new CesExpandableListView[nivel1.size()];
 		NivelDosListAdapter.setLista(nivel1);
@@ -186,12 +186,12 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 	@Override
     public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent)
 	{
-        View v = null;
+        View v;
         if( convertView != null)
             v = convertView;
         else
 			v = _inflater.inflate(R.layout.nivel1, parent, false);
-        String gt = (String)getGroup(groupPosition).toString();
+        String gt = getGroup(groupPosition).toString();
 		TextView colorGroup = (TextView)v.findViewById( R.id.txtNivel1 );
 		if( gt != null )
 			colorGroup.setText( gt );
@@ -216,8 +216,7 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 			_bIniRowHeight = false;
 			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
 			int height = v.getMeasuredHeight();
-			CesExpandableListView.setRowHeight2(height);//TODO:eliminar, esto seria para poner height1
-System.err.println("zzzzzzzzzzzzzzzzzzzzzz n1.1:" + height);
+			CesExpandableListView.setRowHeight1(height);
 		}*/
         return v;
     }

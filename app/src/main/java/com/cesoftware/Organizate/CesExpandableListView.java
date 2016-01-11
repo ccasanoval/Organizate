@@ -6,11 +6,6 @@ import android.widget.ExpandableListView;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesExpandableListView extends ExpandableListView
 {
-	//TODO: try this with diferent mobiles/resolutions
-//	private static final int ROW_HEIGHT2 = 100;//
-//	private static final int ROW_HEIGHT3 = 90;//  x4!!
-//	private static final int ROW_HEIGHT2 = 66;//24
-//	private static final int ROW_HEIGHT3 = 62;//22
     private static int ROW_HEIGHT2 = 100;   public static void setRowHeight2(int v){ROW_HEIGHT2=v+1;ROW_HEIGHT3=v+1;}//TODO:tnenr la dimensin 3 antes de mostrar
     private static int ROW_HEIGHT3 = 100;   public static void setRowHeight3(int v){ROW_HEIGHT3=v+1;}
 	private int rows2, rows3;

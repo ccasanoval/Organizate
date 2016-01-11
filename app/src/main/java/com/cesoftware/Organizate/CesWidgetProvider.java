@@ -22,13 +22,6 @@ public class CesWidgetProvider extends AppWidgetProvider
 	public void onEnabled(Context context)
 	{
 		SugarContext.init(context);
-		//_lista = Objeto.conectarHijos(Objeto.findAll(Objeto.class));
-		//_lista = new ArrayList<>();
-		//Iterator<Objeto> it = Objeto.findAll(Objeto.class);//.find(Objeto.class, " _iPrioridad > 3 ");//
-		//while(it.hasNext())_lista.add(it.next());
-		//TODO: guardar nivel en objeto y aqui buscar los que no son nivel 1 que son demasiado generales...
-		//_lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is null and _i_prioridad > 3 order by _i_prioridad desc");
-//System.err.println("onEnabled----------"+_lista.size());
 	}
 
 	//______________________________________________________________________________________________

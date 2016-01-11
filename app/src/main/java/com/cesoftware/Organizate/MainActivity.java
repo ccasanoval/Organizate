@@ -93,36 +93,26 @@ public class MainActivity extends AppCompatActivity
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 	}
 	//______________________________________________________________________________________________
-	public void refrescarLista(ArrayList<Objeto> lista)
+	public void refrescarLista()
 	{
 		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
+		ArrayList<Objeto> lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
+		ActEdit.setLista(lista);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 		_expListView.refreshDrawableState();
 	}
 	//______________________________________________________________________________________________
 	public void selectObjeto(Objeto o)
 	{
-		//TODO: Guardar es estados visible de los objetos para dejarlos luego igual???
-		/*
-		if(o.getNivel() == Objeto.NIVEL1)
-		{
-			_expListView.setSelectedGroup();
-		}
-		else if(o.getNivel() == Objeto.NIVEL2)
-		{
-		}
-		else
-		{
-		}*/
-
+		//TODO:dejar abierto el nodo modificado, Guardar es estados visible de los objetos para dejarlos luego igual???
+		//Recorre la lista de objetos y mira flag: abierto o cerrado, si esta abierto despliegalo...
 		//_expListView.setSelectedChild(groupPosition, childPosition, true);
 	}
 
 
 
 	//______________________________________________________________________________________________
-	private static void datosTEST()
+	/*private static void datosTEST()
 	{
 		int i=0;
 		Objeto[] lista = new Objeto[13];
@@ -201,6 +191,6 @@ public class MainActivity extends AppCompatActivity
 					ao2[l].save();
 			}
 		}
-	}
+	}*/
 }
 

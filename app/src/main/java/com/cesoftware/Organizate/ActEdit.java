@@ -38,7 +38,6 @@ import java.util.List;
 import com.cesoftware.Organizate.models.Objeto;
 
 //TODO: Check support libraries : need, do i use it?
-//TODO: al borrarlo todo y crear de nuevo siguen los antiguos ... borrar de lista?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {
@@ -120,7 +119,7 @@ public class ActEdit extends AppCompatActivity
 					{
 						ActEdit.dbDel(_o);
 						Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-						_act.refrescarLista(_lista);
+						_act.refrescarLista();
 						ActEdit.this.finish();
 					}
 				});
@@ -274,7 +273,7 @@ Objeto.printLista(_lista);
 		{
 			o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
 		}
-		_act.refrescarLista(_lista);//TODO:dejar abierto el nodo modificado
+		_act.refrescarLista();
 		_act.selectObjeto(_o);
 		ActEdit.this.finish();
 	}

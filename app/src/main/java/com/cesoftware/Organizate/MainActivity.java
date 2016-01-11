@@ -122,32 +122,24 @@ public class MainActivity extends AppCompatActivity
 			public boolean onTouch(View v, MotionEvent me)
 			{
 				if(_nClicks == 0)_dtClicks = new Date();
+System.err.println("1----click:"+_nClicks+" : "+(new Date().getTime() -  _dtClicks.getTime()));
 				_nClicks++;
 				if(new Date().getTime() -  _dtClicks.getTime() > 1000)
 				{
 					_nClicks=1;
 					_dtClicks = new Date();
+System.err.println("2----click:"+_nClicks+" : "+(new Date().getTime() -  _dtClicks.getTime()));
+					return true;
 				}
 				else if(_nClicks > 7)
 				{
 					_nClicks = 0;
-					//TODO: Egg
 					//http://www.anddev.org/simple_splash_screen-t811.html
 					//http://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen
-
 					System.err.println("EGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-
 					Intent i = new Intent(MainActivity.this, ActSplash.class);
 					MainActivity.this.startActivity(i);
-					/*new Handler().postDelayed(new Runnable()
-					{
-						@Override
-						public void run()
-						{
-							Intent i = new Intent(MainActivity.this, ActSplash.class);
-							MainActivity.this.startActivity(i);
-						}
-					}, 3000);*/
+					return true;
 				}
 				return false;
 			}

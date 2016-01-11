@@ -93,7 +93,6 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 	@Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent)
     {
-//System.err.println("getChildView--------------------groupPosition="+groupPosition+" / childPosition="+childPosition+" / isLastChild="+isLastChild);
 		CesExpandableListView dev = new CesExpandableListView(_context);
 		dev.setRows(calculateRowCount(groupPosition, null));
 		dev.setAdapter(new NivelDosListAdapter(
@@ -120,7 +119,7 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 			{
-				System.err.println("*******************************---------------------------------***" + _lista[groupPosition].getHijos()[childPosition].toString());
+				System.err.println("********---------------------------------***" + _lista[groupPosition].getHijos()[childPosition].toString());
 				return true;
 			}
 		});*/

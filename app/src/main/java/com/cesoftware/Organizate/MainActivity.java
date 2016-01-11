@@ -1,22 +1,24 @@
 package com.cesoftware.Organizate;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-//import android.support.design.widget.Snackbar;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.ExpandableListView;
+	//import android.support.design.widget.Snackbar;
+	import android.os.Bundle;
+	import android.support.v7.widget.Toolbar;
+	import android.view.Menu;
+	import android.view.MenuItem;
+	import android.view.MotionEvent;
+	import android.view.View;
+	import android.widget.ExpandableListView;
 
-import com.cesoftware.Organizate.models.Objeto;
-import com.orm.SugarContext;
+	import com.cesoftware.Organizate.models.Objeto;
+	import com.orm.SugarContext;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+	import java.util.ArrayList;
+	import java.util.Date;
+	import java.util.Iterator;
 
-//TODO: Hacer _lista accesible desde servicio para widget?
-//TODO: Eliminar espaciado extra en nivel2
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainActivity extends AppCompatActivity
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity
 	protected  void onDestroy()
 	{
 		super.onDestroy();
-		//SugarContext.terminate();//look at manifest//No lo llamamos si queremos que widget pueda consultar bbdd
+		//SugarContext.terminate();//look at manifest//No lo llamamos para que widget pueda consultar bbdd
 	}
 
 	//______________________________________________________________________________________________
@@ -38,13 +40,14 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		//------ Medir dimensiones submenus
-		//findViewById(R.id.elv_todo);
+		//-----
+		setEgg();
+
 		//------
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
 		SugarContext.init(this);
-//datosTEST();
+	//datosTEST();
 		cargarLista();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
@@ -65,16 +68,15 @@ public class MainActivity extends AppCompatActivity
 	{
 		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		//System.err.println("onOptionsItemSelected-------------------------------------"+id);
 		//noinspection SimplifiableIfStatement
 		if(id == R.id.nuevo)
 		{
 			Intent intent = new Intent(this, ActEdit.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    		this.startActivity(intent);
+			this.startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
-    }
+	}
 
 	//______________________________________________________________________________________________
 	private void cargarLista()
@@ -109,6 +111,48 @@ public class MainActivity extends AppCompatActivity
 		//_expListView.setSelectedChild(groupPosition, childPosition, true);
 	}
 
+	//______________________________________________________________________________________________
+	public void setEgg()
+	{
+		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
+		tb.setOnTouchListener(new View.OnTouchListener()
+		{
+			private int _nClicks = 0;
+			private Date _dtClicks;
+			public boolean onTouch(View v, MotionEvent me)
+			{
+				if(_nClicks == 0)_dtClicks = new Date();
+				_nClicks++;
+				if(new Date().getTime() -  _dtClicks.getTime() > 1000)
+				{
+					_nClicks=1;
+					_dtClicks = new Date();
+				}
+				else if(_nClicks > 7)
+				{
+					_nClicks = 0;
+					//TODO: Egg
+					//http://www.anddev.org/simple_splash_screen-t811.html
+					//http://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen
+
+					System.err.println("EGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+
+					Intent i = new Intent(MainActivity.this, ActSplash.class);
+					MainActivity.this.startActivity(i);
+					/*new Handler().postDelayed(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							Intent i = new Intent(MainActivity.this, ActSplash.class);
+							MainActivity.this.startActivity(i);
+						}
+					}, 3000);*/
+				}
+				return false;
+			}
+		});
+	}
 
 
 	//______________________________________________________________________________________________

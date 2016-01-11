@@ -33,6 +33,10 @@
 			android:label="@string/editar"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
+		<activity
+			android:name=".ActSplash"
+			android:theme="@style/Theme.Transparent">
+		</activity>
 
 		<receiver android:name="com.cesoftware.Organizate.CesWidgetProvider" >
 			<intent-filter >

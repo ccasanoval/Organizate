@@ -18,9 +18,6 @@ import java.util.Iterator;
 public class Objeto extends SugarRecord implements Parcelable
 {
 	public static final int NIVEL1 = 0;
-	public static final int NIVEL2 = 1;
-	public static final int NIVEL3 = 2;
-	public static final int NIVEL_MAX = 3;
 
 	private Long _idUsr = Long.valueOf(0);
 	private Date _dtCreacion = new Date();
@@ -32,23 +29,10 @@ public class Objeto extends SugarRecord implements Parcelable
 	private Objeto _padre = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
-	//TODO:hacer esto por id
-	/*@Ignore
-	private int _posicion[] = new int[NIVEL_MAX];//TODO: anadir posicion absoluta en _lista (para editar elementos mas rapido?)
-	public int getPosicion(int nivel)
-	{
-		if(nivel >= NIVEL_MAX)return -1;
-		return _posicion[nivel];
-	}
-	public void setPosicion(int nivel, int posicion)
-	{
-		if(nivel >= NIVEL_MAX)return;
-		_posicion[nivel] = posicion;
-	}*/
 
 	//______________________________________________________________________________________________
 	public Objeto(){}
-	public Objeto(String s, Objeto padre){_sNombre=s; _padre=padre;}
+	//public Objeto(String s, Objeto padre){_sNombre=s; _padre=padre;}
 
 	//______________________________________________________________________________________________
 	@Override
@@ -89,26 +73,16 @@ public class Objeto extends SugarRecord implements Parcelable
 	{
 		boolean isEliminado = false;
 		int len = _hijos.length;
-System.err.println("\n"+this+"********************************"+len + " ::: "+hijo);
 		if(len < 1)return;
 		Objeto[] hijos = new Objeto[len-1];
 		for(int i=0, j=0; i < len; i++)
 			if(_hijos[i].equals(hijo))
-			{
 				isEliminado = true;
-				System.err.println(this+"------------delHijo"+hijo);
-			}
 			else
 				hijos[j++] = _hijos[i];
 		if(isEliminado)
 			_hijos = hijos;
 	}
-
-	//______________________________________________________________________________________________
-	/*public void delHijos()
-	{
-		_hijos = new Objeto[0];
-	}*/
 
 	//______________________________________________________________________________________________
 	public int getNivel()
@@ -124,13 +98,13 @@ System.err.println("\n"+this+"********************************"+len + " ::: "+hi
 	}
 
 	//______________________________________________________________________________________________
-	public Long getIdUsr(){return _idUsr;}
-	public void setIdUsr(Long idUsr){_idUsr = idUsr;}
-	public Date getCreacion(){return _dtCreacion;}
+	//public Long getIdUsr(){return _idUsr;}
+	//public void setIdUsr(Long idUsr){_idUsr = idUsr;}
+	//public Date getCreacion(){return _dtCreacion;}
 	public void setCreacion(Date dtCreacion){_dtCreacion = dtCreacion;}
-	public Date getLimite(){return _dtLimite;}
-	public void setLimite(Date dtLimite){_dtLimite = dtLimite;}
-	public Date getModificado(){return _dtModificado;}
+	//public Date getLimite(){return _dtLimite;}
+	//public void setLimite(Date dtLimite){_dtLimite = dtLimite;}
+	//public Date getModificado(){return _dtModificado;}
 	public void setModificado(Date dtModificado){_dtModificado = dtModificado;}
 	public Integer getPrioridad(){return _iPrioridad;}
 	public void setPrioridad(Integer iPrioridad){_iPrioridad = iPrioridad;}

@@ -27,6 +27,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	private String _sNombre = "";
 	private String _sDescripcion = "";
 	private Objeto _padre = null;
+	private Aviso _aviso = null;//TODO: quiza array de Aviso
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
 
@@ -116,6 +117,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	public void setPadre(Objeto padre){_padre = padre;}
 	public Objeto[] getHijos(){return _hijos;}
 	//public void setHijos(Objeto[] hijos){_hijos = hijos;}
+	public Aviso getAviso(){return _aviso;}
+	public void setAviso(Aviso aviso){_aviso = aviso;}
 
 
 	//______________________________________________________________________________________________
@@ -143,6 +146,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		_iPrioridad = in.readInt();
 		_sNombre = in.readString();
 		_sDescripcion = in.readString();
+		_aviso = in.readParcelable(Aviso.class.getClassLoader());
 		_padre = in.readParcelable(Objeto.class.getClassLoader());
 		_hijos = in.createTypedArray(Objeto.CREATOR);
 	}
@@ -157,6 +161,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		dest.writeInt(_iPrioridad);
 		dest.writeString(_sNombre);
 		dest.writeString(_sDescripcion);
+		dest.writeParcelable(_aviso, flags);
 		dest.writeParcelable(_padre, flags);
 		dest.writeTypedArray(_hijos, flags);
 	}

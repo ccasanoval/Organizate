@@ -3,6 +3,7 @@ package com.cesoftware.Organizate;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,13 +53,12 @@ public class ActEdit extends AppCompatActivity
 		public static void setParentAct(MainActivity act){_act = act;}
 
 	//______________________________________________________________________________________________
-	private String		_popUpContents[];
+	private String[]	_popUpContents;
     private PopupWindow	_popupPadre;
     private Button		_btnPadre;
 	private ImageButton _btnEliminar;
 	private ImageButton _btnHablar;
 
-		//Si no mueves de lugar guarda solo _o, pero si no, guarda tanto origen como destino
 	private boolean _isNuevo=false;
 	private long _idPadre = TOP_NODE;
 	private Objeto _o;
@@ -87,11 +87,14 @@ public class ActEdit extends AppCompatActivity
 		_rbPrioridad.setNumStars(5);
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
 		_btnHablar = (ImageButton)findViewById(R.id.btnHablar);
-		ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
+		//ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
+		ImageButton	btnAviso = (ImageButton)findViewById(R.id.btnAviso);
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+
+		//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
 		//------------------------------------------------------------------------------------------
 		fab.setOnClickListener(new View.OnClickListener()
@@ -99,7 +102,6 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(View view)
 			{
-				//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 				ActEdit.this.finish();
 			}
 		});
@@ -107,31 +109,9 @@ public class ActEdit extends AppCompatActivity
 		_btnEliminar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
-			public void onClick(final View v)
+			public void onClick(View v)
 			{
-				AlertDialog.Builder dialog = new AlertDialog.Builder(ActEdit.this);
-				dialog.setTitle(ActEdit.this.getString(R.string.eliminar));
-				dialog.setMessage(ActEdit.this.getString(R.string.seguro_eliminar));
-				dialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
-						ActEdit.dbDel(_o);
-						Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();
-						_act.refrescarLista();
-						ActEdit.this.finish();
-					}
-				});
-				/*dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
-				{
-					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
-						Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
-					}
-				});*/
-				dialog.create().show();
+				borrar(v);
 			}
 		});
 		_btnHablar.setOnClickListener(new View.OnClickListener()
@@ -142,22 +122,23 @@ public class ActEdit extends AppCompatActivity
 				hablar();
 			}
 		});
-		btnGuardar.setOnClickListener(new View.OnClickListener()
+		btnAviso.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				showAviso();
+			}
+		});
+		/*btnGuardar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
 				saveValores();
 			}
-		});
-
+		});*/
 		//------------------------------------------------------------------------------------------
-		/*if(_lista == null)
-		{
-			//Avisar
-			System.err.println("ActEdit:onCreate:ERROR: Sin lista de objetos");
-			finish();
-		}*/
 
 		List<String> lst = new ArrayList<>();
 		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+TOP_NODE);
@@ -262,9 +243,8 @@ System.err.println("setValores-----------------_o=" + _o);
 					_lista.set();*/
 		}
 
-System.err.println("TO ADD------------o=" + _o);
 		fixPadres();
-Objeto.printLista(_lista);
+//Objeto.printLista(_lista);
 
 		//BBDD---------------------------------------------------------
 		clearDataBase();
@@ -330,6 +310,33 @@ Objeto.printLista(_lista);
 		o.delete();
 		for(Objeto o1 : o.getHijos())
 			dbDel(o1);
+	}
+
+	private void borrar(final View v)
+	{
+		AlertDialog.Builder dialog = new AlertDialog.Builder(ActEdit.this);
+		dialog.setTitle(ActEdit.this.getString(R.string.eliminar));
+		dialog.setMessage(ActEdit.this.getString(R.string.seguro_eliminar));
+		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				ActEdit.dbDel(_o);
+				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+				_act.refrescarLista();
+				ActEdit.this.finish();
+			}
+		});
+		/*dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener()
+		{
+			@Override
+			public void onClick(DialogInterface dialog, int which)
+			{
+				Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
+			}
+		});*/
+		dialog.create().show();
 	}
 
 
@@ -429,6 +436,8 @@ Objeto.printLista(_lista);
 
 
 	//______________________________________________________________________________________________
+	/// TEXT TO SPEECH
+	//______________________________________________________________________________________________
 	private static TextToSpeech tts = null;
 	private void hablar()
 	{
@@ -468,4 +477,30 @@ Objeto.printLista(_lista);
     	String utteranceId=this.hashCode() + "";
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
 	}
+
+	//______________________________________________________________________________________________
+	// AVISO
+	//______________________________________________________________________________________________
+	private static final int AVISO = 200;
+	private void showAviso()
+	{
+		Intent i = new Intent(this, ActAvisoEdit.class);
+		i.putExtra("aviso", _o.getAviso());
+		startActivityForResult(i, AVISO);
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode == RESULT_OK)
+		{
+			if(requestCode == AVISO)
+			{
+			}
+		}
+	}
+
+
+
+
 }

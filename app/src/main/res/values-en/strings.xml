@@ -18,4 +18,20 @@
 
 	<string name="seguro_eliminar">Are you sure you want to delete it?</string>
 	<string name="sintareas">No tasks</string>
+
+	<string name="lunes"    >Mo</string>
+	<string name="martes"   >Tu</string>
+	<string name="miercoles">We</string>
+	<string name="jueves"   >Th</string>
+	<string name="viernes"  >Fr</string>
+	<string name="sabado"   >Sa</string>
+	<string name="domingo"  >Su</string>
+
+	<string name="date">Date:</string>
+	<string name="mes">+Month</string>
+	<string name="dia_mes">+Month Day</string>
+	<string name="dia_semana">+Week Day</string>
+	<string name="hora">+Hour</string>
+	<string name="minuto">+Minute</string>
+
 </resources>

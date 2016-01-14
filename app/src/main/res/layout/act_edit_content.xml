@@ -96,13 +96,13 @@
 		/>
 
 	<ImageButton
-		android:id="@+id/btnGuardar"
+		android:id="@+id/btnAviso"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignTop="@+id/btnEliminar"
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
-		android:src="@android:drawable/ic_menu_save"
+		android:src="@android:drawable/ic_menu_agenda"
 		/>
 
 </RelativeLayout>

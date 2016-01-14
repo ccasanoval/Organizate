@@ -85,9 +85,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		_btn = new Button[_ai.length];
 		for(int i=0; i < _ai.length; i++)
 		{
-System.err.println("----"+_ai[i]);
 			_btn[i] = (Button)findViewById(_ai[i]);
-System.err.println("----"+_ai[i]+" : "+_btn[i]);
 			_btn[i].setOnClickListener(handler);
 		}
 
@@ -96,13 +94,13 @@ System.err.println("----"+_ai[i]+" : "+_btn[i]);
 		for(int i=0; i < _asPopUpHora.length; i++)	_asPopUpHora[i]=String.valueOf(i);
 		for(int i=0; i < _asPopUpMinuto.length; i++)_asPopUpMinuto[i]=String.valueOf(i*5);
 
-		_asPopUpDiaSemana[Calendar.MONDAY] = getResources().getString(R.string.lunes);
-		_asPopUpDiaSemana[Calendar.TUESDAY] = getResources().getString(R.string.martes);
-		_asPopUpDiaSemana[Calendar.WEDNESDAY] = getResources().getString(R.string.miercoles);
-		_asPopUpDiaSemana[Calendar.THURSDAY] = getResources().getString(R.string.jueves);
-		_asPopUpDiaSemana[Calendar.FRIDAY] = getResources().getString(R.string.viernes);
-		_asPopUpDiaSemana[Calendar.SATURDAY] = getResources().getString(R.string.sabado);
-		_asPopUpDiaSemana[Calendar.SUNDAY] = getResources().getString(R.string.domingo);
+		_asPopUpDiaSemana[Calendar.MONDAY-1] =	getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY-1);
+		_asPopUpDiaSemana[Calendar.TUESDAY-1] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY-1);
+		_asPopUpDiaSemana[Calendar.WEDNESDAY-1]=getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY-1);
+		_asPopUpDiaSemana[Calendar.THURSDAY-1] =getResources().getString(R.string.jueves)+SEP+(Calendar.THURSDAY-1);
+		_asPopUpDiaSemana[Calendar.FRIDAY-1] = 	getResources().getString(R.string.viernes)+SEP+(Calendar.FRIDAY-1);
+		_asPopUpDiaSemana[Calendar.SATURDAY-1] =getResources().getString(R.string.sabado)+SEP+(Calendar.SATURDAY-1);
+		_asPopUpDiaSemana[Calendar.SUNDAY-1] =	getResources().getString(R.string.domingo)+SEP+(Calendar.SUNDAY-1);
 
 
 		//------------------------------------------------------------------------------------------
@@ -260,11 +258,22 @@ System.err.println("setValores-----------------_a=" + _a);
             @Override
             public View getView(int position, View convertView, ViewGroup parent)
 			{
+				String id;
+				String text;
+
                 // setting the ID and text for every items in the list
                 String item = getItem(position);
-                String[] itemArr = item.split(SEP);
-                String text = itemArr[0];
-                String id = itemArr[1];
+				if(item.contains(SEP))
+				{
+                	String[] itemArr = item.split(SEP);
+                	text = itemArr[0];
+                	id = itemArr[1];
+				}
+				else
+				{
+					id = item;
+					text = item;
+				}
 
                 // visual settings for the list item
                 TextView listItem = new TextView(ActAvisoEdit.this);

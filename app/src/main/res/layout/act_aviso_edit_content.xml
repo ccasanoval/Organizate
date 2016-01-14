@@ -13,14 +13,14 @@
 	tools:context=".ActAvisoEdit"
 	tools:showIn="@layout/act_aviso_edit">
 
-	<ToggleButton
+	<!--ToggleButton
 		android:id="@+id/tb"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Fecha / Condiciones"
-		/>
+		/-->
 
-	<TextView
+	<!-- TextView
 		android:id="@+id/lblFecha"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -34,55 +34,89 @@
 		android:layout_height="wrap_content"
 		android:layout_toEndOf="@id/lblFecha"
 		android:layout_toRightOf="@id/lblFecha"
-		/>
 
-	<Button
-		android:id="@+id/btnMes"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
 		android:layout_below="@+id/lblFecha"
-		android:layout_marginTop="2dp"
-		android:text="@string/mes"
-		/>
+		/-->
 
-	<Button
-		android:id="@+id/btnDiaMes"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/btnMes"
-		android:layout_marginTop="2dp"
-		android:text="@string/dia_mes"
-		/>
-	<Button
-		android:id="@+id/btnDiaSemana"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/btnDiaMes"
-		android:layout_marginTop="2dp"
-		android:text="@string/dia_semana"
-		/>
 
-	<Button
-		android:id="@+id/btnHora"
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:id="@+id/layMes"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/btnDiaSemana"
-		android:layout_marginTop="2dp"
-		android:text="@string/hora"
-		/>
-	<Button
-		android:id="@+id/btnMinuto"
-		android:layout_width="wrap_content"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnMes"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="2dp"
+			android:text="@string/mes"
+			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/layDiaMes"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/btnHora"
-		android:layout_marginTop="2dp"
-		android:text="@string/minuto"
-		/>
+		android:layout_below="@+id/layMes"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnDiaMes"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="2dp"
+			android:text="@string/dia_mes"
+			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/layDiaSemana"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layDiaMes"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnDiaSemana"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="2dp"
+			android:text="@string/dia_semana"
+			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/layHora"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layDiaSemana"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnHora"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="2dp"
+			android:text="@string/hora"
+			/>
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/layMinuto"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layHora"
+		android:orientation="horizontal">
+		<Button
+			android:id="@+id/btnMinuto"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerHorizontal="true"
+			android:layout_marginTop="2dp"
+			android:text="@string/minuto"
+			/>
+	</LinearLayout>
 
 
 

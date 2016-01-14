@@ -50,7 +50,7 @@
         	</intent-filter>
 			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_info" />
 		</receiver>
-		<service android:name="com.cesoftware.Organizate.UpdateWidgetService"></service>
+		<service android:name="com.cesoftware.Organizate.UpdateWidgetService"/>
 	</application>
 
 </manifest>

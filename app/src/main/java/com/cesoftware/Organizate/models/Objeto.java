@@ -19,11 +19,11 @@ public class Objeto extends SugarRecord implements Parcelable
 {
 	public static final int NIVEL1 = 0;
 
-	private Long _idUsr = Long.valueOf(0);
+	private Long _idUsr = 0L;//Long.valueOf(0);
 	private Date _dtCreacion = new Date();
 	private Date _dtModificado = new Date();
 	private Date _dtLimite = new Date();
-	private Integer _iPrioridad = Integer.valueOf(0);
+	private Integer _iPrioridad = 0;//Integer.valueOf(0);
 	private String _sNombre = "";
 	private String _sDescripcion = "";
 	private Objeto _padre = null;

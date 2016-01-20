@@ -122,22 +122,12 @@ public class ActAvisoEdit extends AppCompatActivity
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("setValores-----------------_a=" + _a);
+System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 		_isNuevo = false;
-		/*_txtNombre.setText(_o.getNombre());
-		_txtDescripcion.setText(_o.getDescripcion());
-		_rbPrioridad.setRating(_o.getPrioridad());
-		Objeto oPadre = _o.getPadre();
-		if(oPadre == null)
-		{
-			_idPadre = -1;
-			//_btnPadre.setText();
-		}
-		else
-		{
-			_idPadre = oPadre.getId();
-			_btnPadre.setText(oPadre.getNombre());
-		}*/
+
+		if(_a.getMeses().size() )
+
+
 	}
 
 	//______________________________________________________________________________________________

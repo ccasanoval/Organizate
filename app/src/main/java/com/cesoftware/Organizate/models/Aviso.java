@@ -19,11 +19,26 @@ public class Aviso extends SugarRecord implements Parcelable
 
 	private Date _dt;
 	//boolean[] bDiaMes = new boolean[31];
+	private ArrayList<Integer> _aMes = new ArrayList<>();
 	private ArrayList<Integer> _aDiaMes = new ArrayList<>();
 	private ArrayList<Integer> _aDiaSemana = new ArrayList<>();
-	private ArrayList<Integer> _aMes = new ArrayList<>();
 	private ArrayList<Integer> _aHora = new ArrayList<>();
 	private ArrayList<Integer> _aMinuto = new ArrayList<>();
+
+	/// MES
+	public void addMes(Integer v)
+	{
+		if( !_aMes.contains(v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
+			_aMes.add(v);
+	}
+	public void delMes(Integer v)
+	{
+		_aMes.remove(v);
+	}
+	public ArrayList<Integer> getMeses()
+	{
+		return (ArrayList<Integer>)_aMes.clone();//TODO:CHECK
+	}
 
 	/// DIA MES
 	public void addDiaMes(Integer v)
@@ -46,17 +61,6 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void delDiaSemana(Integer v)
 	{
 		_aDiaMes.remove(v);
-	}
-
-	/// MES
-	public void addMes(Integer v)
-	{
-		if( !_aMes.contains(v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
-			_aMes.add(v);
-	}
-	public void delMes(Integer v)
-	{
-		_aMes.remove(v);
 	}
 
 	/// HORA

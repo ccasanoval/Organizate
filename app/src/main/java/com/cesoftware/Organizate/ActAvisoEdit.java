@@ -1,19 +1,10 @@
 package com.cesoftware.Organizate;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,21 +15,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import com.cesoftware.Organizate.models.Aviso;
-import com.cesoftware.Organizate.models.Objeto;
 
 //TODO: Check support libraries : need, do i use it?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -46,7 +31,7 @@ public class ActAvisoEdit extends AppCompatActivity
 {
 	private static final String SEP = "::";
 
-	private Aviso _a;
+	private Aviso _a, _a2;
 	private boolean _isNuevo=false;
 	private String[] _asPopUpMes = new String[12];
 	private String[] _asPopUpDiaMes = new String[31];
@@ -54,7 +39,9 @@ public class ActAvisoEdit extends AppCompatActivity
 	private String[] _asPopUpHora = new String[24];
 	private String[] _asPopUpMinuto = new String[12];
 	private String[][] _asPopUp = {_asPopUpMes, _asPopUpDiaMes, _asPopUpDiaSemana, _asPopUpHora, _asPopUpMinuto};
-	private int[] _ai = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
+	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
+	private LinearLayout[] _aLay;
+	private int[] _aIdLay = {R.id.layMes, R.id.layDiaMes, R.id.layDiaSemana, R.id.layHora, R.id.layMinuto};
 	private PopupWindow[] _apw;
 	private Button[] _btn;
 
@@ -66,7 +53,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		setContentView(R.layout.act_aviso_edit);
 
 		// PopUp
-		_apw = new PopupWindow[_ai.length];
+		_apw = new PopupWindow[_aIdBtn.length];
 		popUp();
 		View.OnClickListener handler = new View.OnClickListener()
 		{
@@ -74,7 +61,7 @@ public class ActAvisoEdit extends AppCompatActivity
 			{
 				for(int i=0; i < _btn.length; i++)
 				{
-					if(v.getId() == _ai[i])
+					if(v.getId() == _aIdBtn[i])
 					{
 						_apw[i].showAsDropDown(v, -7, 0);
 						break;
@@ -82,10 +69,10 @@ public class ActAvisoEdit extends AppCompatActivity
 				}
 			}
 		};
-		_btn = new Button[_ai.length];
-		for(int i=0; i < _ai.length; i++)
+		_btn = new Button[_aIdBtn.length];
+		for(int i=0; i < _aIdBtn.length; i++)
 		{
-			_btn[i] = (Button)findViewById(_ai[i]);
+			_btn[i] = (Button)findViewById(_aIdBtn[i]);
 			_btn[i].setOnClickListener(handler);
 		}
 
@@ -94,6 +81,9 @@ public class ActAvisoEdit extends AppCompatActivity
 		for(int i=0; i < _asPopUpHora.length; i++)	_asPopUpHora[i]=String.valueOf(i);
 		for(int i=0; i < _asPopUpMinuto.length; i++)_asPopUpMinuto[i]=String.valueOf(i*5);
 
+		_aLay = new LinearLayout[_aIdLay.length];
+		for(int i=0; i < _aLay.length; i++)_aLay[i]=(LinearLayout)findViewById(_aIdLay[i]);
+
 		_asPopUpDiaSemana[Calendar.MONDAY-1] =	getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY-1);
 		_asPopUpDiaSemana[Calendar.TUESDAY-1] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY-1);
 		_asPopUpDiaSemana[Calendar.WEDNESDAY-1]=getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY-1);
@@ -101,7 +91,6 @@ public class ActAvisoEdit extends AppCompatActivity
 		_asPopUpDiaSemana[Calendar.FRIDAY-1] = 	getResources().getString(R.string.viernes)+SEP+(Calendar.FRIDAY-1);
 		_asPopUpDiaSemana[Calendar.SATURDAY-1] =getResources().getString(R.string.sabado)+SEP+(Calendar.SATURDAY-1);
 		_asPopUpDiaSemana[Calendar.SUNDAY-1] =	getResources().getString(R.string.domingo)+SEP+(Calendar.SUNDAY-1);
-
 
 		//------------------------------------------------------------------------------------------
 		try
@@ -215,9 +204,12 @@ System.err.println("setValores-----------------_a=" + _a);
 	//______________________________________________________________________________________________
     public void popUp()
 	{
+		final LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
+
 		_apw = new PopupWindow[_asPopUp.length];
 		for(int i=0; i < _asPopUp.length; i++)
 		{
+			final int i_ = i;
         	final PopupWindow popupWindow = new PopupWindow(this);
         	ListView list = new ListView(this);
         	list.setAdapter(adapter(_asPopUp[i]));
@@ -227,8 +219,7 @@ System.err.println("setValores-----------------_a=" + _a);
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3)
 						{
-							Context mContext = v.getContext();
-							ActAvisoEdit act = ((ActAvisoEdit)mContext);
+							ActAvisoEdit act = ((ActAvisoEdit)v.getContext());
 							// add some animation when a list item was clicked
 							Animation fadeInAnimation = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.fade_in);
 							fadeInAnimation.setDuration(10);
@@ -236,13 +227,47 @@ System.err.println("setValores-----------------_a=" + _a);
 							// dismiss the pop up
 							popupWindow.dismiss();
 							//
-							String selectedItemText = ((TextView)v).getText().toString();
+							String texto = ((TextView)v).getText().toString();
+							//Long valor = Long.parseLong(v.getTag().toString());
+							Object valor = v.getTag();
+							//
+ 							final View item = inflater.inflate(R.layout.aviso_item, null, false);
+							item.setTag(valor);
+							TextView lbl = (TextView)item.findViewById(R.id.lbl);
+							lbl.setText(texto);
+							ImageButton btnDel = (ImageButton)item.findViewById(R.id.btnDel);
+							btnDel.setOnClickListener(new View.OnClickListener()
+							{
+								@Override
+								public void onClick(View v)
+								{
+									_aLay[i_].removeView(item);
+									switch(i_)//TODO: Que otra manera hay?
+									{
+									case 0:_a.delMes(Integer.parseInt(v.getTag().toString()));break;
+									case 1:_a.delDiaMes(Integer.parseInt(v.getTag().toString()));break;
+									case 2:_a.delDiaSemana(Integer.parseInt(v.getTag().toString()));break;
+									case 3:_a.delHora(Integer.parseInt(v.getTag().toString()));break;
+									case 4:_a.delMinuto(Integer.parseInt(v.getTag().toString()));break;
+									}
+								}
+							});
+							_aLay[i_].addView(item);
+							switch(i_)//TODO: Que otra manera hay?
+							{
+							case 0:_a.addMes(Integer.parseInt(valor.toString()));break;
+							case 1:_a.addDiaMes(Integer.parseInt(valor.toString()));break;
+							case 2:_a.addDiaSemana(Integer.parseInt(valor.toString()));break;
+							case 3:_a.addHora(Integer.parseInt(valor.toString()));break;
+							case 4:_a.addMinuto(Integer.parseInt(valor.toString()));
+								break;
+							}
 						}
 					}
 			);
         	// some other visual settings
         	DisplayMetrics metrics = getResources().getDisplayMetrics();
-        	popupWindow.setWidth(metrics.widthPixels - 40);
+        	popupWindow.setWidth(metrics.widthPixels/4);
 			popupWindow.setFocusable(true);
         	popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         	// set the list view as pop up window content
@@ -253,6 +278,9 @@ System.err.println("setValores-----------------_a=" + _a);
     //______________________________________________________________________________________________
     private ArrayAdapter<String> adapter(String padreArray[])
 	{
+		final DisplayMetrics metrics = getResources().getDisplayMetrics();
+        //setWidth(metrics.widthPixels/2);
+
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, padreArray)
 		{
             @Override
@@ -280,39 +308,12 @@ System.err.println("setValores-----------------_a=" + _a);
                 listItem.setText(text);
                 listItem.setTag(id);
                 listItem.setTextSize(22);
-                listItem.setPadding(10, 10, 10, 10);
+                listItem.setPadding(metrics.widthPixels/4, 50, 10, 10);
                 listItem.setTextColor(Color.WHITE);
 
                 return listItem;
             }
         };
     }
-	//______________________________________________________________________________________________
-/*	class OnItemClickListenerMes implements AdapterView.OnItemClickListener
-	{
-		@Override
-		public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3)
-		{
-System.err.println("------------------------"+arg2+":"+arg3);
-			// get the context and main activity to access variables
-			Context mContext = v.getContext();
-			ActAvisoEdit act = ((ActAvisoEdit)mContext);
-
-			// add some animation when a list item was clicked
-			Animation fadeInAnimation = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.fade_in);
-			fadeInAnimation.setDuration(10);
-			v.startAnimation(fadeInAnimation);
-
-			// dismiss the pop up
-			act._apw[0].dismiss();
-
-			// get the text and set it as the button text
-			String selectedItemText = ((TextView)v).getText().toString();
-			//act._btn[0].setText(selectedItemText);
-			// get the id
-			//_idPadre = Long.parseLong(v.getTag().toString());
-			//Toast.makeText(mContext, "ID is: " + _idPadre, Toast.LENGTH_SHORT).show();
-		}
-	}*/
 
 }

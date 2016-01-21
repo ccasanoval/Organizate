@@ -39,6 +39,7 @@
 		/-->
 
 
+	<ScrollView android:id="@+id/scrMes" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layMes"
 		android:layout_width="match_parent"
@@ -53,7 +54,9 @@
 			android:text="@string/mes"
 			/>
 	</LinearLayout>
+	</ScrollView>
 
+	<ScrollView android:id="@+id/scrDiaMes" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layDiaMes"
 		android:layout_width="match_parent"
@@ -69,7 +72,9 @@
 			android:text="@string/dia_mes"
 			/>
 	</LinearLayout>
+	</ScrollView>
 
+	<ScrollView android:id="@+id/scrDiaSemana" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layDiaSemana"
 		android:layout_width="match_parent"
@@ -85,7 +90,9 @@
 			android:text="@string/dia_semana"
 			/>
 	</LinearLayout>
+	</ScrollView>
 
+	<ScrollView android:id="@+id/scrHora" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layHora"
 		android:layout_width="match_parent"
@@ -101,7 +108,9 @@
 			android:text="@string/hora"
 			/>
 	</LinearLayout>
+	</ScrollView>
 
+	<ScrollView android:id="@+id/scrMinuto" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layMinuto"
 		android:layout_width="match_parent"
@@ -117,15 +126,11 @@
 			android:text="@string/minuto"
 			/>
 	</LinearLayout>
-
-
+	</ScrollView>
 
 	<!-- TimePicker
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:id="@+id/timePicker"/ -->
-
-
-
 
 </RelativeLayout>

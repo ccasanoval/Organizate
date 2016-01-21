@@ -25,6 +25,7 @@ import java.util.Calendar;
 
 import com.cesoftware.Organizate.models.Aviso;
 
+//TODO: no permitir que repita los mismos elementos...
 //TODO: Check support libraries : need, do i use it?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
@@ -38,6 +39,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private String[] _asPopUpDiaSemana = new String[7];
 	private String[] _asPopUpHora = new String[24];
 	private String[] _asPopUpMinuto = new String[12];
+	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX=5;
 	private String[][] _asPopUp = {_asPopUpMes, _asPopUpDiaMes, _asPopUpDiaSemana, _asPopUpHora, _asPopUpMinuto};
 	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
 	private LinearLayout[] _aLay;
@@ -124,11 +126,52 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 		_isNuevo = false;
-
-		if(_a.getMeses().size() )
-
-
+		for(Integer i : _a.getMeses())//TODO: meter y sacar ordenados ...
+			createItemView(i, i.toString(), MES);
+		for(Integer i : _a.getDiasMes())
+			createItemView(i, i.toString(), DIA_MES);
+		for(Integer i : _a.getDiasSemana())
+			createItemView(i, i.toString(), DIA_SEMANA);
+		for(Integer i : _a.getHoras())
+			createItemView(i, i.toString(), HORA);
+		for(Integer i : _a.getMinutos())
+			createItemView(i, i.toString(), MINUTO);
 	}
+
+
+	private View createItemView(Object tag, String texto, final int i)
+	{
+		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
+		final View item = inflater.inflate(R.layout.aviso_item, null, false);
+		item.setTag(tag);
+		TextView lbl = (TextView)item.findViewById(R.id.lbl);
+		lbl.setText(texto);
+		ImageButton btnDel = (ImageButton)item.findViewById(R.id.btnDel);
+		btnDel.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				_aLay[i].removeView(item);
+				delItem(item, i);
+			}
+		});
+		_aLay[i].addView(item);
+		return item;
+	}
+
+	private void delItem(View v, int i)
+	{
+		switch(i)//TODO: Que otra manera hay?
+		{
+		case MES:		_a.delMes(Integer.parseInt(v.getTag().toString()));break;
+		case DIA_MES:	_a.delDiaMes(Integer.parseInt(v.getTag().toString()));break;
+		case DIA_SEMANA:_a.delDiaSemana(Integer.parseInt(v.getTag().toString()));break;
+		case HORA:		_a.delHora(Integer.parseInt(v.getTag().toString()));break;
+		case MINUTO:	_a.delMinuto(Integer.parseInt(v.getTag().toString()));break;
+		}
+	}
+
 
 	//______________________________________________________________________________________________
 	// DB SAVE
@@ -180,9 +223,6 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		int id = item.getItemId();
-		//noinspection SimplifiableIfStatement
-		//if(id == R.id.)return true;
 		saveValores();
 		return super.onOptionsItemSelected(item);
     }
@@ -194,8 +234,6 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 	//______________________________________________________________________________________________
     public void popUp()
 	{
-		final LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
-
 		_apw = new PopupWindow[_asPopUp.length];
 		for(int i=0; i < _asPopUp.length; i++)
 		{
@@ -218,46 +256,23 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 							popupWindow.dismiss();
 							//
 							String texto = ((TextView)v).getText().toString();
-							//Long valor = Long.parseLong(v.getTag().toString());
 							Object valor = v.getTag();
 							//
- 							final View item = inflater.inflate(R.layout.aviso_item, null, false);
-							item.setTag(valor);
-							TextView lbl = (TextView)item.findViewById(R.id.lbl);
-							lbl.setText(texto);
-							ImageButton btnDel = (ImageButton)item.findViewById(R.id.btnDel);
-							btnDel.setOnClickListener(new View.OnClickListener()
-							{
-								@Override
-								public void onClick(View v)
-								{
-									_aLay[i_].removeView(item);
-									switch(i_)//TODO: Que otra manera hay?
-									{
-									case 0:_a.delMes(Integer.parseInt(v.getTag().toString()));break;
-									case 1:_a.delDiaMes(Integer.parseInt(v.getTag().toString()));break;
-									case 2:_a.delDiaSemana(Integer.parseInt(v.getTag().toString()));break;
-									case 3:_a.delHora(Integer.parseInt(v.getTag().toString()));break;
-									case 4:_a.delMinuto(Integer.parseInt(v.getTag().toString()));break;
-									}
-								}
-							});
-							_aLay[i_].addView(item);
+ 							createItemView(valor, texto, i_);
 							switch(i_)//TODO: Que otra manera hay?
 							{
-							case 0:_a.addMes(Integer.parseInt(valor.toString()));break;
-							case 1:_a.addDiaMes(Integer.parseInt(valor.toString()));break;
-							case 2:_a.addDiaSemana(Integer.parseInt(valor.toString()));break;
-							case 3:_a.addHora(Integer.parseInt(valor.toString()));break;
-							case 4:_a.addMinuto(Integer.parseInt(valor.toString()));
-								break;
+							case MES:		_a.addMes(Integer.parseInt(valor.toString()));break;
+							case DIA_MES:	_a.addDiaMes(Integer.parseInt(valor.toString()));break;
+							case DIA_SEMANA:_a.addDiaSemana(Integer.parseInt(valor.toString()));break;
+							case HORA:		_a.addHora(Integer.parseInt(valor.toString()));break;
+							case MINUTO:	_a.addMinuto(Integer.parseInt(valor.toString()));break;
 							}
 						}
 					}
 			);
         	// some other visual settings
         	DisplayMetrics metrics = getResources().getDisplayMetrics();
-        	popupWindow.setWidth(metrics.widthPixels/4);
+        	popupWindow.setWidth(250);
 			popupWindow.setFocusable(true);
         	popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         	// set the list view as pop up window content
@@ -298,7 +313,7 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
                 listItem.setText(text);
                 listItem.setTag(id);
                 listItem.setTextSize(22);
-                listItem.setPadding(metrics.widthPixels/4, 50, 10, 10);
+                listItem.setPadding(10, 10, 10, 10);
                 listItem.setTextColor(Color.WHITE);
 
                 return listItem;

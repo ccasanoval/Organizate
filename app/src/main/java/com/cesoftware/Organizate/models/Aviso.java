@@ -51,6 +51,10 @@ public class Aviso extends SugarRecord implements Parcelable
 		_aDiaMes.remove(v);//TODO:check
 		//int i = _aDiaMes.indexOf(v);
 	}
+	public ArrayList<Integer> getDiasMes()
+	{
+		return (ArrayList<Integer>)_aDiaMes.clone();
+	}
 
 	/// DIA SEMANA
 	public void addDiaSemana(Integer v)
@@ -61,6 +65,10 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void delDiaSemana(Integer v)
 	{
 		_aDiaMes.remove(v);
+	}
+	public ArrayList<Integer> getDiasSemana()
+	{
+		return (ArrayList<Integer>)_aDiaSemana.clone();
 	}
 
 	/// HORA
@@ -73,6 +81,10 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		_aHora.remove(v);
 	}
+	public ArrayList<Integer> getHoras()
+	{
+		return (ArrayList<Integer>)_aHora.clone();
+	}
 
 	/// MINUTO
 	public void addMinuto(Integer v)
@@ -83,6 +95,10 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void delMinuto(Integer v)
 	{
 		_aMinuto.remove(v);
+	}
+	public ArrayList<Integer> getMinutos()
+	{
+		return (ArrayList<Integer>)_aMinuto.clone();
 	}
 
 	///-----

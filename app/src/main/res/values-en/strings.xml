@@ -29,7 +29,7 @@
 
 	<string name="date">Date:</string>
 	<string name="mes">+Month</string>
-	<string name="dia_mes">+Month Day</string>
+	<string name="dia_mes">+Mnth.Day</string>
 	<string name="dia_semana">+Week Day</string>
 	<string name="hora">+Hour</string>
 	<string name="minuto">+Minute</string>

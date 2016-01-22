@@ -12,22 +12,7 @@
 	app:layout_behavior="@string/appbar_scrolling_view_behavior"
 	tools:context=".ActAvisoEdit"
 	tools:showIn="@layout/act_aviso_edit">
-
-	<!--ToggleButton
-		android:id="@+id/tb"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:text="Fecha / Condiciones"
-		/-->
-
-	<!-- TextView
-		android:id="@+id/lblFecha"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:text="@string/fecha"
-		android:layout_below="@+id/tb"
-		/>
+<!--
 	<DatePicker
 		android:id="@+id/fecha"
 		android:layout_width="wrap_content"
@@ -36,10 +21,12 @@
 		android:layout_toRightOf="@id/lblFecha"
 
 		android:layout_below="@+id/lblFecha"
-		/-->
+		/ -->
+<!-- TimePicker
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:id="@+id/timePicker"/ -->
 
-
-	<ScrollView android:id="@+id/scrMes" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layMes"
 		android:layout_width="match_parent"
@@ -49,88 +36,99 @@
 			android:id="@+id/btnMes"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="2dp"
 			android:text="@string/mes"
 			/>
 	</LinearLayout>
-	</ScrollView>
+	<LinearLayout
+		android:id="@+id/layMes2"
+		android:layout_below="@+id/layMes"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" />
 
-	<ScrollView android:id="@+id/scrDiaMes" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layDiaMes"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/layMes"
+		android:layout_below="@+id/layMes2"
 		android:orientation="horizontal">
 		<Button
 			android:id="@+id/btnDiaMes"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="2dp"
 			android:text="@string/dia_mes"
 			/>
 	</LinearLayout>
-	</ScrollView>
+	<LinearLayout
+		android:id="@+id/layDiaMes2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layMes"
+		android:orientation="horizontal" />
 
-	<ScrollView android:id="@+id/scrDiaSemana" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layDiaSemana"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/layDiaMes"
+		android:layout_below="@+id/layDiaMes2"
 		android:orientation="horizontal">
 		<Button
 			android:id="@+id/btnDiaSemana"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="2dp"
 			android:text="@string/dia_semana"
 			/>
 	</LinearLayout>
-	</ScrollView>
+	<LinearLayout
+		android:id="@+id/layDiaSemana2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layDiaSemana"
+		android:orientation="horizontal" />
 
-	<ScrollView android:id="@+id/scrHora" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layHora"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/layDiaSemana"
+		android:layout_below="@+id/layDiaSemana2"
 		android:orientation="horizontal">
 		<Button
 			android:id="@+id/btnHora"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="2dp"
 			android:text="@string/hora"
 			/>
 	</LinearLayout>
-	</ScrollView>
+	<LinearLayout
+		android:id="@+id/layHora2"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/layHora"
+		android:orientation="horizontal" />
 
-	<ScrollView android:id="@+id/scrMinuto" android:layout_width="fill_parent" android:layout_height="fill_parent">
 	<LinearLayout
 		android:id="@+id/layMinuto"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/layHora"
+		android:layout_below="@+id/layHora2"
 		android:orientation="horizontal">
 		<Button
 			android:id="@+id/btnMinuto"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_centerHorizontal="true"
 			android:layout_marginTop="2dp"
 			android:text="@string/minuto"
 			/>
 	</LinearLayout>
-	</ScrollView>
-
-	<!-- TimePicker
-		android:layout_width="wrap_content"
+	<LinearLayout
+		android:id="@+id/layMinuto2"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:id="@+id/timePicker"/ -->
+		android:layout_below="@+id/layMinuto"
+		android:orientation="horizontal" />
 
 </RelativeLayout>

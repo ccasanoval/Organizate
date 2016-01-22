@@ -16,6 +16,8 @@ import java.util.Iterator;
 public class Aviso extends SugarRecord implements Parcelable
 {
 	private static final long OFFSET_DATE = 60*60*1000;//ms
+	public static final int NADA = -1;
+	public static final int TODO = -2;
 
 	private Date _dt;
 	//boolean[] bDiaMes = new boolean[31];
@@ -33,7 +35,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 	public void delMes(Integer v)
 	{
-		_aMes.remove(v);
+		if(v == TODO)	_aMes.clear();
+		else			_aMes.remove(v);
 	}
 	public ArrayList<Integer> getMeses()
 	{
@@ -48,8 +51,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 	public void delDiaMes(Integer v)
 	{
-		_aDiaMes.remove(v);//TODO:check
-		//int i = _aDiaMes.indexOf(v);
+		if(v == TODO)	_aDiaMes.clear();
+		else			_aDiaMes.remove(v);//TODO:check
 	}
 	public ArrayList<Integer> getDiasMes()
 	{
@@ -64,7 +67,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 	public void delDiaSemana(Integer v)
 	{
-		_aDiaMes.remove(v);
+		if(v == TODO)	_aDiaSemana.clear();
+		else			_aDiaSemana.remove(v);
 	}
 	public ArrayList<Integer> getDiasSemana()
 	{
@@ -79,7 +83,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 	public void delHora(Integer v)
 	{
-		_aHora.remove(v);
+		if(v == TODO)	_aHora.clear();
+		else			_aHora.remove(v);
 	}
 	public ArrayList<Integer> getHoras()
 	{
@@ -94,7 +99,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 	public void delMinuto(Integer v)
 	{
-		_aMinuto.remove(v);
+		if(v == TODO)	_aMinuto.clear();
+		else			_aMinuto.remove(v);
 	}
 	public ArrayList<Integer> getMinutos()
 	{

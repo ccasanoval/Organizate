@@ -1,5 +1,7 @@
 package com.cesoftware.Organizate;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -31,16 +33,13 @@ import com.cesoftware.Organizate.models.Aviso;
 public class ActAvisoEdit extends AppCompatActivity
 {
 	private static final String SEP = "::";
+	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;
+	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
-	private Aviso _a, _a2;
+	private Aviso _a;
 	private boolean _isNuevo=false;
-	private String[] _asPopUpMes = new String[12];
-	private String[] _asPopUpDiaMes = new String[31];
-	private String[] _asPopUpDiaSemana = new String[7];
-	private String[] _asPopUpHora = new String[24];
-	private String[] _asPopUpMinuto = new String[12];
-	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX=5;
-	private String[][] _asPopUp = {_asPopUpMes, _asPopUpDiaMes, _asPopUpDiaSemana, _asPopUpHora, _asPopUpMinuto};
+	private String[][] _asPopUp;
+
 	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
 	private LinearLayout[] _aLay;
 	private int[] _aIdLay = {R.id.layMes, R.id.layDiaMes, R.id.layDiaSemana, R.id.layHora, R.id.layMinuto};
@@ -55,7 +54,9 @@ public class ActAvisoEdit extends AppCompatActivity
 		setContentView(R.layout.act_aviso_edit);
 
 		// PopUp
-		_apw = new PopupWindow[_aIdBtn.length];
+		_asPopUp = new String[MAX_TIPO][];
+		for(int i=0; i < MAX_TIPO; i++)_asPopUp[i] = new String[_anMax[i]];
+		_apw = new PopupWindow[MAX_TIPO];
 		popUp();
 		View.OnClickListener handler = new View.OnClickListener()
 		{
@@ -78,21 +79,30 @@ public class ActAvisoEdit extends AppCompatActivity
 			_btn[i].setOnClickListener(handler);
 		}
 
-		for(int i=0; i < _asPopUpMes.length; i++)	_asPopUpMes[i]=String.valueOf(i);
-		for(int i=0; i < _asPopUpDiaMes.length; i++)_asPopUpDiaMes[i]=String.valueOf(i);
-		for(int i=0; i < _asPopUpHora.length; i++)	_asPopUpHora[i]=String.valueOf(i);
-		for(int i=0; i < _asPopUpMinuto.length; i++)_asPopUpMinuto[i]=String.valueOf(i*5);
-
 		_aLay = new LinearLayout[_aIdLay.length];
 		for(int i=0; i < _aLay.length; i++)_aLay[i]=(LinearLayout)findViewById(_aIdLay[i]);
 
-		_asPopUpDiaSemana[Calendar.MONDAY-1] =	getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY-1);
-		_asPopUpDiaSemana[Calendar.TUESDAY-1] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY-1);
-		_asPopUpDiaSemana[Calendar.WEDNESDAY-1]=getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY-1);
-		_asPopUpDiaSemana[Calendar.THURSDAY-1] =getResources().getString(R.string.jueves)+SEP+(Calendar.THURSDAY-1);
-		_asPopUpDiaSemana[Calendar.FRIDAY-1] = 	getResources().getString(R.string.viernes)+SEP+(Calendar.FRIDAY-1);
-		_asPopUpDiaSemana[Calendar.SATURDAY-1] =getResources().getString(R.string.sabado)+SEP+(Calendar.SATURDAY-1);
-		_asPopUpDiaSemana[Calendar.SUNDAY-1] =	getResources().getString(R.string.domingo)+SEP+(Calendar.SUNDAY-1);
+		_asPopUp[MES][0] = getString(R.string.todo);
+		_asPopUp[MES][_anMax[MES]-1] = getString(R.string.nada);
+		_asPopUp[DIA_MES][0] = getString(R.string.todo);
+		_asPopUp[DIA_MES][_anMax[DIA_MES]-1] = getString(R.string.nada);
+		_asPopUp[HORA][_asPopUp[HORA].length-1] = getString(R.string.nada);
+		_asPopUp[MINUTO][_anMax[MINUTO]-1] = getString(R.string.nada);
+		for(int i=1; i < _anMax[MES]; i++)			_asPopUp[MES][i]=String.valueOf(i);
+		for(int i=1; i < _anMax[DIA_SEMANA]; i++)	_asPopUp[DIA_SEMANA][i]=String.valueOf(i);
+		for(int i=1; i < _anMax[DIA_MES]; i++)		_asPopUp[DIA_MES][i]=String.valueOf(i);
+		for(int i=0; i < _anMax[HORA]; i++)			_asPopUp[HORA][i]=String.valueOf(i);
+		for(int i=0; i < _anMax[MINUTO]; i++)		_asPopUp[MINUTO][i]=String.valueOf(i*5);
+
+		_asPopUp[DIA_SEMANA][0] = getString(R.string.todo);
+		_asPopUp[DIA_SEMANA][_anMax[DIA_SEMANA]-1] = getString(R.string.nada);
+		_asPopUp[DIA_SEMANA][Calendar.MONDAY] =		getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY);
+		_asPopUp[DIA_SEMANA][Calendar.TUESDAY] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY);
+		_asPopUp[DIA_SEMANA][Calendar.WEDNESDAY] =	getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY);
+		_asPopUp[DIA_SEMANA][Calendar.THURSDAY] =	getResources().getString(R.string.jueves)+SEP+(Calendar.THURSDAY);
+		_asPopUp[DIA_SEMANA][Calendar.FRIDAY] = 	getResources().getString(R.string.viernes)+SEP+(Calendar.FRIDAY);
+		_asPopUp[DIA_SEMANA][Calendar.SATURDAY] =	getResources().getString(R.string.sabado)+SEP+(Calendar.SATURDAY);
+		_asPopUp[DIA_SEMANA][Calendar.SUNDAY] =		getResources().getString(R.string.domingo)+SEP+(Calendar.SUNDAY);
 
 		//------------------------------------------------------------------------------------------
 		try
@@ -124,22 +134,22 @@ public class ActAvisoEdit extends AppCompatActivity
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
+System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses());
 		_isNuevo = false;
 		for(Integer i : _a.getMeses())//TODO: meter y sacar ordenados ...
-			createItemView(i, i.toString(), MES);
+			createItemView(MES, i, i.toString());
 		for(Integer i : _a.getDiasMes())
-			createItemView(i, i.toString(), DIA_MES);
+			createItemView(DIA_MES, i, i.toString());
 		for(Integer i : _a.getDiasSemana())
-			createItemView(i, i.toString(), DIA_SEMANA);
+			createItemView(DIA_SEMANA, i, i.toString());
 		for(Integer i : _a.getHoras())
-			createItemView(i, i.toString(), HORA);
+			createItemView(HORA, i, i.toString());
 		for(Integer i : _a.getMinutos())
-			createItemView(i, i.toString(), MINUTO);
+			createItemView(MINUTO, i, i.toString());
 	}
 
 
-	private View createItemView(Object tag, String texto, final int i)
+	private View createItemView(final int iTipo, Object tag, String texto)
 	{
 		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
 		final View item = inflater.inflate(R.layout.aviso_item, null, false);
@@ -152,23 +162,52 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 			@Override
 			public void onClick(View v)
 			{
-				_aLay[i].removeView(item);
-				delItem(item, i);
+				_aLay[iTipo].removeView(item);
+				delItem(iTipo, Integer.parseInt(v.getTag().toString()));
 			}
 		});
-		_aLay[i].addView(item);
+		_aLay[iTipo].addView(item);
 		return item;
 	}
 
-	private void delItem(View v, int i)
+	private void delItem(int iTipo, int nValor)
 	{
-		switch(i)//TODO: Que otra manera hay?
+		switch(iTipo)//TODO: Que otra manera hay?
 		{
-		case MES:		_a.delMes(Integer.parseInt(v.getTag().toString()));break;
-		case DIA_MES:	_a.delDiaMes(Integer.parseInt(v.getTag().toString()));break;
-		case DIA_SEMANA:_a.delDiaSemana(Integer.parseInt(v.getTag().toString()));break;
-		case HORA:		_a.delHora(Integer.parseInt(v.getTag().toString()));break;
-		case MINUTO:	_a.delMinuto(Integer.parseInt(v.getTag().toString()));break;
+		case MES:		_a.delMes(nValor);break;
+		case DIA_MES:	_a.delDiaMes(nValor);break;
+		case DIA_SEMANA:_a.delDiaSemana(nValor);break;
+		case HORA:		_a.delHora(nValor);break;
+		case MINUTO:	_a.delMinuto(nValor);break;
+		}
+	}
+	private void addItem(int iTipo, int nValor)
+	{
+		switch(iTipo)//TODO: Que otra manera hay?
+		{
+		case MES:		_a.addMes(nValor);break;
+		case DIA_MES:	_a.addDiaMes(nValor);break;
+		case DIA_SEMANA:_a.addDiaSemana(nValor);break;
+		case HORA:		_a.addHora(nValor);break;
+		case MINUTO:	_a.addMinuto(nValor);break;
+		}
+	}
+
+	private void manageItems(int iTipo, int iValor, String sTexto)
+	{
+		if(iValor == _anMax[iTipo])
+		{
+			delItem(iTipo, Aviso.TODO);
+			_aLay[iTipo].removeAllViews();
+		}
+		else
+		{
+			if(iValor == Aviso.TODO)
+			{
+				delItem(iTipo, Aviso.TODO);
+				_aLay[iTipo].removeAllViews();
+			}
+			createItemView(iTipo, iValor, sTexto);
 		}
 	}
 
@@ -177,34 +216,10 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 	// DB SAVE
 	private void saveValores()
 	{
-		/*_o.setNombre(_txtNombre.getText().toString());
-		_o.setDescripcion(_txtDescripcion.getText().toString());
-		_o.setPrioridad((int) _rbPrioridad.getRating());
-		_o.setModificado(new Date());
-		if(_isNuevo)
-		{
-			//if(_o.getPadre() == null)_lista.add(_o);
-			_o.setCreacion(new Date());
-			_lista.add(_o);
-		}
-		else
-		{
-			_lista.set(_lista.indexOf(_o), _o);
-		}
-
-		fixPadres();
-//Objeto.printLista(_lista);
-
-		//BBDD---------------------------------------------------------
-		clearDataBase();
-		if(_lista != null && _lista.size() > 0)
-		for(Objeto o : _lista)
-		{
-			o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
-		}
-		_act.refrescarLista();
-		_act.selectObjeto(_o);
-		ActEdit.this.finish();*/
+		Intent data = new Intent();
+    	data.putExtra("aviso", _a);
+		setResult(Activity.RESULT_OK, data);
+		finish();
 	}
 
 
@@ -234,13 +249,13 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 	//______________________________________________________________________________________________
     public void popUp()
 	{
-		_apw = new PopupWindow[_asPopUp.length];
-		for(int i=0; i < _asPopUp.length; i++)
+		_apw = new PopupWindow[MAX_TIPO];
+		for(int iTipo_=0; iTipo_ < MAX_TIPO; iTipo_++)
 		{
-			final int i_ = i;
+			final int iTipo = iTipo_;
         	final PopupWindow popupWindow = new PopupWindow(this);
         	ListView list = new ListView(this);
-        	list.setAdapter(adapter(_asPopUp[i]));
+        	list.setAdapter(adapter(_asPopUp[iTipo]));
         	list.setOnItemClickListener(
 					new AdapterView.OnItemClickListener()
 					{
@@ -255,18 +270,10 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
 							// dismiss the pop up
 							popupWindow.dismiss();
 							//
-							String texto = ((TextView)v).getText().toString();
-							Object valor = v.getTag();
-							//
- 							createItemView(valor, texto, i_);
-							switch(i_)//TODO: Que otra manera hay?
-							{
-							case MES:		_a.addMes(Integer.parseInt(valor.toString()));break;
-							case DIA_MES:	_a.addDiaMes(Integer.parseInt(valor.toString()));break;
-							case DIA_SEMANA:_a.addDiaSemana(Integer.parseInt(valor.toString()));break;
-							case HORA:		_a.addHora(Integer.parseInt(valor.toString()));break;
-							case MINUTO:	_a.addMinuto(Integer.parseInt(valor.toString()));break;
-							}
+							String sTexto = ((TextView)v).getText().toString();
+							//Object oValor = v.getTag();
+							int nValor = Integer.parseInt(v.getTag().toString());
+							manageItems(iTipo, nValor, sTexto);
 						}
 					}
 			);
@@ -277,7 +284,7 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
         	popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
         	// set the list view as pop up window content
         	popupWindow.setContentView(list);
-			_apw[i] = popupWindow;
+			_apw[iTipo] = popupWindow;
 		}
     }
     //______________________________________________________________________________________________
@@ -322,3 +329,64 @@ System.err.println("setValores-----------------_a=" + _a+" : "+_a.getMeses());
     }
 
 }
+/*
+private void populateLinks(LinearLayout ll, ArrayList collection, String header) {
+
+    Display display = getWindowManager().getDefaultDisplay();
+    int maxWidth = display.getWidth() - 10;
+
+    if (collection.size() > 0) {
+        LinearLayout llAlso = new LinearLayout(this);
+        llAlso.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
+                LayoutParams.WRAP_CONTENT));
+        llAlso.setOrientation(LinearLayout.HORIZONTAL);
+
+        TextView txtSample = new TextView(this);
+        txtSample.setText(header);
+
+        llAlso.addView(txtSample);
+        txtSample.measure(0, 0);
+
+        int widthSoFar = txtSample.getMeasuredWidth();
+        for (Sample samItem : collection) {
+            TextView txtSamItem = new TextView(this, null,
+                    android.R.attr.textColorLink);
+            txtSamItem.setText(samItem.Sample);
+            txtSamItem.setPadding(10, 0, 0, 0);
+            txtSamItem.setTag(samItem);
+            txtSamItem.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TextView self = (TextView) v;
+                    Sample ds = (Sample) self.getTag();
+
+                    Intent myIntent = new Intent();
+                    myIntent.putExtra("link_info", ds.Sample);
+                    setResult("link_clicked", myIntent);
+                    finish();
+                }
+            });
+
+            txtSamItem.measure(0, 0);
+            widthSoFar += txtSamItem.getMeasuredWidth();
+
+            if (widthSoFar >= maxWidth) {
+                ll.addView(llAlso);
+
+                llAlso = new LinearLayout(this);
+                llAlso.setLayoutParams(new LayoutParams(
+                        LayoutParams.FILL_PARENT,
+                        LayoutParams.WRAP_CONTENT));
+                llAlso.setOrientation(LinearLayout.HORIZONTAL);
+
+                llAlso.addView(txtSamItem);
+                widthSoFar = txtSamItem.getMeasuredWidth();
+            } else {
+                llAlso.addView(txtSamItem);
+            }
+        }
+
+        ll.addView(llAlso);
+    }
+}
+*/

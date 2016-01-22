@@ -36,6 +36,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import com.cesoftware.Organizate.models.Aviso;
 import com.cesoftware.Organizate.models.Objeto;
 
 //TODO: Check support libraries : need, do i use it?
@@ -492,15 +493,11 @@ System.err.println("setValores-----------------_o=" + _o);
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode == RESULT_OK)
+		if(requestCode == AVISO && resultCode == RESULT_OK)
 		{
-			if(requestCode == AVISO)
-			{
-			}
+			_o.setAviso((Aviso)data.getParcelableExtra("key"));
 		}
 	}
-
-
 
 
 }

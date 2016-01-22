@@ -4,6 +4,7 @@
 	<string name="editar">Edit</string>
 	<string name="eliminar">Remove</string>
 	<string name="nuevo">Add</string>
+	<string name="volver">Get Back</string>
 
 	<string name="nombre">Name</string>
 	<string name="descripcion">Description</string>
@@ -27,11 +28,15 @@
 	<string name="sabado"   >Sa</string>
 	<string name="domingo"  >Su</string>
 
-	<string name="date">Date:</string>
+	<string name="todo">Todo</string>
+	<string name="nada">Nada</string>
+
 	<string name="mes">+Month</string>
 	<string name="dia_mes">+Mnth.Day</string>
 	<string name="dia_semana">+Week Day</string>
 	<string name="hora">+Hour</string>
 	<string name="minuto">+Minute</string>
+	<string name="fecha">Date:</string>
+	<string name="editar_aviso">Edit the Warning</string>
 
 </resources>

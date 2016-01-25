@@ -32,7 +32,9 @@ import com.cesoftware.Organizate.models.Aviso;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
 {
-	private static final String SEP = "::";
+	private static String TODO;
+	private static String NADA;
+	private static final String SEP = ":";
 	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
@@ -52,6 +54,9 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_aviso_edit);
+
+		TODO = getString(R.string.todo);
+		NADA = getString(R.string.nada);
 
 		// PopUp
 		_asPopUp = new String[MAX_TIPO][];
@@ -82,20 +87,19 @@ public class ActAvisoEdit extends AppCompatActivity
 		_aLay = new LinearLayout[_aIdLay.length];
 		for(int i=0; i < _aLay.length; i++)_aLay[i]=(LinearLayout)findViewById(_aIdLay[i]);
 
-		_asPopUp[MES][0] = getString(R.string.todo);
-		_asPopUp[MES][_anMax[MES]-1] = getString(R.string.nada);
-		_asPopUp[DIA_MES][0] = getString(R.string.todo);
-		_asPopUp[DIA_MES][_anMax[DIA_MES]-1] = getString(R.string.nada);
-		_asPopUp[HORA][_asPopUp[HORA].length-1] = getString(R.string.nada);
-		_asPopUp[MINUTO][_anMax[MINUTO]-1] = getString(R.string.nada);
-		for(int i=1; i < _anMax[MES]; i++)			_asPopUp[MES][i]=String.valueOf(i);
-		for(int i=1; i < _anMax[DIA_SEMANA]; i++)	_asPopUp[DIA_SEMANA][i]=String.valueOf(i);
-		for(int i=1; i < _anMax[DIA_MES]; i++)		_asPopUp[DIA_MES][i]=String.valueOf(i);
-		for(int i=0; i < _anMax[HORA]; i++)			_asPopUp[HORA][i]=String.valueOf(i);
-		for(int i=0; i < _anMax[MINUTO]; i++)		_asPopUp[MINUTO][i]=String.valueOf(i*5);
+		_asPopUp[MES][0] = TODO+SEP+Aviso.TODO;
+		_asPopUp[MES][_anMax[MES]-1] = NADA+SEP+Aviso.NADA;
+		_asPopUp[DIA_MES][0] = TODO+SEP+Aviso.TODO;
+		_asPopUp[DIA_MES][_anMax[DIA_MES]-1] = NADA+SEP+Aviso.NADA;
+		_asPopUp[HORA][_asPopUp[HORA].length-1] = NADA+SEP+Aviso.NADA;
+		_asPopUp[MINUTO][_anMax[MINUTO]-1] = NADA+SEP+Aviso.NADA;
+		for(int i=1; i < _anMax[MES]-1; i++)		_asPopUp[MES][i]=String.valueOf(i);
+		for(int i=1; i < _anMax[DIA_MES]-1; i++)	_asPopUp[DIA_MES][i]=String.valueOf(i);
+		for(int i=0; i < _anMax[HORA]-1; i++)		_asPopUp[HORA][i]=String.valueOf(i);
+		for(int i=0; i < _anMax[MINUTO]-1; i++)		_asPopUp[MINUTO][i]=String.valueOf(i*5);
 
-		_asPopUp[DIA_SEMANA][0] = getString(R.string.todo);
-		_asPopUp[DIA_SEMANA][_anMax[DIA_SEMANA]-1] = getString(R.string.nada);
+		_asPopUp[DIA_SEMANA][0] = TODO+SEP+Aviso.TODO;
+		_asPopUp[DIA_SEMANA][_anMax[DIA_SEMANA]-1] = NADA+SEP+Aviso.NADA;
 		_asPopUp[DIA_SEMANA][Calendar.MONDAY] =		getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY);
 		_asPopUp[DIA_SEMANA][Calendar.TUESDAY] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY);
 		_asPopUp[DIA_SEMANA][Calendar.WEDNESDAY] =	getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY);
@@ -151,6 +155,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 
 	private View createItemView(final int iTipo, Object tag, String texto)
 	{
+		if(Integer.parseInt(tag.toString()) == Aviso.NADA)return null;
 		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
 		final View item = inflater.inflate(R.layout.aviso_item, null, false);
 		item.setTag(tag);
@@ -163,7 +168,8 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 			public void onClick(View v)
 			{
 				_aLay[iTipo].removeView(item);
-				delItem(iTipo, Integer.parseInt(v.getTag().toString()));
+				if(v.getTag() != null)
+					delItem(iTipo, Integer.parseInt(v.getTag().toString()));
 			}
 		});
 		_aLay[iTipo].addView(item);
@@ -181,7 +187,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		case MINUTO:	_a.delMinuto(nValor);break;
 		}
 	}
-	private void addItem(int iTipo, int nValor)
+	/*private void addItem(int iTipo, int nValor)
 	{
 		switch(iTipo)//TODO: Que otra manera hay?
 		{
@@ -191,7 +197,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		case HORA:		_a.addHora(nValor);break;
 		case MINUTO:	_a.addMinuto(nValor);break;
 		}
-	}
+	}*/
 
 	private void manageItems(int iTipo, int iValor, String sTexto)
 	{
@@ -202,7 +208,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		}
 		else
 		{
-			if(iValor == Aviso.TODO)
+			if(iValor == Aviso.TODO || iValor == Aviso.NADA)
 			{
 				delItem(iTipo, Aviso.TODO);
 				_aLay[iTipo].removeAllViews();
@@ -272,7 +278,10 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 							//
 							String sTexto = ((TextView)v).getText().toString();
 							//Object oValor = v.getTag();
-							int nValor = Integer.parseInt(v.getTag().toString());
+							int nValor = 0;
+							if(v.getTag().toString().equals(TODO))nValor = Aviso.TODO;
+							else if(v.getTag().toString().equals(NADA))nValor = Aviso.NADA;
+							else nValor = Integer.parseInt(v.getTag().toString());
 							manageItems(iTipo, nValor, sTexto);
 						}
 					}
@@ -290,9 +299,6 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
     //______________________________________________________________________________________________
     private ArrayAdapter<String> adapter(String padreArray[])
 	{
-		final DisplayMetrics metrics = getResources().getDisplayMetrics();
-        //setWidth(metrics.widthPixels/2);
-
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, padreArray)
 		{
             @Override
@@ -320,7 +326,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
                 listItem.setText(text);
                 listItem.setTag(id);
                 listItem.setTextSize(22);
-                listItem.setPadding(10, 10, 10, 10);
+                listItem.setPadding(40, 10, 10, 10);
                 listItem.setTextColor(Color.WHITE);
 
                 return listItem;
@@ -329,64 +335,3 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
     }
 
 }
-/*
-private void populateLinks(LinearLayout ll, ArrayList collection, String header) {
-
-    Display display = getWindowManager().getDefaultDisplay();
-    int maxWidth = display.getWidth() - 10;
-
-    if (collection.size() > 0) {
-        LinearLayout llAlso = new LinearLayout(this);
-        llAlso.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-                LayoutParams.WRAP_CONTENT));
-        llAlso.setOrientation(LinearLayout.HORIZONTAL);
-
-        TextView txtSample = new TextView(this);
-        txtSample.setText(header);
-
-        llAlso.addView(txtSample);
-        txtSample.measure(0, 0);
-
-        int widthSoFar = txtSample.getMeasuredWidth();
-        for (Sample samItem : collection) {
-            TextView txtSamItem = new TextView(this, null,
-                    android.R.attr.textColorLink);
-            txtSamItem.setText(samItem.Sample);
-            txtSamItem.setPadding(10, 0, 0, 0);
-            txtSamItem.setTag(samItem);
-            txtSamItem.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    TextView self = (TextView) v;
-                    Sample ds = (Sample) self.getTag();
-
-                    Intent myIntent = new Intent();
-                    myIntent.putExtra("link_info", ds.Sample);
-                    setResult("link_clicked", myIntent);
-                    finish();
-                }
-            });
-
-            txtSamItem.measure(0, 0);
-            widthSoFar += txtSamItem.getMeasuredWidth();
-
-            if (widthSoFar >= maxWidth) {
-                ll.addView(llAlso);
-
-                llAlso = new LinearLayout(this);
-                llAlso.setLayoutParams(new LayoutParams(
-                        LayoutParams.FILL_PARENT,
-                        LayoutParams.WRAP_CONTENT));
-                llAlso.setOrientation(LinearLayout.HORIZONTAL);
-
-                llAlso.addView(txtSamItem);
-                widthSoFar = txtSamItem.getMeasuredWidth();
-            } else {
-                llAlso.addView(txtSamItem);
-            }
-        }
-
-        ll.addView(llAlso);
-    }
-}
-*/

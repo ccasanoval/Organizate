@@ -32,6 +32,11 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		if( !_aMes.contains(v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
 			_aMes.add(v);
+		if(v == TODO)
+		{
+			_aMes.clear();
+			_aMes.add(v);
+		}
 	}
 	public void delMes(Integer v)
 	{
@@ -48,6 +53,11 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		if( !_aDiaMes.contains(v) && v > 0 && v < 32)
 			_aDiaMes.add(v);
+		if(v == TODO)
+		{
+			_aDiaMes.clear();
+			_aDiaMes.add(v);
+		}
 	}
 	public void delDiaMes(Integer v)
 	{
@@ -64,6 +74,11 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		if( !_aDiaSemana.contains(v) && v >= Calendar.SUNDAY && v <= Calendar.SATURDAY)
 			_aDiaSemana.add(v);
+		if(v == TODO)
+		{
+			_aDiaSemana.clear();
+			_aDiaSemana.add(v);
+		}
 	}
 	public void delDiaSemana(Integer v)
 	{
@@ -80,6 +95,11 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		if( !_aHora.contains(v) && v >= 0 && v <= 23)
 			_aHora.add(v);
+		if(v == TODO)
+		{
+			_aHora.clear();
+			_aHora.add(v);
+		}
 	}
 	public void delHora(Integer v)
 	{
@@ -115,10 +135,15 @@ public class Aviso extends SugarRecord implements Parcelable
 	///----- PARCELABLE
 	protected Aviso(Parcel in)
 	{
+		long l;
 		int i;
 		int[] ai;
-		setId(in.readLong());
-		_dt = new Date(in.readLong());
+		//
+		l = in.readLong();
+		if(l >= 0)setId(l);
+		//
+		l = in.readLong();
+		if(l >= 0)_dt = new Date(l);
 		//
 		ai = in.createIntArray();
 		for(i=0; i < ai.length; i++)_aMes.add(ai[i]);
@@ -135,8 +160,8 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void writeToParcel(Parcel dest, int flags)
 	{
 		int[] ai;
-		dest.writeLong(getId());
-		dest.writeLong(_dt.getTime());
+		dest.writeLong(getId()!=null?getId():-1);
+		dest.writeLong(_dt!=null?_dt.getTime():-1);
 		//
 		ai = convertIntegers(_aMes);
 		dest.writeIntArray(ai);
@@ -176,6 +201,7 @@ public class Aviso extends SugarRecord implements Parcelable
 		for(int i=0; i < ret.length; i++)
 		{
 			ret[i] = iterator.next();//.intValue();
+System.err.println("--"+ret[i]);
 		}
 		return ret;
 	}

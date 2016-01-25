@@ -495,7 +495,9 @@ System.err.println("setValores-----------------_o=" + _o);
 		super.onActivityResult(requestCode, resultCode, data);
 		if(requestCode == AVISO && resultCode == RESULT_OK)
 		{
-			_o.setAviso((Aviso)data.getParcelableExtra("key"));
+			_o.setAviso((Aviso)data.getParcelableExtra("aviso"));
+			System.err.println("----------" + _o.getAviso());
+			//System.err.println("----------" + _o.getAviso().getMeses().size()+" : "+_o.getAviso().getMeses().get(0));
 		}
 	}
 

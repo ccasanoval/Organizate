@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,10 +57,22 @@ public class ActAvisoEdit extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_aviso_edit);
 
+		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+		fab.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				ActAvisoEdit.this.finish();
+			}
+		});
+
+		//------------------------------------------------------------------------------------------
+		// PopUp
 		TODO = getString(R.string.todo);
 		NADA = getString(R.string.nada);
-
-		// PopUp
 		_asPopUp = new String[MAX_TIPO][];
 		for(int i=0; i < MAX_TIPO; i++)_asPopUp[i] = new String[_anMax[i]];
 		_apw = new PopupWindow[MAX_TIPO];
@@ -141,13 +155,13 @@ public class ActAvisoEdit extends AppCompatActivity
 System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses());
 		_isNuevo = false;
 		for(Integer i : _a.getMeses())//TODO: meter y sacar ordenados ...
-			createItemView(MES, i, i.toString());
+			createItemView(MES, i, i==Aviso.TODO ? TODO : i.toString());
 		for(Integer i : _a.getDiasMes())
-			createItemView(DIA_MES, i, i.toString());
+			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : i.toString());
 		for(Integer i : _a.getDiasSemana())
-			createItemView(DIA_SEMANA, i, i.toString());
+			createItemView(DIA_SEMANA, i, i==Aviso.TODO ? TODO : i.toString());
 		for(Integer i : _a.getHoras())
-			createItemView(HORA, i, i.toString());
+			createItemView(HORA, i, i==Aviso.TODO ? TODO : i.toString());
 		for(Integer i : _a.getMinutos())
 			createItemView(MINUTO, i, i.toString());
 	}
@@ -187,7 +201,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		case MINUTO:	_a.delMinuto(nValor);break;
 		}
 	}
-	/*private void addItem(int iTipo, int nValor)
+	private void addItem(int iTipo, int nValor)
 	{
 		switch(iTipo)//TODO: Que otra manera hay?
 		{
@@ -197,24 +211,18 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		case HORA:		_a.addHora(nValor);break;
 		case MINUTO:	_a.addMinuto(nValor);break;
 		}
-	}*/
+	}
 
-	private void manageItems(int iTipo, int iValor, String sTexto)
+	private void manageItems(int iTipo, int nValor, String sTexto)
 	{
-		if(iValor == _anMax[iTipo])
+		if(nValor == Aviso.NADA || nValor == Aviso.TODO)
 		{
 			delItem(iTipo, Aviso.TODO);
 			_aLay[iTipo].removeAllViews();
+			if(nValor == Aviso.NADA)return;
 		}
-		else
-		{
-			if(iValor == Aviso.TODO || iValor == Aviso.NADA)
-			{
-				delItem(iTipo, Aviso.TODO);
-				_aLay[iTipo].removeAllViews();
-			}
-			createItemView(iTipo, iValor, sTexto);
-		}
+		createItemView(iTipo, nValor, sTexto);
+		addItem(iTipo, nValor);
 	}
 
 
@@ -227,8 +235,6 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		setResult(Activity.RESULT_OK, data);
 		finish();
 	}
-
-
 
 
 	//____________________________________________________________________________________________________________________________________________________
@@ -334,4 +340,47 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
         };
     }
 
+
+
+/*
+
+use editText.setOnFocusChangeListenerinstead, works on first click
+I've solved this by using android:focusable="false" and onclicklistner
+
+Calendar myCalendar = Calendar.getInstance();
+
+DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int monthOfYear,
+            int dayOfMonth) {
+        // TODO Auto-generated method stub
+        myCalendar.set(Calendar.YEAR, year);
+        myCalendar.set(Calendar.MONTH, monthOfYear);
+        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        updateLabel();
+    }
+
+};
+
+   edittext.setOnClickListener(new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            // TODO Auto-generated method stub
+            new DatePickerDialog(classname.this, date, myCalendar
+                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+        }
+    });
+
+      private void updateLabel() {
+
+    String myFormat = "MM/dd/yy"; //In which you need put here
+    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+
+    edittext.setText(sdf.format(myCalendar.getTime()));
+    }
+
+*/
 }

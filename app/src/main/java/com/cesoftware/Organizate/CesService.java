@@ -31,22 +31,28 @@ public class CesService extends IntentService
 	@Override
 	protected void onHandleIntent(Intent workIntent)
 	{
-		//String dataString = workIntent.getDataString();
-		long tmLoad = System.currentTimeMillis();
-		long tmCheck = System.currentTimeMillis();
-		while(true)
+		try
 		{
-			if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
+			Thread.sleep(DELAY_CHECK/2);
+
+			//String dataString = workIntent.getDataString();
+			long tmLoad = System.currentTimeMillis();
+			long tmCheck = System.currentTimeMillis();
+			while(true)
 			{
-				cargarLista();
-				tmLoad = System.currentTimeMillis();
-			}
-			if(tmCheck + DELAY_CHECK < System.currentTimeMillis())
-			{
-				checkAvisos();
-				tmCheck = System.currentTimeMillis();
+				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
+				{
+					cargarLista();
+					tmLoad = System.currentTimeMillis();
+				}
+				if(tmCheck + DELAY_CHECK < System.currentTimeMillis())
+				{
+					checkAvisos();
+					tmCheck = System.currentTimeMillis();
+				}
 			}
 		}
+		catch(InterruptedException e){}
 	}
 
 	//______________________________________________________________________________________________

@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Iterator;
 ///https://guides.codepath.com/android/Clean-Persistence-with-Sugar-ORM
 /**
- * Created by Cesar_Casanova on 10/12/2015.
+ * Created by Cesar_Casanova on 10/12/2015
  */
 //TODO: add numero de orden dentro del nivel
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	@Override
-	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos+"}";}
+	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+"}";}
 	public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
 
 	//______________________________________________________________________________________________
@@ -232,6 +232,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	//______________________________________________________________________________________________
 	public long save()
 	{
+		System.err.println("SAVING OBJETO:------"+this);
 		_aviso.save();
 		return super.save();
 	}

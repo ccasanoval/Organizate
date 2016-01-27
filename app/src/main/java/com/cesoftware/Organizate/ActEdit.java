@@ -486,6 +486,25 @@ System.err.println("setValores-----------------_o=" + _o);
 	private void showAviso()
 	{
 		Intent i = new Intent(this, ActAvisoEdit.class);
+		if(_o.getAviso() == null)
+		{
+			Aviso a = new Aviso();
+			if(_o.getDescripcion().isEmpty())
+			{
+				if(_o.getNombre().isEmpty())
+				{
+					if(_txtDescripcion.getText().toString().isEmpty())
+						a.setTexto(this._txtNombre.getText().toString());
+					else
+						a.setTexto(this._txtDescripcion.getText().toString());
+				}
+				else
+					a.setTexto(_o.getNombre());
+			}
+			else
+				a.setTexto(_o.getDescripcion());
+			_o.setAviso(a);
+		}
 		i.putExtra("aviso", _o.getAviso());
 		startActivityForResult(i, AVISO);
 	}

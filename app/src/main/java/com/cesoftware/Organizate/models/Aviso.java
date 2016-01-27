@@ -5,27 +5,25 @@ import android.os.Parcelable;
 
 import com.orm.SugarRecord;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 
 /**
- * Created by Cesar_Casanova on 12/01/2016.
+ * Created by Cesar_Casanova on 12/01/2016
  */
 public class Aviso extends SugarRecord implements Parcelable
 {
 	private static final long OFFSET_DATE = 60*60*1000;//ms
-	public static final int NADA = -1;
-	public static final int TODO = -2;
+	public static final byte NADA = -1;
+	public static final byte TODO = -2;
 
 	private String _sTexto="";
 	private Date _dt;
-	int[] _aMes = new int[0];
-	int[] _aDiaMes = new int[0];
-	int[] _aDiaSemana = new int[0];
-	int[] _aHora = new int[0];
-	int[] _aMinuto = new int[0];
+	private byte[] _aMes = new byte[0];
+	private byte[] _aDiaMes = new byte[0];
+	private byte[] _aDiaSemana = new byte[0];
+	private byte[] _aHora = new byte[0];
+	private byte[] _aMinuto = new byte[0];
 	/* Sugar no guarda array list...
 	private ArrayList<Integer> _aMes = new ArrayList<>();
 	private ArrayList<Integer> _aDiaMes = new ArrayList<>();
@@ -36,109 +34,135 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
 
-	/// MES
-	public void addMes(Integer v)
+	/// HELPING FUNCS
+	private static boolean contains(byte[] a, byte v)
 	{
-		if( !_aMes.contains(v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
-			_aMes.add(v);
+		for(byte b : a)if(b == v)return true;
+		return false;
+	}
+	private static byte[] add(byte[] a, byte v)
+	{
+		byte[] b = new byte[a.length+1];
+		System.arraycopy(a, 0, b, 0, a.length);//for(int i=0; i < a.length; i++)b[i]=a[i];
+		b[b.length-1]=v;
+		return b;
+	}
+	private static byte[] remove(byte[] a, byte v)
+	{
+System.err.println("AAA-----z:"+v);
+		if(a.length == 0)return a;
+		byte[] b = new byte[a.length-1];
+		for(int i=0, j=0; i < a.length; i++)
+			if(a[i] != v)
+				b[j++]=a[i];
+System.err.println("AAA-----"+b.length);
+		return b;
+	}
+
+
+	/// MES
+	public void addMes(byte v)
+	{
+		if( !contains(_aMes, v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
+			_aMes = add(_aMes, v);
 		if(v == TODO)
 		{
-			_aMes.clear();
-			_aMes.add(v);
+			_aMes = new byte[0];
+			_aMes = add(_aMes, v);
 		}
 	}
-	public void delMes(Integer v)
+	public void delMes(byte v)
 	{
-		if(v == TODO)	_aMes.clear();
-		else			_aMes.remove(v);
+		if(v == TODO)	_aMes = new byte[0];
+		else			_aMes = remove(_aMes, v);
 	}
-	public ArrayList<Integer> getMeses()
+	public byte[] getMeses()
 	{
-		return (ArrayList<Integer>)_aMes.clone();//TODO:CHECK
+		return _aMes;//.clone();//TODO:CHECK
 	}
 
 	/// DIA MES
-	public void addDiaMes(Integer v)
+	public void addDiaMes(byte v)
 	{
-		if( !_aDiaMes.contains(v) && v > 0 && v < 32)
-			_aDiaMes.add(v);
+		if( !contains(_aDiaMes, v) && v > 0 && v < 32)
+			_aDiaMes = add(_aDiaMes, v);
 		if(v == TODO)
 		{
-			_aDiaMes.clear();
-			_aDiaMes.add(v);
+			_aDiaMes = new byte[0];
+			_aDiaMes = add(_aDiaMes, v);
 		}
 	}
-	public void delDiaMes(Integer v)
+	public void delDiaMes(byte v)
 	{
-		if(v == TODO)	_aDiaMes.clear();
-		else			_aDiaMes.remove(v);//TODO:check
+		if(v == TODO)	_aDiaMes = new byte[0];
+		else			_aDiaMes = remove(_aDiaMes, v);//TODO:check
 	}
-	public ArrayList<Integer> getDiasMes()
+	public byte[] getDiasMes()
 	{
-		return (ArrayList<Integer>)_aDiaMes.clone();
+		return _aDiaMes;//.clone();
 	}
 
 	/// DIA SEMANA
-	public void addDiaSemana(Integer v)
+	public void addDiaSemana(byte v)
 	{
-		if( !_aDiaSemana.contains(v) && v >= Calendar.SUNDAY && v <= Calendar.SATURDAY)
-			_aDiaSemana.add(v);
+		if( !contains(_aDiaSemana, v) && v >= Calendar.SUNDAY && v <= Calendar.SATURDAY)
+			_aDiaSemana = add(_aDiaSemana, v);
 		if(v == TODO)
 		{
-			_aDiaSemana.clear();
-			_aDiaSemana.add(v);
+			_aDiaSemana = new byte[0];
+			_aDiaSemana = add(_aDiaSemana, v);
 		}
 	}
-	public void delDiaSemana(Integer v)
+	public void delDiaSemana(byte v)
 	{
-		if(v == TODO)	_aDiaSemana.clear();
-		else			_aDiaSemana.remove(v);
+		if(v == TODO)	_aDiaSemana = new byte[0];
+		else			_aDiaSemana = remove(_aDiaSemana, v);
 	}
-	public ArrayList<Integer> getDiasSemana()
+	public byte[] getDiasSemana()
 	{
-		return (ArrayList<Integer>)_aDiaSemana.clone();
+		return _aDiaSemana;//.clone();
 	}
 
 	/// HORA
-	public void addHora(Integer v)
+	public void addHora(byte v)
 	{
-		if( !_aHora.contains(v) && v >= 0 && v <= 23)
-			_aHora.add(v);
+		if( !contains(_aHora, v) && v >= 0 && v <= 23)
+			_aHora = add(_aHora, v);
 		if(v == TODO)
 		{
-			_aHora.clear();
-			_aHora.add(v);
+			_aHora = new byte[0];
+			_aHora = add(_aHora, v);
 		}
 	}
-	public void delHora(Integer v)
+	public void delHora(byte v)
 	{
-		if(v == TODO)	_aHora.clear();
-		else			_aHora.remove(v);
+		if(v == TODO)	_aHora = new byte[0];
+		else			_aHora = remove(_aHora, v);
 	}
-	public ArrayList<Integer> getHoras()
+	public byte[] getHoras()
 	{
-		return (ArrayList<Integer>)_aHora.clone();
+		return _aHora;//.clone();
 	}
 
 	/// MINUTO
-	public void addMinuto(Integer v)
+	public void addMinuto(byte v)
 	{
-		if( !_aMinuto.contains(v) && v >= 0 && v <= 59)
-			_aMinuto.add(v);
+		if( !contains(_aMinuto, v) && v >= 0 && v <= 59)
+			_aMinuto = add(_aMinuto, v);
 	}
-	public void delMinuto(Integer v)
+	public void delMinuto(byte v)
 	{
-		if(v == TODO)	_aMinuto.clear();
-		else			_aMinuto.remove(v);
+		if(v == TODO)	_aMinuto = new byte[0];
+		else			_aMinuto = remove(_aMinuto, v);
 	}
-	public ArrayList<Integer> getMinutos()
+	public byte[] getMinutos()
 	{
-		return (ArrayList<Integer>)_aMinuto.clone();
+		return _aMinuto;//.clone();
 	}
 
 	///-----
 	public Aviso(){}
-	public String toString(){return "{id="+getId()+", dt="+_dt+", diaM="+_aDiaMes+", diaS="+_aDiaSemana+", mes="+_aMes+", hor="+_aHora+", min="+_aMinuto+", txt="+_sTexto+"}";}
+	public String toString(){return "{id="+getId()+", dt="+_dt+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
 
 
 	///----- PARCELABLE
@@ -146,7 +170,7 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		long l;
 		int i;
-		int[] ai;
+		byte[] ai;
 		//
 		l = in.readLong();
 		if(l >= 0)setId(l);
@@ -156,36 +180,31 @@ public class Aviso extends SugarRecord implements Parcelable
 		//
 		_sTexto = in.readString();
 		//
-		ai = in.createIntArray();
-		for(i=0; i < ai.length; i++)_aMes.add(ai[i]);
-		ai = in.createIntArray();
-		for(i=0; i < ai.length; i++)_aDiaMes.add(ai[i]);
-		ai = in.createIntArray();
-		for(i=0; i < ai.length; i++)_aDiaSemana.add(ai[i]);
-		ai = in.createIntArray();
-		for(i=0; i < ai.length; i++)_aHora.add(ai[i]);
-		ai = in.createIntArray();
-		for(i=0; i < ai.length; i++)_aMinuto.add(ai[i]);
+		ai = in.createByteArray();
+		for(i=0; i < ai.length; i++)_aMes = add(_aMes, ai[i]);
+		ai = in.createByteArray();
+		for(i=0; i < ai.length; i++)_aDiaMes = add(_aDiaMes, ai[i]);
+		ai = in.createByteArray();
+		for(i=0; i < ai.length; i++)_aDiaSemana = add(_aDiaSemana, ai[i]);
+		ai = in.createByteArray();
+		for(i=0; i < ai.length; i++)_aHora = add(_aHora, ai[i]);
+		ai = in.createByteArray();
+		for(i=0; i < ai.length; i++)_aMinuto = add(_aMinuto, ai[i]);
 	}
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
 		int[] ai;
-		dest.writeLong(getId()!=null?getId():-1);
-		dest.writeLong(_dt!=null?_dt.getTime():-1);
+		dest.writeLong(getId() != null ? getId() : -1);
+		dest.writeLong(_dt != null ? _dt.getTime() : -1);
 		//
 		dest.writeString(_sTexto);
 		//
-		ai = convertIntegers(_aMes);
-		dest.writeIntArray(ai);
-		ai = convertIntegers(_aDiaMes);
-		dest.writeIntArray(ai);
-		ai = convertIntegers(_aDiaSemana);
-		dest.writeIntArray(ai);
-		ai = convertIntegers(_aHora);
-		dest.writeIntArray(ai);
-		ai = convertIntegers(_aMinuto);
-		dest.writeIntArray(ai);
+		dest.writeByteArray(_aMes);
+		dest.writeByteArray(_aDiaMes);
+		dest.writeByteArray(_aDiaSemana);
+		dest.writeByteArray(_aHora);
+		dest.writeByteArray(_aMinuto);
 	}
 	@Override
 	public int describeContents()
@@ -207,7 +226,7 @@ public class Aviso extends SugarRecord implements Parcelable
 	};
 
 
-	private static int[] convertIntegers(ArrayList<Integer> ai)
+	/*private static int[] convertIntegers(ArrayList<Integer> ai)
 	{
 		int[] ret = new int[ai.size()];
 		Iterator<Integer> iterator = ai.iterator();
@@ -217,7 +236,7 @@ public class Aviso extends SugarRecord implements Parcelable
 System.err.println("--"+ret[i]);
 		}
 		return ret;
-	}
+	}*/
 
 	//TODO: Servicio que recorra objetos de db, coja sus avisos y los procese....
 	//TODO: Pantalla para introducir al menos un aviso por objeto
@@ -303,5 +322,14 @@ System.err.println("--"+ret[i]);
 			}
 		}
 		return bOk;
+	}
+
+
+
+	//______________________________________________________________________________________________
+	public long save()
+	{
+		System.err.println("SAVING AVISO:------" + this);
+		return super.save();
 	}
 }

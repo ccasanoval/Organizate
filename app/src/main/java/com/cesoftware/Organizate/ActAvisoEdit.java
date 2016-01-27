@@ -41,7 +41,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
 	private Aviso _a;
-	private boolean _isNuevo=false;
+	//private boolean _isNuevo=false;
 	private String[][] _asPopUp;
 
 	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
@@ -130,10 +130,8 @@ public class ActAvisoEdit extends AppCompatActivity
 		try
 		{
 			_a = this.getIntent().getParcelableExtra("aviso");
-			if(_a != null)
+			//if(_a == null)setValoresNuevo(); else
 				setValores();
-			else
-				setValoresNuevo();
 		}
 		catch(Exception e)
 		{
@@ -146,29 +144,28 @@ public class ActAvisoEdit extends AppCompatActivity
 
 	//____________________________________________________________________________________________________________________________________________________
 
-	//______________________________________________________________________________________________
+/*	//______________________________________________________________________________________________
 	private void setValoresNuevo()
 	{
-		_isNuevo = true;
+		//_isNuevo = true;
 		_a = new Aviso();
 //System.err.println("setValoresNuevo-----------------getId=" + _a);
-	}
+	}*/
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses());
-		_isNuevo = false;
+		//_isNuevo = false;
 		_txtAviso.setText(_a.getTexto());
-		for(Integer i : _a.getMeses())//TODO: meter y sacar ordenados ...
-			createItemView(MES, i, i==Aviso.TODO ? TODO : i.toString());
-		for(Integer i : _a.getDiasMes())
-			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : i.toString());
-		for(Integer i : _a.getDiasSemana())
-			createItemView(DIA_SEMANA, i, i==Aviso.TODO ? TODO : i.toString());
-		for(Integer i : _a.getHoras())
-			createItemView(HORA, i, i==Aviso.TODO ? TODO : i.toString());
-		for(Integer i : _a.getMinutos())
-			createItemView(MINUTO, i, i.toString());
+		for(byte i : _a.getMeses())//TODO: meter y sacar ordenados ...
+			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+		for(byte i : _a.getDiasMes())
+			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+		for(byte i : _a.getDiasSemana())
+			createItemView(DIA_SEMANA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+		for(byte i : _a.getHoras())
+			createItemView(HORA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+		for(byte i : _a.getMinutos())
+			createItemView(MINUTO, i, String.valueOf(i));
 	}
 
 
@@ -177,25 +174,27 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		if(Integer.parseInt(tag.toString()) == Aviso.NADA)return null;
 		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
 		final View item = inflater.inflate(R.layout.aviso_item, null, false);
-		item.setTag(tag);
+		//item.setTag(tag);
 		TextView lbl = (TextView)item.findViewById(R.id.lbl);
 		lbl.setText(texto);
 		ImageButton btnDel = (ImageButton)item.findViewById(R.id.btnDel);
+		btnDel.setTag(tag);
 		btnDel.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
 				_aLay[iTipo].removeView(item);
-				if(v.getTag() != null)
-					delItem(iTipo, Integer.parseInt(v.getTag().toString()));
+				Object tag = ((View)(v.getParent())).getTag();
+				if(tag != v.getTag())
+					delItem(iTipo, Byte.parseByte(v.getTag().toString()));
 			}
 		});
 		_aLay[iTipo].addView(item);
 		return item;
 	}
 
-	private void delItem(int iTipo, int nValor)
+	private void delItem(int iTipo, byte nValor)
 	{
 		switch(iTipo)//TODO: Que otra manera hay?
 		{
@@ -206,7 +205,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		case MINUTO:	_a.delMinuto(nValor);break;
 		}
 	}
-	private void addItem(int iTipo, int nValor)
+	private void addItem(int iTipo, byte nValor)
 	{
 		switch(iTipo)//TODO: Que otra manera hay?
 		{
@@ -218,7 +217,7 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		}
 	}
 
-	private void manageItems(int iTipo, int nValor, String sTexto)
+	private void manageItems(int iTipo, byte nValor, String sTexto)
 	{
 		if(nValor == Aviso.NADA || nValor == Aviso.TODO)
 		{
@@ -288,10 +287,10 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 							//
 							String sTexto = ((TextView)v).getText().toString();
 							//Object oValor = v.getTag();
-							int nValor = 0;
+							byte nValor;
 							if(v.getTag().toString().equals(TODO))nValor = Aviso.TODO;
 							else if(v.getTag().toString().equals(NADA))nValor = Aviso.NADA;
-							else nValor = Integer.parseInt(v.getTag().toString());
+							else nValor = Byte.parseByte(v.getTag().toString());
 							manageItems(iTipo, nValor, sTexto);
 						}
 					}

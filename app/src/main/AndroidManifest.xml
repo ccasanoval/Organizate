@@ -21,6 +21,9 @@
 		<meta-data
 			android:name="DOMAIN_PACKAGE_NAME"
 			android:value="com.cesoftware.Organizate"/>
+		<service
+			android:name=".CesService"
+			android:exported="false"/>
 
 		<activity android:name="com.cesoftware.Organizate.MainActivity">
 			<intent-filter>

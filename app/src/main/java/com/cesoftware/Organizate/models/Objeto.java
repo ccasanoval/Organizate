@@ -9,11 +9,11 @@ import com.orm.SugarRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+
 ///https://guides.codepath.com/android/Clean-Persistence-with-Sugar-ORM
-/**
- * Created by Cesar_Casanova on 10/12/2015
- */
 //TODO: add numero de orden dentro del nivel
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Created by Cesar_Casanova on 10/12/2015
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Objeto extends SugarRecord implements Parcelable
 {

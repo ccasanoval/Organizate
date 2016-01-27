@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
 		//-----
 		setEgg();
+		setAvisos();
 
 		//------
 		ActEdit.setParentAct(this);
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void setEgg()
+	public void setEgg()//TODO: Mejorar huevo
 	{
 		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
 		tb.setOnTouchListener(new View.OnTouchListener()
@@ -144,6 +145,14 @@ System.err.println("2----click:"+_nClicks+" : "+(new Date().getTime() -  _dtClic
 				return false;
 			}
 		});
+	}
+
+	//______________________________________________________________________________________________
+	public void setAvisos()
+	{
+		Intent i = new Intent(this, CesService.class);
+		//i.setData("");
+		startService(i);
 	}
 
 

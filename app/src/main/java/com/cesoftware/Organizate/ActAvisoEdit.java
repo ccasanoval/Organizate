@@ -50,6 +50,8 @@ public class ActAvisoEdit extends AppCompatActivity
 	private PopupWindow[] _apw;
 	private Button[] _btn;
 
+	private TextView _txtAviso;
+
 	//______________________________________________________________________________________________
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -68,6 +70,8 @@ public class ActAvisoEdit extends AppCompatActivity
 				ActAvisoEdit.this.finish();
 			}
 		});
+
+		_txtAviso = (TextView)findViewById(R.id.txtAviso);
 
 		//------------------------------------------------------------------------------------------
 		// PopUp
@@ -154,6 +158,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses());
 		_isNuevo = false;
+		_txtAviso.setText(_a.getTexto());
 		for(Integer i : _a.getMeses())//TODO: meter y sacar ordenados ...
 			createItemView(MES, i, i==Aviso.TODO ? TODO : i.toString());
 		for(Integer i : _a.getDiasMes())
@@ -225,17 +230,16 @@ System.err.println("setValores-----------------_a=" + _a + " : " + _a.getMeses()
 		addItem(iTipo, nValor);
 	}
 
-
 	//______________________________________________________________________________________________
 	// DB SAVE
 	private void saveValores()
 	{
+		_a.setTexto(_txtAviso.getText().toString());
 		Intent data = new Intent();
     	data.putExtra("aviso", _a);
 		setResult(Activity.RESULT_OK, data);
 		finish();
 	}
-
 
 	//____________________________________________________________________________________________________________________________________________________
 	/// MENU

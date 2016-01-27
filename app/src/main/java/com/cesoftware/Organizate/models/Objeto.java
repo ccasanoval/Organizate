@@ -230,6 +230,14 @@ public class Objeto extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
+	public long save()
+	{
+		_aviso.save();
+		return super.save();
+	}
+
+
+	//______________________________________________________________________________________________
 	/*public static void calcPosiciones(ArrayList<Objeto> lista)
 	{
 		ArrayList<Objeto> n1 = filtroN(lista, NIVEL1);

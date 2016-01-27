@@ -19,13 +19,22 @@ public class Aviso extends SugarRecord implements Parcelable
 	public static final int NADA = -1;
 	public static final int TODO = -2;
 
+	private String _sTexto="";
 	private Date _dt;
-	//boolean[] bDiaMes = new boolean[31];
+	int[] _aMes = new int[0];
+	int[] _aDiaMes = new int[0];
+	int[] _aDiaSemana = new int[0];
+	int[] _aHora = new int[0];
+	int[] _aMinuto = new int[0];
+	/* Sugar no guarda array list...
 	private ArrayList<Integer> _aMes = new ArrayList<>();
 	private ArrayList<Integer> _aDiaMes = new ArrayList<>();
 	private ArrayList<Integer> _aDiaSemana = new ArrayList<>();
 	private ArrayList<Integer> _aHora = new ArrayList<>();
-	private ArrayList<Integer> _aMinuto = new ArrayList<>();
+	private ArrayList<Integer> _aMinuto = new ArrayList<>();*/
+
+	public void setTexto(String s){_sTexto = s;}
+	public String getTexto(){return _sTexto;}
 
 	/// MES
 	public void addMes(Integer v)
@@ -129,7 +138,7 @@ public class Aviso extends SugarRecord implements Parcelable
 
 	///-----
 	public Aviso(){}
-	public String toString(){return "{id="+getId()+", dt="+_dt+", diaM="+_aDiaMes+", diaS="+_aDiaSemana+", mes="+_aMes+", hor="+_aHora+", min="+_aMinuto+"}";}
+	public String toString(){return "{id="+getId()+", dt="+_dt+", diaM="+_aDiaMes+", diaS="+_aDiaSemana+", mes="+_aMes+", hor="+_aHora+", min="+_aMinuto+", txt="+_sTexto+"}";}
 
 
 	///----- PARCELABLE
@@ -144,6 +153,8 @@ public class Aviso extends SugarRecord implements Parcelable
 		//
 		l = in.readLong();
 		if(l >= 0)_dt = new Date(l);
+		//
+		_sTexto = in.readString();
 		//
 		ai = in.createIntArray();
 		for(i=0; i < ai.length; i++)_aMes.add(ai[i]);
@@ -162,6 +173,8 @@ public class Aviso extends SugarRecord implements Parcelable
 		int[] ai;
 		dest.writeLong(getId()!=null?getId():-1);
 		dest.writeLong(_dt!=null?_dt.getTime():-1);
+		//
+		dest.writeString(_sTexto);
 		//
 		ai = convertIntegers(_aMes);
 		dest.writeIntArray(ai);

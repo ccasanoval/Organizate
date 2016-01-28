@@ -24,7 +24,7 @@ public class CesService extends IntentService
 	public CesService()
 	{
 		super("Organizate");
-		SugarContext.init(this);
+		//SugarContext.init(this);
 	}
 
 	//______________________________________________________________________________________________
@@ -33,13 +33,15 @@ public class CesService extends IntentService
 	{
 		try
 		{
-			Thread.sleep(DELAY_CHECK/2);
+			SugarContext.init(this);
 
 			//String dataString = workIntent.getDataString();
 			long tmLoad = System.currentTimeMillis();
 			long tmCheck = System.currentTimeMillis();
 			while(true)
 			{
+System.err.println("CesService:onHandleIntent:looping------------");
+				Thread.sleep(DELAY_CHECK/2);
 				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
 				{
 					cargarLista();
@@ -52,7 +54,7 @@ public class CesService extends IntentService
 				}
 			}
 		}
-		catch(InterruptedException e){}
+		catch(InterruptedException e){System.err.println("CesService:onHandleIntent:------------");}
 	}
 
 	//______________________________________________________________________________________________

@@ -233,7 +233,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	public long save()
 	{
 		System.err.println("SAVING OBJETO:------"+this);
-		_aviso.save();
+		if(_aviso != null)_aviso.save();
 		return super.save();
 	}
 

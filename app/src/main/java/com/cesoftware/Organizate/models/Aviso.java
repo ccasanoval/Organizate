@@ -17,6 +17,7 @@ public class Aviso extends SugarRecord implements Parcelable
 	public static final byte NADA = -1;
 	public static final byte TODO = -2;
 
+	private boolean _bActivo = true;
 	private String _sTexto="";
 	private Date _dt;
 	private byte[] _aMes = new byte[0];
@@ -162,7 +163,7 @@ System.err.println("AAA-----"+b.length);
 
 	///-----
 	public Aviso(){}
-	public String toString(){return "{id="+getId()+", dt="+_dt+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
+	public String toString(){return "{id="+getId()+", act="+_bActivo+", dt="+_dt+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
 
 
 	///----- PARCELABLE
@@ -174,6 +175,8 @@ System.err.println("AAA-----"+b.length);
 		//
 		l = in.readLong();
 		if(l >= 0)setId(l);
+		//
+		_bActivo = in.readByte()==0;
 		//
 		l = in.readLong();
 		if(l >= 0)_dt = new Date(l);
@@ -197,6 +200,8 @@ System.err.println("AAA-----"+b.length);
 		int[] ai;
 		dest.writeLong(getId() != null ? getId() : -1);
 		dest.writeLong(_dt != null ? _dt.getTime() : -1);
+		//
+		dest.writeByte(_bActivo?(byte)1:0);
 		//
 		dest.writeString(_sTexto);
 		//
@@ -324,6 +329,8 @@ System.err.println("--"+ret[i]);
 		return bOk;
 	}
 
+	public void setActivo(boolean v){_bActivo = v;}
+	public boolean getActivo(){return _bActivo;}
 
 
 	//______________________________________________________________________________________________

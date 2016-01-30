@@ -31,6 +31,7 @@
 	<string name="todo">Todo</string>
 	<string name="nada">Nada</string>
 
+	<string name="activo">Active</string>
 	<string name="mes">+Month</string>
 	<string name="dia_mes">+Mnth.Day</string>
 	<string name="dia_semana">+Week Day</string>

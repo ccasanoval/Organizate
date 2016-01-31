@@ -11,6 +11,7 @@ import java.util.Date;
 /**
  * Created by Cesar_Casanova on 12/01/2016
  */
+////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Aviso extends SugarRecord implements Parcelable
 {
 	private static final long OFFSET_DATE = 60*60*1000;//ms
@@ -19,7 +20,7 @@ public class Aviso extends SugarRecord implements Parcelable
 
 	private boolean _bActivo = true;
 	private String _sTexto="";
-	private Date _dt;
+	//private Date _dt;//eliminar fecha, es inutil...
 	private byte[] _aMes = new byte[0];
 	private byte[] _aDiaMes = new byte[0];
 	private byte[] _aDiaSemana = new byte[0];
@@ -163,7 +164,7 @@ System.err.println("AAA-----"+b.length);
 
 	///-----
 	public Aviso(){}
-	public String toString(){return "{id="+getId()+", act="+_bActivo+", dt="+_dt+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
+	public String toString(){return "{id="+getId()+", act="+_bActivo+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
 
 
 	///----- PARCELABLE
@@ -176,11 +177,7 @@ System.err.println("AAA-----"+b.length);
 		l = in.readLong();
 		if(l >= 0)setId(l);
 		//
-		_bActivo = in.readByte()==0;
-		//
-		l = in.readLong();
-		if(l >= 0)_dt = new Date(l);
-		//
+		_bActivo = in.readByte()>=0;
 		_sTexto = in.readString();
 		//
 		ai = in.createByteArray();
@@ -199,10 +196,9 @@ System.err.println("AAA-----"+b.length);
 	{
 		int[] ai;
 		dest.writeLong(getId() != null ? getId() : -1);
-		dest.writeLong(_dt != null ? _dt.getTime() : -1);
+		//dest.writeLong(_dt != null ? _dt.getTime() : -1);
 		//
-		dest.writeByte(_bActivo?(byte)1:0);
-		//
+		dest.writeByte(_bActivo?(byte)1:(byte)0);
 		dest.writeString(_sTexto);
 		//
 		dest.writeByteArray(_aMes);
@@ -243,23 +239,12 @@ System.err.println("--"+ret[i]);
 		return ret;
 	}*/
 
-	//TODO: Servicio que recorra objetos de db, coja sus avisos y los procese....
-	//TODO: Pantalla para introducir al menos un aviso por objeto
-	///-----
+
+	//______________________________________________________________________________________________
 	public boolean check(Date now)
 	{
-		if(now == null) now = new Date();
-
-		// DATE
-		if(_dt != null)
-		{
-			long dif = _dt.getTime() - now.getTime();
-			if(dif < 0) dif = -dif;
-			if(dif < OFFSET_DATE) return true;
-		}
-
-		//
 		boolean bOk;
+		if(now == null) now = new Date();
 		Calendar c = Calendar.getInstance();
 		c.setTime(now);
 		int minuto = c.get(Calendar.MINUTE);

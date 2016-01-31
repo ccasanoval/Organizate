@@ -11,7 +11,7 @@ public class ActSplash extends Activity
 {
 	private static final int STOPSPLASH1 = 0;
 	private static final int STOPSPLASH2 = 1;
-	private static final long SPLASHTIME1 = 2000;
+	private static final long SPLASHTIME1 = 3500;
 	private static final long SPLASHTIME2 = 5000;
    
 	private ImageView splash;
@@ -19,9 +19,7 @@ public class ActSplash extends Activity
 	//handler for act_splash screen
 	private Handler splashHandler = new Handler()
 	{
-		/* (non-Javadoc)
-		* @see android.os.Handler#handleMessage(android.os.Message)
-		*/
+		//* @see android.os.Handler#handleMessage(android.os.Message)
 		@Override
 		public void handleMessage(Message msg)
 		{

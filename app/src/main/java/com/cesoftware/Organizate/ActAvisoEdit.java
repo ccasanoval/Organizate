@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.util.Calendar;
@@ -32,6 +33,7 @@ import com.cesoftware.Organizate.models.Aviso;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO: no permitir que repita los mismos elementos...
 //TODO: Check support libraries : need, do i use it?
+//TODO: Cuando no quepan mas itmes en una linea pasar a la siguiente... no hay manera de hacer wapping?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
 {
@@ -52,6 +54,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private Button[] _btn;
 
 	private TextView _txtAviso;
+	private Switch _swtActivo;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -73,6 +76,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		});
 
 		_txtAviso = (TextView)findViewById(R.id.txtAviso);
+		_swtActivo = (Switch)findViewById(R.id.bActivo);
 
 		//------------------------------------------------------------------------------------------
 		// PopUp
@@ -145,24 +149,24 @@ public class ActAvisoEdit extends AppCompatActivity
 
 	//____________________________________________________________________________________________________________________________________________________
 
-/*	//______________________________________________________________________________________________
-	private void setValoresNuevo()
-	{
-		//_isNuevo = true;
-		_a = new Aviso();
-//System.err.println("setValoresNuevo-----------------getId=" + _a);
-	}*/
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
 		//_isNuevo = false;
 		_txtAviso.setText(_a.getTexto());
+		_swtActivo.setChecked(_a.getActivo());
 		for(byte i : _a.getMeses())//TODO: meter y sacar ordenados ...
 			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())
 			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasSemana())
-			createItemView(DIA_SEMANA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+		{
+			String item = _asPopUp[DIA_SEMANA][i];
+			String[] itemArr = item.split(SEP);
+            String text = itemArr[0];
+            //id = itemArr[1];
+			createItemView(DIA_SEMANA, i, text);
+		}
 		for(byte i : _a.getHoras())
 			createItemView(HORA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getMinutos())
@@ -235,6 +239,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private void saveValores()
 	{
 		_a.setTexto(_txtAviso.getText().toString());
+		_a.setActivo(_swtActivo.isChecked());
 		Intent data = new Intent();
     	data.putExtra("aviso", _a);
 		setResult(Activity.RESULT_OK, data);
@@ -344,47 +349,4 @@ public class ActAvisoEdit extends AppCompatActivity
         };
     }
 
-
-
-/*
-
-use editText.setOnFocusChangeListenerinstead, works on first click
-I've solved this by using android:focusable="false" and onclicklistner
-
-Calendar myCalendar = Calendar.getInstance();
-
-DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int monthOfYear,
-            int dayOfMonth) {
-        // TODO Auto-generated method stub
-        myCalendar.set(Calendar.YEAR, year);
-        myCalendar.set(Calendar.MONTH, monthOfYear);
-        myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        updateLabel();
-    }
-
-};
-
-   edittext.setOnClickListener(new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            // TODO Auto-generated method stub
-            new DatePickerDialog(classname.this, date, myCalendar
-                    .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                    myCalendar.get(Calendar.DAY_OF_MONTH)).show();
-        }
-    });
-
-      private void updateLabel() {
-
-    String myFormat = "MM/dd/yy"; //In which you need put here
-    SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-
-    edittext.setText(sdf.format(myCalendar.getTime()));
-    }
-
-*/
 }

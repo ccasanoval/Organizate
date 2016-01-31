@@ -37,7 +37,7 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	@Override
-	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+"}";}
+	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+", aviso="+_aviso+"}";}
 	public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
 
 	//______________________________________________________________________________________________

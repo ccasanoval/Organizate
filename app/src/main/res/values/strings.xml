@@ -20,13 +20,13 @@
 	<string name="seguro_eliminar">¿Seguro que desea eliminar?</string>
 	<string name="sintareas">Sin tareas</string>
 
-	<string name="lunes"    >L</string>
-	<string name="martes"   >M</string>
-	<string name="miercoles">X</string>
-	<string name="jueves"   >J</string>
-	<string name="viernes"  >V</string>
-	<string name="sabado"   >S</string>
-	<string name="domingo"  >D</string>
+	<string name="lunes"    >Lu</string>
+	<string name="martes"   >Ma</string>
+	<string name="miercoles">Mi</string>
+	<string name="jueves"   >Ju</string>
+	<string name="viernes"  >Vi</string>
+	<string name="sabado"   >Sa</string>
+	<string name="domingo"  >Do</string>
 
 	<string name="todo">Todo</string>
 	<string name="nada">Nada</string>

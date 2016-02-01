@@ -7,6 +7,7 @@ import com.orm.SugarRecord;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 /**
  * Created by Cesar_Casanova on 12/01/2016
@@ -37,7 +38,7 @@ public class Aviso extends SugarRecord implements Parcelable
 	public String getTexto(){return _sTexto;}
 
 	/// HELPING FUNCS
-	private static boolean contains(byte[] a, byte v)
+	public static boolean contains(byte[] a, byte v)
 	{
 		for(byte b : a)if(b == v)return true;
 		return false;
@@ -80,7 +81,7 @@ System.err.println("AAA-----"+b.length);
 	}
 	public byte[] getMeses()
 	{
-		return _aMes;//.clone();//TODO:CHECK
+		return _aMes;//.clone();
 	}
 
 	/// DIA MES
@@ -97,7 +98,7 @@ System.err.println("AAA-----"+b.length);
 	public void delDiaMes(byte v)
 	{
 		if(v == TODO)	_aDiaMes = new byte[0];
-		else			_aDiaMes = remove(_aDiaMes, v);//TODO:check
+		else			_aDiaMes = remove(_aDiaMes, v);
 	}
 	public byte[] getDiasMes()
 	{
@@ -323,5 +324,11 @@ System.err.println("--"+ret[i]);
 	{
 		System.err.println("SAVING AVISO:------" + this);
 		return super.save();
+	}
+
+	//______________________________________________________________________________________________
+	public static Iterator<Aviso> getActivos()
+	{
+		return Aviso.findAsIterator(Aviso.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
 	}
 }

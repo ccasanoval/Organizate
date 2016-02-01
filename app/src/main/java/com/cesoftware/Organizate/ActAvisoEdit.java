@@ -34,13 +34,14 @@ import com.cesoftware.Organizate.models.Aviso;
 //TODO: no permitir que repita los mismos elementos...
 //TODO: Check support libraries : need, do i use it?
 //TODO: Cuando no quepan mas itmes en una linea pasar a la siguiente... no hay manera de hacer wapping?
+//Todo: Mejorar icono avisos en ActEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
 {
 	private static String TODO;
 	private static String NADA;
 	private static final String SEP = ":";
-	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;
+	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;//TODO: pasar esta logica a Aviso
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
 	private Aviso _a;
@@ -144,7 +145,6 @@ public class ActAvisoEdit extends AppCompatActivity
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
-
     }
 
 	//____________________________________________________________________________________________________________________________________________________
@@ -176,7 +176,8 @@ public class ActAvisoEdit extends AppCompatActivity
 
 	private View createItemView(final int iTipo, Object tag, String texto)
 	{
-		if(Integer.parseInt(tag.toString()) == Aviso.NADA)return null;
+		byte valor = Byte.parseByte(tag.toString());
+		if(valor == Aviso.NADA)return null;
 		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
 		final View item = inflater.inflate(R.layout.aviso_item, null, false);
 		//item.setTag(tag);
@@ -199,6 +200,20 @@ public class ActAvisoEdit extends AppCompatActivity
 		return item;
 	}
 
+	private boolean contains(int iTipo, byte nValor)
+	{
+		switch(iTipo)//TODO: Que otra manera hay? => Pasar logica a Aviso
+		{
+		case MES:		return Aviso.contains(_a.getMeses(), nValor);
+		case DIA_MES:	return Aviso.contains(_a.getDiasMes(), nValor);
+		case DIA_SEMANA:return Aviso.contains(_a.getDiasSemana(), nValor);
+		case HORA:		return Aviso.contains(_a.getHoras(), nValor);
+		case MINUTO:	return Aviso.contains(_a.getMinutos(), nValor);
+		default:		return false;
+		}
+
+	}
+
 	private void delItem(int iTipo, byte nValor)
 	{
 		switch(iTipo)//TODO: Que otra manera hay?
@@ -212,7 +227,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	}
 	private void addItem(int iTipo, byte nValor)
 	{
-		switch(iTipo)//TODO: Que otra manera hay?
+		switch(iTipo)//TODO: Que otra manera hay? Pasar logica a Aviso
 		{
 		case MES:		_a.addMes(nValor);break;
 		case DIA_MES:	_a.addDiaMes(nValor);break;
@@ -224,6 +239,7 @@ public class ActAvisoEdit extends AppCompatActivity
 
 	private void manageItems(int iTipo, byte nValor, String sTexto)
 	{
+		if(contains(iTipo, nValor))return;
 		if(nValor == Aviso.NADA || nValor == Aviso.TODO)
 		{
 			delItem(iTipo, Aviso.TODO);
@@ -283,7 +299,7 @@ public class ActAvisoEdit extends AppCompatActivity
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3)
 						{
-							ActAvisoEdit act = ((ActAvisoEdit)v.getContext());
+							//ActAvisoEdit act = ((ActAvisoEdit)v.getContext());
 							// add some animation when a list item was clicked
 							Animation fadeInAnimation = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.fade_in);
 							fadeInAnimation.setDuration(10);

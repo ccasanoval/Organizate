@@ -42,6 +42,11 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
+			android:name="com.cesoftware.Organizate.ActAvisoDlg"
+			android:label="@string/aviso"
+			android:theme="@android:style/Theme.Dialog">
+		</activity>
+		<activity
 			android:name=".ActSplash"
 			android:theme="@style/Theme.Transparent">
 		</activity>

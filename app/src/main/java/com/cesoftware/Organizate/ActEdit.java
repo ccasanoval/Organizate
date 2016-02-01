@@ -490,20 +490,13 @@ System.err.println("setValores-----------------_o=" + _o);
 		if(_o.getAviso() == null)
 		{
 			Aviso a = new Aviso();
-			if(_o.getDescripcion().isEmpty())
-			{
-				if(_o.getNombre().isEmpty())
-				{
-					if(_txtDescripcion.getText().toString().isEmpty())
-						a.setTexto(this._txtNombre.getText().toString());
-					else
-						a.setTexto(this._txtDescripcion.getText().toString());
-				}
-				else
-					a.setTexto(_o.getNombre());
-			}
-			else
-				a.setTexto(_o.getDescripcion());
+			String sAviso = "";
+			if( ! _txtNombre.getText().toString().isEmpty())
+				sAviso = _txtNombre.getText().toString()+" : ";
+			if( ! _txtDescripcion.getText().toString().isEmpty())
+				sAviso += _txtDescripcion.getText().toString();
+			//if(_o.getDescripcion().isEmpty())
+			a.setTexto(sAviso);
 			_o.setAviso(a);
 		}
 		i.putExtra("aviso", _o.getAviso());
@@ -517,9 +510,7 @@ System.err.println("setValores-----------------_o=" + _o);
 		{
 			_o.setAviso((Aviso)data.getParcelableExtra("aviso"));
 			System.err.println("onActivityResult----------" + _o.getAviso());
-			//System.err.println("----------" + _o.getAviso().getMeses().size()+" : "+_o.getAviso().getMeses().get(0));
 		}
 	}
-
 
 }

@@ -27,7 +27,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	private String _sNombre = "";
 	private String _sDescripcion = "";
 	private Objeto _padre = null;
-	private Aviso _aviso = null;//TODO: quiza array de Aviso
+	private Aviso _aviso = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
 

@@ -40,6 +40,7 @@ import com.cesoftware.Organizate.models.Aviso;
 import com.cesoftware.Organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 //TODO: Check support libraries : need, do i use it? check min version AVD
 //TODO: mejorar icono app para subirlo a playstore
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -90,14 +91,11 @@ public class ActEdit extends AppCompatActivity
 		_rbPrioridad.setNumStars(5);
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
 		_btnHablar = (ImageButton)findViewById(R.id.btnHablar);
-		//ImageButton	btnGuardar = (ImageButton)findViewById(R.id.btnGuardar);
 		ImageButton	btnAviso = (ImageButton)findViewById(R.id.btnAviso);
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-
-		//Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 
 		//------------------------------------------------------------------------------------------
 		fab.setOnClickListener(new View.OnClickListener()
@@ -108,7 +106,6 @@ public class ActEdit extends AppCompatActivity
 				ActEdit.this.finish();
 			}
 		});
-
 		_btnEliminar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -133,14 +130,6 @@ public class ActEdit extends AppCompatActivity
 				showAviso();
 			}
 		});
-		/*btnGuardar.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				saveValores();
-			}
-		});*/
 		//------------------------------------------------------------------------------------------
 
 		List<String> lst = new ArrayList<>();
@@ -201,12 +190,10 @@ public class ActEdit extends AppCompatActivity
 		_o = new Objeto();
 		_btnHablar.setVisibility(View.INVISIBLE);
 		_btnEliminar.setVisibility(View.INVISIBLE);
-System.err.println("setValoresNuevo-----------------getId=" + _o.getId());
 	}
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
-System.err.println("setValores-----------------_o=" + _o);
 		_isNuevo = false;
 		_txtNombre.setText(_o.getNombre());
 		_txtDescripcion.setText(_o.getDescripcion());
@@ -241,22 +228,16 @@ System.err.println("setValores-----------------_o=" + _o);
 		else
 		{
 			_lista.set(_lista.indexOf(_o), _o);
-			/*for(Objeto o : _lista)
-				if(o.getId().equals(_o.getId()))
-					_lista.set();*/
 		}
 
 		fixPadres();
-//Objeto.printLista(_lista);
 
 		//BBDD---------------------------------------------------------
 		clearDataBase();
 		if(_lista != null && _lista.size() > 0)
-		for(Objeto o : _lista)
-		{
-			o.save();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
-		}
-		_act.refrescarLista();
+			for(Objeto o : _lista)
+				o.sav();
+		_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
 		_act.selectObjeto(_o);
 		ActEdit.this.finish();
 	}
@@ -264,11 +245,7 @@ System.err.println("setValores-----------------_o=" + _o);
 	//______________________________________________________________________________________________
 	public static void clearDataBase()
 	{
-		try
-		{
-			Objeto.deleteAll(Objeto.class);
-		}
-		catch(Exception e){System.err.println("Objeto:delTodo:ERROR:"+e);}
+		Objeto.delTodo();
 	}
 
 	//______________________________________________________________________________________________
@@ -310,9 +287,7 @@ System.err.println("setValores-----------------_o=" + _o);
 	// DB DELETE
 	private static void dbDel(Objeto o)
 	{
-		o.delete();
-		for(Objeto o1 : o.getHijos())
-			dbDel(o1);
+		o.del();
 	}
 
 	private void borrar(final View v)

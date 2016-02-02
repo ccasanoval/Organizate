@@ -85,6 +85,7 @@ public class Objeto extends SugarRecord implements Parcelable
 			_hijos = hijos;
 	}
 
+
 	//______________________________________________________________________________________________
 	public int getNivel()
 	{
@@ -230,13 +231,34 @@ public class Objeto extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
+	// BBDD
 	public long save()
 	{
 		System.err.println("SAVING OBJETO:------"+this);
 		if(_aviso != null)_aviso.save();
 		return super.save();
 	}
-
+	public static void delTodo()
+	{
+		try
+		{
+			Objeto.deleteAll(Objeto.class);
+			Aviso.deleteAll(Aviso.class);
+		}
+		catch(Exception e){System.err.println("Objeto:delTodo:ERROR:"+e);}
+	}
+	public void sav()
+	{
+		if(_aviso != null)_aviso.save();
+		save();
+	}
+	public void del()
+	{
+		if(_aviso != null)_aviso.delete();
+		delete();
+		for(Objeto o1 : getHijos())
+			o1.del();
+	}
 
 	//______________________________________________________________________________________________
 	/*public static void calcPosiciones(ArrayList<Objeto> lista)

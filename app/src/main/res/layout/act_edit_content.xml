@@ -83,7 +83,7 @@
 		android:layout_below="@+id/btnPadre"
 		android:layout_marginTop="25dp"
 		android:src="@android:drawable/ic_menu_delete"
-		/>
+		android:contentDescription="@string/eliminar"/>
 
 	<ImageButton
 		android:id="@+id/btnHablar"
@@ -93,7 +93,7 @@
 		android:layout_centerHorizontal="true"
 		android:layout_centerVertical="true"
 		android:src="@android:drawable/ic_menu_help"
-		/>
+		android:contentDescription="@string/leer"/>
 
 	<ImageButton
 		android:id="@+id/btnAviso"
@@ -103,6 +103,6 @@
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
 		android:src="@android:drawable/ic_menu_agenda"
-		/>
+		android:contentDescription="@string/aviso"/>
 
 </RelativeLayout>

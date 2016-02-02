@@ -43,5 +43,7 @@
 	<string name="minuto">+Minute</string>
 	<string name="fecha">Date:</string>
 	<string name="editar_aviso">Edit the Warning</string>
+	<string name="desactivar_por_ahora">Don\'t alert me again\nfor today</string>
+	<string name="leer">Read the content</string>
 
 </resources>

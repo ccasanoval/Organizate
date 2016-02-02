@@ -38,136 +38,133 @@
 			android:singleLine="true"/>
 	</android.support.design.widget.TextInputLayout>
 
-	<LinearLayout
+	<HorizontalScrollView
 		android:id="@+id/layMes2"
 		android:layout_below="@+id/txtAviso_"
-		android:layout_width="match_parent"
+		android:layout_width="700dp"
+		android:layout_gravity="center"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnMes"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="2dp"
-			android:text="@string/mes"
-			/>
 		<LinearLayout
-			android:id="@+id/layMes"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/layMes3"
-		android:layout_below="@+id/layMes2"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal" />
+			android:layout_width="fill_parent"
+  			android:layout_height="wrap_content"
+  			android:orientation="horizontal">
 
-	<LinearLayout
+			<Button
+				android:id="@+id/btnMes"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/mes"
+				/>
+			<LinearLayout
+				android:id="@+id/layMes"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
+
+		</LinearLayout>
+	</HorizontalScrollView>
+
+	<HorizontalScrollView
 		android:id="@+id/layDiaMes2"
+		android:layout_below="@+id/layMes2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/layMes2"
 		android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnDiaMes"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="2dp"
-			android:text="@string/dia_mes"
-			/>
 		<LinearLayout
-			android:id="@+id/layDiaMes"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/layDiaMes3"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/layMes2"
-		android:orientation="horizontal" />
+			android:layout_width="wrap_content"
+  			android:layout_height="wrap_content"
+  			android:orientation="horizontal">
 
-	<LinearLayout
+			<Button
+				android:id="@+id/btnDiaMes"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/dia_mes"
+				/>
+			<LinearLayout
+				android:id="@+id/layDiaMes"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
+		</LinearLayout>
+	</HorizontalScrollView>
+
+	<HorizontalScrollView
 		android:id="@+id/layDiaSemana2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/layDiaMes2"
 		android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnDiaSemana"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="2dp"
-			android:text="@string/dia_semana"
-			/>
 		<LinearLayout
-			android:id="@+id/layDiaSemana"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/layDiaSemana3"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/layDiaSemana2"
-		android:orientation="horizontal" />
+			android:layout_width="wrap_content"
+  			android:layout_height="wrap_content"
+  			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btnDiaSemana"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/dia_semana"
+				/>
+			<LinearLayout
+				android:id="@+id/layDiaSemana"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
+		</LinearLayout>
+	</HorizontalScrollView>
 
-	<LinearLayout
+	<HorizontalScrollView
 		android:id="@+id/layHora2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/layDiaSemana2"
 		android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnHora"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="2dp"
-			android:text="@string/hora"
-			/>
 		<LinearLayout
-			android:id="@+id/layHora"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/layHora3"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/layHora2"
-		android:orientation="horizontal" />
+			android:layout_width="wrap_content"
+  			android:layout_height="wrap_content"
+  			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btnHora"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/hora"
+				/>
+			<LinearLayout
+				android:id="@+id/layHora"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
+		</LinearLayout>
+	</HorizontalScrollView>
 
-	<LinearLayout
+	<HorizontalScrollView
 		android:id="@+id/layMinuto2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/layHora2"
 		android:orientation="horizontal">
-		<Button
-			android:id="@+id/btnMinuto"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="2dp"
-			android:text="@string/minuto"
-			/>
 		<LinearLayout
-		android:id="@+id/layMinuto"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="horizontal"/>
-	</LinearLayout>
-	<LinearLayout
-		android:id="@+id/layMinuto3"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/layMinuto2"
-		android:orientation="horizontal" />
-
-
+			android:layout_width="wrap_content"
+  			android:layout_height="wrap_content"
+  			android:orientation="horizontal">
+			<Button
+				android:id="@+id/btnMinuto"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="2dp"
+				android:text="@string/minuto"
+				/>
+			<LinearLayout
+			android:id="@+id/layMinuto"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"/>
+		</LinearLayout>
+	</HorizontalScrollView>
 
 </RelativeLayout>

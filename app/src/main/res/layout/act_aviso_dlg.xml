@@ -13,34 +13,48 @@
 	tools:context=".ActAvisoDlg">
 
 	<TextView
-		android:id="@+id/txtTitulo"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textAppearance="?android:attr/textAppearanceSmall"
-		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"
-		android:paddingBottom="15dp"
-		android:text="@string/app_name"
-		/>
-
-	<TextView
 		android:id="@+id/txtAviso"
+		android:layout_alignParentTop="true"
+		android:layout_marginTop="20dp"
+		android:layout_centerHorizontal="true"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:textAppearance="?android:attr/textAppearanceLarge"
-		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/txtTitulo"
 		android:text="@string/app_name"
+		android:maxLines="5"
 		/>
 
 	<Switch
 		android:id="@+id/bActivo"
+		android:layout_below="@+id/txtAviso"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_gravity="center_horizontal"
 		android:layout_centerHorizontal="true"
-		android:layout_below="@+id/txtAviso"
+		android:layout_marginTop="10dp"
 		android:text="@string/activo"
+		/>
+
+	<Button
+		android:id="@+id/btnDesactivar"
+		android:layout_below="@+id/bActivo"
+		android:layout_centerHorizontal="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+
+		android:layout_marginTop="50dp"
+		android:text="@string/desactivar_por_ahora"
+		/>
+
+	<ImageButton
+		android:id="@+id/btnCerrar"
+		android:layout_below="@+id/bActivo"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentEnd="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="50dp"
+		android:src="@android:drawable/ic_menu_close_clear_cancel"
+		android:contentDescription="@string/cancel"/>
 		/>
 
 </RelativeLayout>

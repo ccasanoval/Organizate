@@ -4,7 +4,9 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -33,6 +35,15 @@ public class Aviso extends SugarRecord implements Parcelable
 	private ArrayList<Integer> _aDiaSemana = new ArrayList<>();
 	private ArrayList<Integer> _aHora = new ArrayList<>();
 	private ArrayList<Integer> _aMinuto = new ArrayList<>();*/
+
+	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
+	//@ Ignore
+	private Date _dtActivo;//Fecha para desactivar un dia
+	public void desactivarPorHoy()
+	{
+		_dtActivo = Calendar.getInstance().getTime();
+		save();
+	}
 
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
@@ -163,9 +174,12 @@ System.err.println("AAA-----"+b.length);
 		return _aMinuto;//.clone();
 	}
 
+	public void setActivo(boolean v){_bActivo = v;}
+	public boolean getActivo(){return _bActivo;}
+
 	///-----
 	public Aviso(){}
-	public String toString(){return "{id="+getId()+", act="+_bActivo+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+"}";}
+	public String toString(){return "{id="+getId()+", act="+_bActivo+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+", _dtAct="+_dtActivo+" }";}
 
 
 	///----- PARCELABLE
@@ -178,7 +192,7 @@ System.err.println("AAA-----"+b.length);
 		l = in.readLong();
 		if(l >= 0)setId(l);
 		//
-		_bActivo = in.readByte()>=0;
+		_bActivo = in.readByte() > 0;
 		_sTexto = in.readString();
 		//
 		ai = in.createByteArray();
@@ -197,7 +211,6 @@ System.err.println("AAA-----"+b.length);
 	{
 		int[] ai;
 		dest.writeLong(getId() != null ? getId() : -1);
-		//dest.writeLong(_dt != null ? _dt.getTime() : -1);
 		//
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
 		dest.writeString(_sTexto);
@@ -227,20 +240,88 @@ System.err.println("AAA-----"+b.length);
 		}
 	};
 
-
-	/*private static int[] convertIntegers(ArrayList<Integer> ai)
+	//______________________________________________________________________________________________
+	public long save()
 	{
-		int[] ret = new int[ai.size()];
-		Iterator<Integer> iterator = ai.iterator();
-		for(int i=0; i < ret.length; i++)
+		System.err.println("SAVING AVISO:------" + this);
+		return super.save();
+	}
+
+	//______________________________________________________________________________________________
+	public static Iterator<Aviso> getActivos()
+	{
+		return Aviso.findAsIterator(Aviso.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
+	}
+
+	public boolean isDueTime()
+	{
+		Calendar now = Calendar.getInstance();
+System.err.println("isDueTime-----------"+now);
+
+		if(_dtActivo!=null &&  _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia //TODO:Mover a getAvisosActivos ?
 		{
-			ret[i] = iterator.next();//.intValue();
-System.err.println("--"+ret[i]);
+			System.err.println("isDueTime--------------------------ESTA DESACTIVADO TEMPORALMENTE : "+now+" : "+_dtActivo);
+			return false;
 		}
-		return ret;
-	}*/
+		_dtActivo = null;
+System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
 
+		byte[] aMeses = getMeses();
+		byte[] aDiasMes = getDiasMes();
+		byte[] aDiasSemana = getDiasSemana();
+		byte[] aHoras = getHoras();
+		byte[] aMinutos = getMinutos();
+		if(aMeses.length > 0 && aMeses[0] != Aviso.TODO)
+		{
+			boolean b = false;
+			for(byte mes : aMeses)
+				if(b = now.get(Calendar.MONTH)+1 == mes)
+					break;
+			if(!b)return false;
+		}
+System.err.println("isDueTime-----------6 dm:"+now.get(Calendar.DAY_OF_MONTH));
+		if(aDiasMes.length > 0 && aDiasMes[0] != Aviso.TODO)
+		{
+			boolean b = false;
+			for(byte diaMes : aDiasMes)
+				if(b = now.get(Calendar.DAY_OF_MONTH) == diaMes)
+					break;
+			if(!b)return false;
+		}
+System.err.println("isDueTime-----------7 ds:"+now.get(Calendar.DAY_OF_WEEK));
+		if(aDiasSemana.length > 0 && aDiasSemana[0] != Aviso.TODO)
+		{
+			boolean b = false;
+			for(byte diaSemana : aDiasSemana)
+				if(b = now.get(Calendar.DAY_OF_WEEK) == diaSemana)
+					break;
+			if(!b)return false;
+		}
+System.err.println("isDueTime-----------8 hor:"+now.get(Calendar.HOUR_OF_DAY)+" : "+now.get(Calendar.HOUR));
+		//TODO: hacer algo para que si no especifico la hora o minuto no se avisa cada 5 min...
+		if(aHoras.length > 0 && aHoras[0] != Aviso.TODO)
+		{
+			boolean b = false;
+			for(byte hora : aHoras)
+				if(b = now.get(Calendar.HOUR_OF_DAY) == hora)
+					break;
+			if(!b)return false;
+		}
+System.err.println("isDueTime-----------9 min:"+now.get(Calendar.MINUTE));
+		if(aMinutos.length > 0 && aMinutos[0] != Aviso.TODO)
+		{
+			boolean b = false;
+			for(byte minuto : aMinutos)
+				if(b = (now.get(Calendar.MINUTE)-2 <= minuto && now.get(Calendar.MINUTE)+2 >= minuto) )
+					break;
+				else System.err.println("isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
+			if(!b)return false;
+		}
+		return true;
+	}
+}
 
+/*
 	//______________________________________________________________________________________________
 	public boolean check(Date now)
 	{
@@ -314,21 +395,17 @@ System.err.println("--"+ret[i]);
 		}
 		return bOk;
 	}
-
-	public void setActivo(boolean v){_bActivo = v;}
-	public boolean getActivo(){return _bActivo;}
+* */
 
 
-	//______________________________________________________________________________________________
-	public long save()
+	/*private static int[] convertIntegers(ArrayList<Integer> ai)
 	{
-		System.err.println("SAVING AVISO:------" + this);
-		return super.save();
-	}
-
-	//______________________________________________________________________________________________
-	public static Iterator<Aviso> getActivos()
-	{
-		return Aviso.findAsIterator(Aviso.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
-	}
-}
+		int[] ret = new int[ai.size()];
+		Iterator<Integer> iterator = ai.iterator();
+		for(int i=0; i < ret.length; i++)
+		{
+			ret[i] = iterator.next();//.intValue();
+System.err.println("--"+ret[i]);
+		}
+		return ret;
+	}*/

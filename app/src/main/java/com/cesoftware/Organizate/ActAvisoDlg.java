@@ -9,7 +9,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import com.cesoftware.Organizate.models.Aviso;
 
 /**
  * Created by Cesar_Casanova on 01/02/2016
@@ -20,7 +26,8 @@ public class ActAvisoDlg extends Activity
 {
 	private static final int CLOSE_DLG = 0;
 	private static final long CLOSE_TIME = 1*60*1000;
-	private String _sAviso="";
+
+	private Aviso _a;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -29,15 +36,43 @@ public class ActAvisoDlg extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_aviso_dlg);
 
+		// Automatic close
 		Message msg = new Message();
 		msg.what = CLOSE_DLG;
 		CESHandler dlgHandler = new CESHandler(this);
 		dlgHandler.sendMessageDelayed(msg, CLOSE_TIME);
 
-		//------------------------------------------------------------------------------------------
+		// Fields
+		TextView txtAviso = (TextView)findViewById(R.id.txtAviso);
+		Switch swtActivo = (Switch)findViewById(R.id.bActivo);
+		swtActivo.setChecked(true);
+		swtActivo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+		{
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+			{
+				_a.setActivo(isChecked);
+				_a.save();//TODO: fallara si no se llamo a sugar init?
+				ActAvisoDlg.this.finish();
+			}
+		});
+swtActivo.setVisibility(View.INVISIBLE);
+		Button btnDesactivar = (Button)findViewById(R.id.btnDesactivar);
+		btnDesactivar.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+System.err.println("----------DESACTIVADO POR HOY");
+				_a.desactivarPorHoy();
+				ActAvisoDlg.this.finish();
+			}
+		});
+				//------------------------------------------------------------------------------------------
 		try
 		{
-			_sAviso = this.getIntent().getStringExtra("aviso");//this.getIntent().getExtras().getString("aviso");
+			//String sAviso = this.getIntent().getStringExtra("aviso");//this.getIntent().getExtras().getString("aviso");
+			_a = this.getIntent().getParcelableExtra("aviso");
+			txtAviso.setText(_a.getTexto());
 		}
 		catch(Exception e)
 		{

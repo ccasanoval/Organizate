@@ -38,7 +38,6 @@ public class CesService extends IntentService
 		try
 		{
 			SugarContext.init(this);
-
 			//String dataString = workIntent.getDataString();
 			long tmLoad = System.currentTimeMillis();
 			long tmCheck = System.currentTimeMillis();
@@ -77,7 +76,6 @@ System.err.println("CesService---------------------cargarLista:"+_lista.size());
 		{
 System.err.println("CesService---------------------cargarLista:e:"+e);
 			//_lista.clear();
-			//_lista = new ArrayList<>();
 		}
 	}
 
@@ -88,72 +86,17 @@ System.err.println("CesService-------checkAvisos----1");
 		if(_lista == null || _lista.size() == 0)return;
 		for(Aviso a : _lista)
 		{
-			Calendar now = Calendar.getInstance();
-System.err.println("CesService-------checkAvisos----"+now);
-
-			byte[] aMeses = a.getMeses();
-			byte[] aDiasMes = a.getDiasMes();
-			byte[] aDiasSemana = a.getDiasSemana();
-			byte[] aHoras = a.getHoras();
-			byte[] aMinutos = a.getMinutos();
-System.err.println("CesService-------checkAvisos----5 m:"+now.get(Calendar.MONTH)+1);
-			if(aMeses.length > 0 && aMeses[0] != Aviso.TODO)
+			if(a.isDueTime())
 			{
-				boolean b = false;
-				for(byte mes : aMeses)
-					if(b = now.get(Calendar.MONTH)+1 == mes)
-						break;
-				if(!b)return;
-			}
-System.err.println("CesService-------checkAvisos----6 dm:"+now.get(Calendar.DAY_OF_MONTH));
-			if(aDiasMes.length > 0 && aDiasMes[0] != Aviso.TODO)
-			{
-				boolean b = false;
-				for(byte diaMes : aDiasMes)
-					if(b = now.get(Calendar.DAY_OF_MONTH) == diaMes)
-						break;
-				if(!b)return;
-			}
-System.err.println("CesService-------checkAvisos----7 ds:"+now.get(Calendar.DAY_OF_WEEK));
-			if(aDiasSemana.length > 0 && aDiasSemana[0] != Aviso.TODO)
-			{
-				boolean b = false;
-				for(byte diaSemana : aDiasSemana)
-					if(b = now.get(Calendar.DAY_OF_WEEK) == diaSemana)
-						break;
-				if(!b)return;
-			}
-System.err.println("CesService-------checkAvisos----8 hor:"+now.get(Calendar.HOUR_OF_DAY)+" : "+now.get(Calendar.HOUR));
-			//TODO: hacer algo para que si no especifico la hora o minuto no se avisa cada 5 min...
-			//TODO: hacer algo para desactivar la alrma: On Off & Off in this day...
-			if(aHoras.length > 0 && aHoras[0] != Aviso.TODO)
-			{
-				boolean b = false;
-				for(byte hora : aHoras)
-					if(b = now.get(Calendar.HOUR_OF_DAY) == hora)
-						break;
-				if(!b)return;
-			}
-System.err.println("CesService-------checkAvisos----9 min:"+now.get(Calendar.MINUTE));
-			if(aMinutos.length > 0 && aMinutos[0] != Aviso.TODO)//TODO: Mover esto a Aviso::IsDueTime()
-			{
-				boolean b = false;
-				for(byte minuto : aMinutos)
-					if(b = (now.get(Calendar.MINUTE)-2 <= minuto && now.get(Calendar.MINUTE)+2 >= minuto) )
-						break;
-					else System.err.println("CesService-------checkAvisos----PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
-				if(!b)return;
-			}
-
 System.err.println("CesService-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
-
-			/*Intent intent = new Intent(getBaseContext(), ActSplash.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			getApplication().startActivity(intent);*/
-			Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent.putExtra("aviso", a.getTexto());
-			getApplication().startActivity(intent);
+				/*Intent intent = new Intent(getBaseContext(), ActSplash.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				getApplication().startActivity(intent);*/
+				Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.putExtra("aviso", a);//.getTexto()
+				getApplication().startActivity(intent);
+			}
 		}
 	}
 }

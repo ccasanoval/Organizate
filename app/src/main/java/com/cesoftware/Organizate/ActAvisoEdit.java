@@ -31,8 +31,6 @@ import java.util.Calendar;
 import com.cesoftware.Organizate.models.Aviso;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: no permitir que repita los mismos elementos...
-//TODO: Check support libraries : need, do i use it?
 //TODO: Cuando no quepan mas itmes en una linea pasar a la siguiente... no hay manera de hacer wapping?
 //Todo: Mejorar icono avisos en ActEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,7 +39,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private static String TODO;
 	private static String NADA;
 	private static final String SEP = ":";
-	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;//TODO: pasar esta logica a Aviso
+	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;//TODO: pasar esta logica a Aviso?
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
 	private Aviso _a;
@@ -136,8 +134,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		try
 		{
 			_a = this.getIntent().getParcelableExtra("aviso");
-			//if(_a == null)setValoresNuevo(); else
-				setValores();
+			setValores();
 		}
 		catch(Exception e)
 		{
@@ -155,6 +152,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		//_isNuevo = false;
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.getActivo());
+System.err.println("---------_a.getActivo()="+_a.getActivo());
 		for(byte i : _a.getMeses())//TODO: meter y sacar ordenados ...
 			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())
@@ -171,6 +169,18 @@ public class ActAvisoEdit extends AppCompatActivity
 			createItemView(HORA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getMinutos())
 			createItemView(MINUTO, i, String.valueOf(i));
+	}
+
+	// DB SAVE
+	private void saveValores()
+	{
+		_a.setTexto(_txtAviso.getText().toString());
+		_a.setActivo(_swtActivo.isChecked());
+System.err.println("SAVE---------_a.getActivo()=" + _a.getActivo());
+		Intent data = new Intent();
+    	data.putExtra("aviso", _a);
+		setResult(Activity.RESULT_OK, data);
+		finish();
 	}
 
 
@@ -248,18 +258,6 @@ public class ActAvisoEdit extends AppCompatActivity
 		}
 		createItemView(iTipo, nValor, sTexto);
 		addItem(iTipo, nValor);
-	}
-
-	//______________________________________________________________________________________________
-	// DB SAVE
-	private void saveValores()
-	{
-		_a.setTexto(_txtAviso.getText().toString());
-		_a.setActivo(_swtActivo.isChecked());
-		Intent data = new Intent();
-    	data.putExtra("aviso", _a);
-		setResult(Activity.RESULT_OK, data);
-		finish();
 	}
 
 	//____________________________________________________________________________________________________________________________________________________

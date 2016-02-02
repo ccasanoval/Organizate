@@ -40,7 +40,8 @@ import com.cesoftware.Organizate.models.Aviso;
 import com.cesoftware.Organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: Check support libraries : need, do i use it?
+//TODO: Check support libraries : need, do i use it? check min version AVD
+//TODO: mejorar icono app para subirlo a playstore
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {

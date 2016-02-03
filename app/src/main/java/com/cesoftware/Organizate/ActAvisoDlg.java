@@ -11,6 +11,7 @@ import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -20,12 +21,11 @@ import com.cesoftware.Organizate.models.Aviso;
 /**
  * Created by Cesar_Casanova on 01/02/2016
  */
-//TODO:switch que permita desactivar termporalmente el aviso => Temporal? fecha_aviso?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity
 {
 	private static final int CLOSE_DLG = 0;
-	private static final long CLOSE_TIME = 1*60*1000;
+	private static final long CLOSE_TIME = 60*1000;
 
 	private Aviso _a;
 
@@ -51,7 +51,7 @@ public class ActAvisoDlg extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				_a.setActivo(isChecked);
-				_a.save();//TODO: fallara si no se llamo a sugar init?
+				_a.save();
 				ActAvisoDlg.this.finish();
 			}
 		});
@@ -62,12 +62,22 @@ swtActivo.setVisibility(View.INVISIBLE);
 			@Override
 			public void onClick(View v)
 			{
-System.err.println("----------DESACTIVADO POR HOY");
+				System.err.println("----------DESACTIVADO POR HOY");
 				_a.desactivarPorHoy();
 				ActAvisoDlg.this.finish();
 			}
 		});
-				//------------------------------------------------------------------------------------------
+		ImageButton btnCerrar = (ImageButton)findViewById(R.id.btnCerrar);
+		btnCerrar.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				ActAvisoDlg.this.finish();
+			}
+		});
+
+		//------------------------------------------------------------------------------------------
 		try
 		{
 			//String sAviso = this.getIntent().getStringExtra("aviso");//this.getIntent().getExtras().getString("aviso");
@@ -99,6 +109,6 @@ System.err.println("----------DESACTIVADO POR HOY");
 			}
 			super.handleMessage(msg);
 		}
-	};
+	}
 
 }

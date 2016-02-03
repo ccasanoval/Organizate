@@ -54,7 +54,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="50dp"
 		android:src="@android:drawable/ic_menu_close_clear_cancel"
-		android:contentDescription="@string/cancel"/>
+		android:contentDescription="@string/cerrar"/>
 		/>
 
 </RelativeLayout>

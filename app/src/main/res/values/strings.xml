@@ -2,8 +2,7 @@
 	<string name="app_name">Organízate!</string>
 
 	<string name="aviso">Aviso!</string>
-	<string name="ok">Ok</string>
-	<string name="cancel">Cancelar</string>
+	<string name="cerrar">Cerrar</string>
 
 	<string name="editar">Editar</string>
 	<string name="eliminar">Eliminar</string>

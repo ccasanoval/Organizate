@@ -18,10 +18,11 @@ import java.util.Iterator;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo
 //TODO: hacer que el servicio arranque con el sistema, fallará si no llamas a SugarContext.init() ????
+//java.util.Arrays.sort
 public class CesService extends IntentService
 {
-	private static final long DELAY_LOAD = 2*60*1000;//TODO: ampliar tras debug
-	private static final long DELAY_CHECK = 2*60*1000;
+	private static final long DELAY_LOAD = 5*60*1000;//TODO: ampliar tras debug
+	private static final long DELAY_CHECK = 3*60*1000;
 	private ArrayList<Aviso> _lista = new ArrayList<>();
 
 	//______________________________________________________________________________________________

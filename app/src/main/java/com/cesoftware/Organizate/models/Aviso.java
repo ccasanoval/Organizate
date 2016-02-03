@@ -48,31 +48,6 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
 
-	/// HELPING FUNCS
-	public static boolean contains(byte[] a, byte v)
-	{
-		for(byte b : a)if(b == v)return true;
-		return false;
-	}
-	private static byte[] add(byte[] a, byte v)
-	{
-		byte[] b = new byte[a.length+1];
-		System.arraycopy(a, 0, b, 0, a.length);//for(int i=0; i < a.length; i++)b[i]=a[i];
-		b[b.length-1]=v;
-		return b;
-	}
-	private static byte[] remove(byte[] a, byte v)
-	{
-System.err.println("AAA-----z:"+v);
-		if(a.length == 0)return a;
-		byte[] b = new byte[a.length-1];
-		for(int i=0, j=0; i < a.length; i++)
-			if(a[i] != v)
-				b[j++]=a[i];
-System.err.println("AAA-----"+b.length);
-		return b;
-	}
-
 
 	/// MES
 	public void addMes(byte v)
@@ -244,6 +219,11 @@ System.err.println("AAA-----"+b.length);
 	public long save()
 	{
 		System.err.println("SAVING AVISO:------" + this);
+		java.util.Arrays.sort(_aMes);//quickSort(_aMes, 0, _aMes.length - 1);
+		java.util.Arrays.sort(_aDiaMes);
+		java.util.Arrays.sort(_aDiaSemana);
+		java.util.Arrays.sort(_aHora);
+		java.util.Arrays.sort(_aMinuto);
 		return super.save();
 	}
 
@@ -256,7 +236,7 @@ System.err.println("AAA-----"+b.length);
 	public boolean isDueTime()
 	{
 		Calendar now = Calendar.getInstance();
-System.err.println("isDueTime-----------"+now);
+System.err.println("isDueTime-----------" + now);
 
 		if(_dtActivo!=null &&  _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia //TODO:Mover a getAvisosActivos ?
 		{
@@ -279,7 +259,7 @@ System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------6 dm:"+now.get(Calendar.DAY_OF_MONTH));
+System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
 		if(aDiasMes.length > 0 && aDiasMes[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -288,7 +268,7 @@ System.err.println("isDueTime-----------6 dm:"+now.get(Calendar.DAY_OF_MONTH));
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------7 ds:"+now.get(Calendar.DAY_OF_WEEK));
+System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
 		if(aDiasSemana.length > 0 && aDiasSemana[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -297,8 +277,7 @@ System.err.println("isDueTime-----------7 ds:"+now.get(Calendar.DAY_OF_WEEK));
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------8 hor:"+now.get(Calendar.HOUR_OF_DAY)+" : "+now.get(Calendar.HOUR));
-		//TODO: hacer algo para que si no especifico la hora o minuto no se avisa cada 5 min...
+System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
 		if(aHoras.length > 0 && aHoras[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -307,7 +286,7 @@ System.err.println("isDueTime-----------8 hor:"+now.get(Calendar.HOUR_OF_DAY)+" 
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------9 min:"+now.get(Calendar.MINUTE));
+System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
 		if(aMinutos.length > 0 && aMinutos[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -319,7 +298,68 @@ System.err.println("isDueTime-----------9 min:"+now.get(Calendar.MINUTE));
 		}
 		return true;
 	}
+
+
+	/// HELPING FUNCS ------------------------------------------------------------------------------
+	public static boolean contains(byte[] a, byte v)
+	{
+		for(byte b : a)if(b == v)return true;
+		return false;
+	}
+	private static byte[] add(byte[] a, byte v)
+	{
+		byte[] b = new byte[a.length+1];
+		System.arraycopy(a, 0, b, 0, a.length);//for(int i=0; i < a.length; i++)b[i]=a[i];
+		b[b.length-1]=v;
+		return b;
+	}
+	private static byte[] remove(byte[] a, byte v)
+	{
+System.err.println("AAA-----z:"+v);
+		if(a.length == 0)return a;
+		byte[] b = new byte[a.length-1];
+		for(int i=0, j=0; i < a.length; i++)
+			if(a[i] != v)
+				b[j++]=a[i];
+System.err.println("AAA-----"+b.length);
+		return b;
+	}
 }
+
+	/*
+	// Los sustituyo por java.util.Arrays.sort(ab);
+	public static void quickSort(byte[] ab, int low, int high)//int low = 0;	int high = ab.length - 1;
+	{
+		if(ab == null || ab.length == 0)return;
+		if(low >= high)return;
+
+		// pick the pivot
+		int middle = low + (high - low) / 2;
+		byte pivot = ab[middle];
+
+		// make left < pivot and right > pivot
+		int i = low, j = high;
+		while(i <= j)
+		{
+			while(ab[i] < pivot)i++;
+			while(ab[j] > pivot)j--;
+			if(i <= j)
+			{
+				byte temp = ab[i];
+				ab[i] = ab[j];
+				ab[j] = temp;
+				i++;
+				j--;
+			}
+		}
+
+		// recursively sort two sub parts
+		if(low < j)
+			quickSort(ab, low, j);
+		if(high > i)
+			quickSort(ab, i, high);
+	}*/
+
 
 /*
 	//______________________________________________________________________________________________

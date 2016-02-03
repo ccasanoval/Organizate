@@ -11,20 +11,29 @@ import android.widget.RemoteViews;
 import com.orm.SugarContext;
 
 //http://www.vogella.com/tutorials/AndroidWidgets/article.html
+//http://developer.android.com/intl/es/guide/topics/appwidgets/index.html
+//http://developer.android.com/intl/es/guide/practices/ui_guidelines/widget_design.html
+/*
+row height	=>	look at widget_layout	=>	widget_info
+col width
+1 	40dp
+2 	110dp
+3 	180dp
+4 	250dp
+*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesWidgetProvider extends AppWidgetProvider
 {
-	public static String ACTION_WIDGET_SHOWAPP = "ActionReceiverShowApp";
-	public static String ACTION_WIDGET_CHANGE = "ActionReceiverChange";
-
 	//______________________________________________________________________________________________
 	@Override
 	public void onEnabled(Context context)
 	{
 		SugarContext.init(context);
 	}
+	//onDisabled(Context)
 
 	//______________________________________________________________________________________________
+	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds)
 	{
 		// Update the widgets via the service and user click
@@ -42,38 +51,11 @@ public class CesWidgetProvider extends AppWidgetProvider
 		appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
 	}
 
-/*
-	// Update the widgets via user click
-		PendingIntent actionPendingIntent;
-		RemoteViews widView = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-
-		Intent intent1 = new Intent(context, CesWidgetProvider.class);
-		actionPendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
-		intent1.setAction(ACTION_WIDGET_SHOWAPP);
-		widView.setOnClickPendingIntent(R.id.txtTarea, actionPendingIntent);
-
-		Intent intent2 = new Intent(context, CesWidgetProvider.class);
-		intent2.setAction(ACTION_WIDGET_SHOWAPP);
-		actionPendingIntent = PendingIntent.getBroadcast(context, 0, intent2, 0);
-		widView.setOnClickPendingIntent(R.id.lblNomApp, actionPendingIntent);
-
-		appWidgetManager.updateAppWidget(appWidgetIds, widView);
-	}
-
 	//______________________________________________________________________________________________
-	@Override
-	public void onReceive(Context context, Intent intent)
+	/*@Override
+	public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, android.os.Bundle newOptions)
 	{
-    	if(intent.getAction().equals(ACTION_WIDGET_SHOWAPP))
-		{
-        	System.err.println("onReceive:" + ACTION_WIDGET_SHOWAPP);
-    	}
-		else
-		{
-			System.err.println("onReceive:OTRO");
-        	super.onReceive(context, intent);
-    	}
-	}
-	*/
+		//getAppWidgetOptions()
+	}*/
 
 }

@@ -31,7 +31,6 @@ import java.util.Calendar;
 import com.cesoftware.Organizate.models.Aviso;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: Cuando no quepan mas itmes en una linea pasar a la siguiente... no hay manera de hacer wapping?
 //Todo: Mejorar icono avisos en ActEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
@@ -153,7 +152,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.getActivo());
 System.err.println("---------_a.getActivo()="+_a.getActivo());
-		for(byte i : _a.getMeses())//TODO: meter y sacar ordenados ...
+		for(byte i : _a.getMeses())
 			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())
 			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
@@ -226,7 +225,7 @@ System.err.println("SAVE---------_a.getActivo()=" + _a.getActivo());
 
 	private void delItem(int iTipo, byte nValor)
 	{
-		switch(iTipo)//TODO: Que otra manera hay?
+		switch(iTipo)
 		{
 		case MES:		_a.delMes(nValor);break;
 		case DIA_MES:	_a.delDiaMes(nValor);break;

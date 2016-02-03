@@ -12,7 +12,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar;//TODO: Check support libraries : need, do i use it?
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,7 +41,6 @@ import com.cesoftware.Organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//TODO: Check support libraries : need, do i use it? check min version AVD
 //TODO: mejorar icono app para subirlo a playstore
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity

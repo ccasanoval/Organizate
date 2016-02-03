@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
- 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//TODO: Mejorar imagen de splash!
 public class ActSplash extends Activity
 {
 	private static final int STOPSPLASH1 = 0;
@@ -14,10 +16,43 @@ public class ActSplash extends Activity
 	private static final long SPLASHTIME1 = 3500;
 	private static final long SPLASHTIME2 = 5000;
    
-	private ImageView splash;
+	private ImageView _splash;
+
+	@Override
+	public void onCreate(Bundle icicle)
+	{
+		super.onCreate(icicle);
+		setContentView(R.layout.act_splash);
+		_splash = (ImageView)findViewById(R.id.splashscreen);
+		Message msg = new Message();
+		msg.what = STOPSPLASH1;
+		CESHandler splashHandler = new CESHandler(this);
+		splashHandler.sendMessageDelayed(msg, SPLASHTIME1);
+		msg = new Message();
+		msg.what = STOPSPLASH2;
+		splashHandler.sendMessageDelayed(msg, SPLASHTIME2);
+	}
    
-	//handler for act_splash screen
-	private Handler splashHandler = new Handler()
+	private static class CESHandler extends Handler
+	{
+		private ActSplash _win;
+		public CESHandler(ActSplash win){_win = win;}
+		@Override
+		public void handleMessage(Message msg)
+		{
+			switch(msg.what)
+			{
+			case STOPSPLASH1:
+				_win._splash.setVisibility(View.GONE);
+				break;
+			case STOPSPLASH2:
+				_win.finish();
+				break;
+			}
+			super.handleMessage(msg);
+		}
+	}
+	/*private Handler splashHandler = new Handler()
 	{
 		//* @see android.os.Handler#handleMessage(android.os.Message)
 		@Override
@@ -34,20 +69,5 @@ public class ActSplash extends Activity
 			}
 			super.handleMessage(msg);
 		}
-	};
-   
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle icicle)
-	{
-		super.onCreate(icicle);
-		setContentView(R.layout.act_splash);
-		splash = (ImageView)findViewById(R.id.splashscreen);
-		Message msg = new Message();
-		msg.what = STOPSPLASH1;
-		splashHandler.sendMessageDelayed(msg, SPLASHTIME1);
-		msg = new Message();
-		msg.what = STOPSPLASH2;
-		splashHandler.sendMessageDelayed(msg, SPLASHTIME2);
-	}
+	};*/
 }

@@ -1,7 +1,6 @@
 package com.cesoftware.Organizate;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 	//import android.support.design.widget.Snackbar;
 	import android.os.Bundle;
@@ -150,7 +149,7 @@ System.err.println("2----click:"+_nClicks+" : "+(new Date().getTime() -  _dtClic
 	//______________________________________________________________________________________________
 	public void setAvisos()
 	{
-		Intent i = new Intent(this, CesService.class);
+		Intent i = new Intent(this, CesServiceAviso.class);
 		//i.setData("");
 		startService(i);
 	}

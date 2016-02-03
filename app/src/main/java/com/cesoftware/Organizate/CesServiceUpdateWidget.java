@@ -16,11 +16,11 @@ import com.cesoftware.Organizate.models.Objeto;
 /**
  * Created by Cesar_Casanova on 04/01/2016.
  */
-public class UpdateWidgetService extends Service
+public class CesServiceUpdateWidget extends Service
 {
 	private static Handler _h = null;
 	private static Runnable _r = null;
-	private static final int _DELAY = 60000;
+	private static final int _DELAY = 5*60*1000;
 	private static Long _id = -1L;
 
 	//______________________________________________________________________________________________
@@ -107,7 +107,7 @@ public class UpdateWidgetService extends Service
 		}
 		catch(Exception e)
 		{
-			System.err.println("UpdateWidgetService: onStartCommand: ERROR: "+e);
+			System.err.println("CesServiceUpdateWidget: onStartCommand: ERROR: "+e);
 		}
 	}
 }

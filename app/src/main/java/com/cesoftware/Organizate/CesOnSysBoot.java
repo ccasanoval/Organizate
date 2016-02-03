@@ -17,7 +17,7 @@ System.err.println("------------------CesOnSysBoot : onReceive : action="+intent
 		//TODO: mirar en bbdd si la configuracion dice que quiere arranque en boot o no...
 		if(intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED))
 		{
-			Intent serviceIntent = new Intent(context, CesService.class);
+			Intent serviceIntent = new Intent(context, CesServiceAviso.class);
 			context.startService(serviceIntent);
 		}
 	}

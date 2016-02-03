@@ -39,7 +39,7 @@ public class CesWidgetProvider extends AppWidgetProvider
 		// Update the widgets via the service and user click
 		ComponentName thisWidget = new ComponentName(context, CesWidgetProvider.class);
 		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget);
-		Intent intent = new Intent(context.getApplicationContext(), UpdateWidgetService.class);
+		Intent intent = new Intent(context.getApplicationContext(), CesServiceUpdateWidget.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, allWidgetIds);
 		context.startService(intent);
 

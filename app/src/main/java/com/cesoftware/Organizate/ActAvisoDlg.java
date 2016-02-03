@@ -21,6 +21,9 @@ import com.cesoftware.Organizate.models.Aviso;
 /**
  * Created by Cesar_Casanova on 01/02/2016
  */
+//TODO: Make noise? => Settings
+//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? Aviso noise? Aviso time to desapear? Desactivar por (hoy|hora|...)
+//TODO: Private but free git host? gitHub make ur code public...
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity
 {

@@ -17,18 +17,16 @@ import java.util.Iterator;
 /// Created by Cesar_Casanova on 27/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo
-//TODO: hacer que el servicio arranque con el sistema, fallará si no llamas a SugarContext.init() ????
-//java.util.Arrays.sort
-public class CesService extends IntentService
+public class CesServiceAviso extends IntentService
 {
-	private static final long DELAY_LOAD = 5*60*1000;//TODO: ampliar tras debug
+	private static final long DELAY_LOAD = 5*60*1000;//TODO: ajustar
 	private static final long DELAY_CHECK = 3*60*1000;
 	private ArrayList<Aviso> _lista = new ArrayList<>();
 
 	//______________________________________________________________________________________________
-	public CesService()
+	public CesServiceAviso()
 	{
-		super("Organizate");
+		super("OrganizateAviso");
 		//SugarContext.init(this);
 	}
 
@@ -44,7 +42,7 @@ public class CesService extends IntentService
 			long tmCheck = System.currentTimeMillis();
 			while(true)
 			{
-System.err.println("CesService:onHandleIntent:looping------------");
+System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 				Thread.sleep(DELAY_CHECK/2);
 				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
 				{
@@ -58,24 +56,24 @@ System.err.println("CesService:onHandleIntent:looping------------");
 				}
 			}
 		}
-		catch(InterruptedException e){System.err.println("CesService:onHandleIntent:------------");}
+		catch(InterruptedException e){System.err.println("CesServiceAviso:onHandleIntent:------------");}
 	}
 
 	//______________________________________________________________________________________________
 	private void cargarLista()
 	{
-System.err.println("CesService----cargarLista----");
+System.err.println("CesServiceAviso----cargarLista----");
 		try
 		{
 			_lista.clear();
 			Iterator<Aviso> it = Aviso.getActivos();
 			while(it.hasNext())
 				_lista.add(it.next());
-System.err.println("CesService---------------------cargarLista:"+_lista.size());
+System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.size());
 		}
 		catch(Exception e)
 		{
-System.err.println("CesService---------------------cargarLista:e:"+e);
+			System.err.println("CesServiceAviso:cargarLista:ERROR:"+e);
 			//_lista.clear();
 		}
 	}
@@ -83,16 +81,13 @@ System.err.println("CesService---------------------cargarLista:e:"+e);
 	//______________________________________________________________________________________________
 	private void checkAvisos()
 	{
-System.err.println("CesService-------checkAvisos----1");
+System.err.println("CesServiceAviso-------checkAvisos----1");
 		if(_lista == null || _lista.size() == 0)return;
 		for(Aviso a : _lista)
 		{
 			if(a.isDueTime())
 			{
-System.err.println("CesService-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
-				/*Intent intent = new Intent(getBaseContext(), ActSplash.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				getApplication().startActivity(intent);*/
+System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
 				Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra("aviso", a);//.getTexto()

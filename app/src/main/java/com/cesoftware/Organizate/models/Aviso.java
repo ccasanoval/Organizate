@@ -17,7 +17,6 @@ import java.util.Iterator;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Aviso extends SugarRecord implements Parcelable
 {
-	private static final long OFFSET_DATE = 60*60*1000;//ms
 	public static final byte NADA = -1;
 	public static final byte TODO = -2;
 

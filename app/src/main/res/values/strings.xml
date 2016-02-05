@@ -8,6 +8,8 @@
 	<string name="eliminar">Eliminar</string>
 	<string name="nuevo">Añadir</string>
 	<string name="volver">Volver</string>
+	<string name="editar_aviso">Editar Aviso</string>
+	<string name="editar_aviso_geo">Editar Aviso Geo</string>
 
 	<string name="nombre">Nombre</string>
 	<string name="descripcion">Descripción</string>
@@ -41,7 +43,6 @@
 	<string name="dia_semana">+Día Sem.</string>
 	<string name="hora">+Hora</string>
 	<string name="minuto">+Minuto</string>
-	<string name="editar_aviso">Editar Aviso</string>
 	<string name="desactivar_por_ahora">No me avises\nmás hoy</string>
 	<string name="leer">Lee el contenido</string>
 

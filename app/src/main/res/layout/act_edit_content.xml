@@ -86,6 +86,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginRight="5dp"
+		android:layout_marginEnd="5dp"
 		android:src="@android:drawable/ic_menu_delete"
 		android:contentDescription="@string/eliminar"/>
 
@@ -94,6 +95,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginRight="5dp"
+		android:layout_marginEnd="5dp"
 		android:src="@android:drawable/ic_menu_help"
 		android:contentDescription="@string/leer"/>
 
@@ -102,6 +104,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginRight="5dp"
+		android:layout_marginEnd="5dp"
 		android:src="@android:drawable/ic_menu_agenda"
 		android:contentDescription="@string/aviso"/>
 
@@ -110,6 +113,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginRight="5dp"
+		android:layout_marginEnd="5dp"
 		android:src="@android:drawable/ic_dialog_map"
 		android:contentDescription="@string/aviso"/>
 	</LinearLayout>

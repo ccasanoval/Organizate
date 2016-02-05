@@ -1,12 +1,13 @@
 package com.cesoftware.Organizate;
 
+import com.cesoftware.Organizate.models.AvisoGeo;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -16,33 +17,29 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
+import java.util.ArrayList;
 
-import com.cesoftware.Organizate.models.AvisoGeo;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.ArrayList;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Todo: Añadir boton en ActEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnCameraChangeListener
-		//extends FragmentActivity
+public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener
 {
 	private AvisoGeo _a;
 	private TextView _txtAviso;
 	private Switch _swtActivo;
 	private GoogleMap _Map;
+	//private MapView _vMap;
 	ArrayList<Geofence> _Geofences;
 	ArrayList<LatLng> _GeofenceCoordinates;
 	ArrayList<Integer> _GeofenceRadius;
@@ -53,7 +50,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCall
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.act_aviso_edit);
+		setContentView(R.layout.act_avisogeo_edit);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -70,7 +67,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCall
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = this.getIntent().getParcelableExtra("aviso");
+			_a = this.getIntent().getParcelableExtra("avisoGeo");
 			setValores();
 		} catch(Exception e)
 		{
@@ -95,25 +92,46 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCall
 		// Performing Arts Center
 		_Geofences.add(new Geofence.Builder().setRequestId("Performing Arts Center")
 				// The coordinates of the center of the geofence and the radius in meters.
-				.setCircularRegion(_GeofenceCoordinates.get(0).latitude, _GeofenceCoordinates.get(0).longitude, _GeofenceRadius.get(0).intValue()).setExpirationDuration(Geofence.NEVER_EXPIRE)
+				.setCircularRegion(_GeofenceCoordinates.get(0).latitude, _GeofenceCoordinates.get(0).longitude, _GeofenceRadius.get(0)).setExpirationDuration(Geofence.NEVER_EXPIRE)
 						// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
 				.setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 		// Starbucks
 		_Geofences.add(new Geofence.Builder().setRequestId("Starbucks")
 				// The coordinates of the center of the geofence and the radius in meters.
-				.setCircularRegion(_GeofenceCoordinates.get(1).latitude, _GeofenceCoordinates.get(1).longitude, _GeofenceRadius.get(1).intValue()).setExpirationDuration(Geofence.NEVER_EXPIRE)
+				.setCircularRegion(_GeofenceCoordinates.get(1).latitude, _GeofenceCoordinates.get(1).longitude, _GeofenceRadius.get(1)).setExpirationDuration(Geofence.NEVER_EXPIRE)
 						// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
 				.setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 		// Milwaukee Public Museum
 		_Geofences.add(new Geofence.Builder().setRequestId("Milwaukee Public Museum")
 				// The coordinates of the center of the geofence and the radius in meters.
-				.setCircularRegion(_GeofenceCoordinates.get(2).latitude, _GeofenceCoordinates.get(2).longitude, _GeofenceRadius.get(2).intValue()).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
+				.setCircularRegion(_GeofenceCoordinates.get(2).latitude, _GeofenceCoordinates.get(2).longitude, _GeofenceRadius.get(2)).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 		// Milwaukee Art Museum
 		_Geofences.add(new Geofence.Builder().setRequestId("Milwaukee Art Museum")
 				// The coordinates of the center of the geofence and the radius in meters.
-				.setCircularRegion(_GeofenceCoordinates.get(3).latitude, _GeofenceCoordinates.get(3).longitude, _GeofenceRadius.get(3).intValue()).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
+				.setCircularRegion(_GeofenceCoordinates.get(3).latitude, _GeofenceCoordinates.get(3).longitude, _GeofenceRadius.get(3)).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 		// Add the geofences to the GeofenceStore object.
 		_GeofenceStore = new CesGeofenceStore(this, _Geofences);
+
+		//------------------------------------------------------------------------------------------
+
+		SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(this);
+		//_vMap = (MapView)findViewById(R.id.map);
+		//_vMap.onCreate(savedInstanceState);
+		mapFragment.getMapAsync(new OnMapReadyCallback()
+		{
+			@Override
+			public void onMapReady(GoogleMap map)
+			{
+				_Map = map;
+				map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+				map.setTrafficEnabled(true);
+				map.setIndoorEnabled(true);
+				map.setBuildingsEnabled(true);
+				map.getUiSettings().setZoomControlsEnabled(true);
+				setUpMap();
+			}
+		});
 	}
 
 	@Override
@@ -127,14 +145,14 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCall
 	protected void onResume()
 	{
 		super.onResume();
-		int i = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this.getBaseContext());
+		/*int i = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this.getBaseContext());
 		if(i == ConnectionResult.SUCCESS)//SUCCESS, SERVICE_MISSING, SERVICE_UPDATING, SERVICE_VERSION_UPDATE_REQUIRED, SERVICE_DISABLED, SERVICE_INVALID
 			setUpMapIfNeeded();
 		else
-			GoogleApiAvailability.getInstance().getErrorDialog(this, i, 0);
+			GoogleApiAvailability.getInstance().getErrorDialog(this, i, 0);*/
 	}
 
-	private void setUpMapIfNeeded()
+	/*private void setUpMapIfNeeded()
 	{
 		// Do a null check to confirm that we have not already instantiated the map.
 		if(_Map == null)
@@ -148,7 +166,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements OnMapReadyCall
 				setUpMap();
 		}
 	}
-	@Override
+	/*@Override
 	public void onMapReady(GoogleMap map)
 	{
 		//DO WHATEVER YOU WANT WITH GOOGLEMAP
@@ -173,14 +191,9 @@ System.err.println("----------ActivityCompat.checkSelfPermission--------------")
 
 		_Map = map;
 		setUpMap();
-	}
+	}*/
 
 
-	/**
-	 * This is where we can add markers or lines, add listeners or move the camera. In this case, we just add a marker near Africa.
-	 * <p/>
-	 * This should only be called once and when we are sure that {@link #_Map} is not null.
-	 */
 	private void setUpMap()
 	{
 		// Centers the camera over the building and zooms int far enough to show the floor picker.
@@ -210,7 +223,7 @@ System.err.println("----------ActivityCompat.checkSelfPermission--------------")
 		for(int i = 0; i < _GeofenceCoordinates.size(); i++)
 		{
 			_Map.addCircle(new CircleOptions().center(_GeofenceCoordinates.get(i))
-					.radius(_GeofenceRadius.get(i).intValue())
+					.radius(_GeofenceRadius.get(i))
 					.fillColor(0x40ff0000)
 					.strokeColor(Color.TRANSPARENT).strokeWidth(2));
 		}

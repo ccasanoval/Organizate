@@ -8,6 +8,8 @@
 	<string name="eliminar">Remove</string>
 	<string name="nuevo">Add</string>
 	<string name="volver">Get Back</string>
+	<string name="editar_aviso">Edit the Warning</string>
+	<string name="editar_aviso_geo">Edit the GeoWarning</string>
 
 	<string name="nombre">Name</string>
 	<string name="descripcion">Description</string>
@@ -41,7 +43,6 @@
 	<string name="hora">+Hour</string>
 	<string name="minuto">+Minute</string>
 	<string name="fecha">Date:</string>
-	<string name="editar_aviso">Edit the Warning</string>
 	<string name="desactivar_por_ahora">Don\'t alert me again\nfor today</string>
 	<string name="leer">Read the content</string>
 

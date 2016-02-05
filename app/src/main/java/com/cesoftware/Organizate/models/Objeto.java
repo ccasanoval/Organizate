@@ -28,6 +28,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	private String _sDescripcion = "";
 	private Objeto _padre = null;
 	private Aviso _aviso = null;
+	private AvisoGeo _avisoGeo = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
 
@@ -37,8 +38,8 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	@Override
-	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+", aviso="+_aviso+"}";}
-	public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
+	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+", avi="+_aviso+", aviGeo="+_avisoGeo+"}";}
+	//public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
 
 	//______________________________________________________________________________________________
 	@Override
@@ -85,7 +86,6 @@ public class Objeto extends SugarRecord implements Parcelable
 			_hijos = hijos;
 	}
 
-
 	//______________________________________________________________________________________________
 	public int getNivel()
 	{
@@ -120,6 +120,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	//public void setHijos(Objeto[] hijos){_hijos = hijos;}
 	public Aviso getAviso(){return _aviso;}
 	public void setAviso(Aviso aviso){_aviso = aviso;}
+	public AvisoGeo getAvisoGeo(){return _avisoGeo;}
+	public void setAvisoGeo(AvisoGeo avisoGeo){_avisoGeo = avisoGeo;}
 
 
 	//______________________________________________________________________________________________
@@ -148,6 +150,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		_sNombre = in.readString();
 		_sDescripcion = in.readString();
 		_aviso = in.readParcelable(Aviso.class.getClassLoader());
+		_avisoGeo = in.readParcelable(AvisoGeo.class.getClassLoader());
 		_padre = in.readParcelable(Objeto.class.getClassLoader());
 		_hijos = in.createTypedArray(Objeto.CREATOR);
 	}
@@ -163,6 +166,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		dest.writeString(_sNombre);
 		dest.writeString(_sDescripcion);
 		dest.writeParcelable(_aviso, flags);
+		dest.writeParcelable(_avisoGeo, flags);
 		dest.writeParcelable(_padre, flags);
 		dest.writeTypedArray(_hijos, flags);
 	}
@@ -232,10 +236,12 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	// BBDD
+	@Override
 	public long save()
 	{
 		System.err.println("SAVING OBJETO:------"+this);
 		if(_aviso != null)_aviso.save();
+		if(_avisoGeo != null)_avisoGeo.save();
 		return super.save();
 	}
 	public static void delTodo()
@@ -247,17 +253,20 @@ public class Objeto extends SugarRecord implements Parcelable
 		}
 		catch(Exception e){System.err.println("Objeto:delTodo:ERROR:"+e);}
 	}
-	public void sav()
+	/*public void sav()
 	{
 		if(_aviso != null)_aviso.save();
+		if(_aviso != null)_aviso.save();
 		save();
-	}
-	public void del()
+	}*/
+	@Override
+	public boolean delete()
 	{
 		if(_aviso != null)_aviso.delete();
-		delete();
+		if(_avisoGeo != null)_avisoGeo.delete();
 		for(Objeto o1 : getHijos())
-			o1.del();
+			o1.delete();
+		return super.delete();
 	}
 
 	//______________________________________________________________________________________________

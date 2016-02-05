@@ -37,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.cesoftware.Organizate.models.Aviso;
+import com.cesoftware.Organizate.models.AvisoGeo;
 import com.cesoftware.Organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,12 +63,12 @@ public class ActEdit extends AppCompatActivity
 	private ImageButton _btnEliminar;
 	private ImageButton _btnHablar;
 
-	private boolean _isNuevo=false;
-	private long _idPadre = TOP_NODE;
-	private Objeto _o;
-	private EditText _txtNombre;
-	private EditText _txtDescripcion;
-	private RatingBar _rbPrioridad;
+	private boolean		_isNuevo=false;
+	private long		_idPadre = TOP_NODE;
+	private Objeto		_o;
+	private EditText	_txtNombre;
+	private EditText	_txtDescripcion;
+	private RatingBar	_rbPrioridad;
 
 	//______________________________________________________________________________________________
 	/*@Override
@@ -91,6 +92,7 @@ public class ActEdit extends AppCompatActivity
 		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
 		_btnHablar = (ImageButton)findViewById(R.id.btnHablar);
 		ImageButton	btnAviso = (ImageButton)findViewById(R.id.btnAviso);
+		ImageButton	btnAvisoGeo = (ImageButton)findViewById(R.id.btnAvisoGeo);
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -127,6 +129,14 @@ public class ActEdit extends AppCompatActivity
 			public void onClick(View v)
 			{
 				showAviso();
+			}
+		});
+		btnAvisoGeo.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				showAvisoGeo();
 			}
 		});
 		//------------------------------------------------------------------------------------------
@@ -235,7 +245,7 @@ public class ActEdit extends AppCompatActivity
 		clearDataBase();
 		if(_lista != null && _lista.size() > 0)
 			for(Objeto o : _lista)
-				o.sav();
+				o.save();
 		_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
 		_act.selectObjeto(_o);
 		ActEdit.this.finish();
@@ -286,7 +296,7 @@ public class ActEdit extends AppCompatActivity
 	// DB DELETE
 	private static void dbDel(Objeto o)
 	{
-		o.del();
+		o.delete();
 	}
 
 	private void borrar(final View v)
@@ -458,6 +468,15 @@ public class ActEdit extends AppCompatActivity
 	//______________________________________________________________________________________________
 	// AVISO
 	//______________________________________________________________________________________________
+	private String getStringAviso()
+	{
+		String sAviso = "";
+		if( ! _txtNombre.getText().toString().isEmpty())
+			sAviso = _txtNombre.getText().toString()+" : ";
+		if( ! _txtDescripcion.getText().toString().isEmpty())
+			sAviso += _txtDescripcion.getText().toString();
+		return sAviso;
+	}
 	private static final int AVISO = 200;
 	private void showAviso()
 	{
@@ -465,26 +484,39 @@ public class ActEdit extends AppCompatActivity
 		if(_o.getAviso() == null)
 		{
 			Aviso a = new Aviso();
-			String sAviso = "";
-			if( ! _txtNombre.getText().toString().isEmpty())
-				sAviso = _txtNombre.getText().toString()+" : ";
-			if( ! _txtDescripcion.getText().toString().isEmpty())
-				sAviso += _txtDescripcion.getText().toString();
-			//if(_o.getDescripcion().isEmpty())
-			a.setTexto(sAviso);
+			a.setTexto(getStringAviso());
 			_o.setAviso(a);
 		}
 		i.putExtra("aviso", _o.getAviso());
 		startActivityForResult(i, AVISO);
 	}
+	private static final int AVISO_GEO = 201;
+	private void showAvisoGeo()
+	{
+		Intent i = new Intent(this, ActAvisoGeoEdit.class);
+		if(_o.getAvisoGeo() == null)
+		{
+			AvisoGeo a = new AvisoGeo();
+			a.setTexto(getStringAviso());
+			_o.setAvisoGeo(a);
+		}
+		i.putExtra("avisoGeo", _o.getAvisoGeo());
+		startActivityForResult(i, AVISO_GEO);
+	}
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
 		super.onActivityResult(requestCode, resultCode, data);
-		if(requestCode == AVISO && resultCode == RESULT_OK)
+		if(resultCode != RESULT_OK)return;
+		if(requestCode == AVISO)
 		{
-			_o.setAviso((Aviso)data.getParcelableExtra("aviso"));
-			System.err.println("onActivityResult----------" + _o.getAviso());
+			_o.setAviso((Aviso) data.getParcelableExtra("aviso"));
+			System.err.println("onActivityResult----------A:" + _o.getAviso());
+		}
+		else if(requestCode == AVISO_GEO)
+		{
+			_o.setAvisoGeo((AvisoGeo)data.getParcelableExtra("avisoGeo"));
+			System.err.println("onActivityResult----------AG:" + _o.getAvisoGeo());
 		}
 	}
 

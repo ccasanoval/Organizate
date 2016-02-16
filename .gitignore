@@ -8,3 +8,4 @@
 *.apk
 *.jks
 google-services.json
+gradle.properties

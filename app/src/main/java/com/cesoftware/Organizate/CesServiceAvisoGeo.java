@@ -69,6 +69,8 @@ public class CesServiceAvisoGeo extends IntentService
 				break;
 			default:
 				notificationTitle = "-----------------------------Geofence Unknown";
+				Log.v(TAG, "-----------------------------Geofence Unknown");
+				break;
 			}
 
 			sendNotification(this, getTriggeringGeofences(intent), notificationTitle);

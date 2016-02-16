@@ -33,9 +33,6 @@
 		<meta-data
 			android:name="DOMAIN_PACKAGE_NAME"
 			android:value="com.cesoftware.Organizate"/>
-		<service
-			android:name=".CesServiceAviso"
-			android:exported="false"/>
 
 		<activity android:name="com.cesoftware.Organizate.MainActivity">
 			<intent-filter>
@@ -81,14 +78,16 @@
     		</intent-filter>
 		</activity -->
 
-		<service android:name=".CesServiceUpdateWidget"/>
+		<service android:name=".CesServiceUpdateWidget" android:exported="false"/>
 		<receiver android:name=".CesOnSysBoot" >
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
 
-		<service android:name=".CesServiceGeofencing"/>
+		<service android:name=".CesServiceAviso" android:exported="false"/>
+
+		<service android:name=".CesServiceAvisoGeo" android:exported="false" />
 		<meta-data
 			android:name="com.google.android.gms.version"
 			android:value="@integer/google_play_services_version" />

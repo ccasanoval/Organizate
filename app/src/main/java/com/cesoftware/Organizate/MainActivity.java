@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 	import android.widget.ExpandableListView;
 
 	import com.cesoftware.Organizate.models.Objeto;
-	import com.orm.SugarContext;
+import com.google.android.gms.location.Geofence;
+import com.orm.SugarContext;
 
 	import java.util.ArrayList;
 	import java.util.Date;
 	import java.util.Iterator;
+import java.util.List;
 
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +156,38 @@ System.err.println("2----click:"+_nClicks+" : "+(new Date().getTime() -  _dtClic
 		startService(i);
 	}
 
+
+
+	List<Geofence> mGeofenceList;
+	private CesGeofenceStore mGeofenceStorage = new CesGeofenceStore(this);
+	private CesGeofence mAndroidBuildingGeofence;
+    private CesGeofence mYerbaBuenaGeofence;
+	public void createGeofencesTEST()
+	{
+		// Create internal "flattened" objects containing the geofence data.
+		mAndroidBuildingGeofence = new CesGeofence(
+				"1",			//id
+				40.4890984,		//lat
+				-3.6512994,		//lon
+				1000,			//radius meters
+				5*60*1000,		//geofence expiration time
+				Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT
+		);
+		mYerbaBuenaGeofence = new CesGeofence(
+				"2",
+				40.4182924,
+				-3.5738288,
+				1000,
+				Geofence.NEVER_EXPIRE,
+				Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT
+		);
+
+		// Store these flat versions in SharedPreferences and add them to the geofence list.
+		mGeofenceStorage.setGeofence("1", mAndroidBuildingGeofence);
+		mGeofenceStorage.setGeofence("2", mYerbaBuenaGeofence);
+		mGeofenceList.add(mAndroidBuildingGeofence.toGeofence());
+		mGeofenceList.add(mYerbaBuenaGeofence.toGeofence());
+	}
 
 	//______________________________________________________________________________________________
 	/*private static void datosTEST()

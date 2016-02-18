@@ -481,26 +481,28 @@ public class ActEdit extends AppCompatActivity
 	private void showAviso()
 	{
 		Intent i = new Intent(this, ActAvisoEdit.class);
-		if(_o.getAviso() == null)
+		Aviso a = _o.getAviso();
+		if(a == null)
 		{
-			Aviso a = new Aviso();
+			a = new Aviso();
 			a.setTexto(getStringAviso());
-			_o.setAviso(a);
+			//_o.setAviso(a);
 		}
-		i.putExtra("aviso", _o.getAviso());
+		i.putExtra("aviso", a);
 		startActivityForResult(i, AVISO);
 	}
 	private static final int AVISO_GEO = 201;
 	private void showAvisoGeo()
 	{
 		Intent i = new Intent(this, ActAvisoGeoEdit.class);
-		if(_o.getAvisoGeo() == null)
+		AvisoGeo a = _o.getAvisoGeo();
+		if(a == null)
 		{
-			AvisoGeo a = new AvisoGeo();
+			a = new AvisoGeo();
 			a.setTexto(getStringAviso());
-			_o.setAvisoGeo(a);
+			//_o.setAvisoGeo(a);
 		}
-		i.putExtra("avisoGeo", _o.getAvisoGeo());
+		i.putExtra("avisoGeo", a);
 		startActivityForResult(i, AVISO_GEO);
 	}
 	@Override
@@ -510,7 +512,7 @@ public class ActEdit extends AppCompatActivity
 		if(resultCode != RESULT_OK)return;
 		if(requestCode == AVISO)
 		{
-			_o.setAviso((Aviso) data.getParcelableExtra("aviso"));
+			_o.setAviso((Aviso)data.getParcelableExtra("aviso"));
 			System.err.println("onActivityResult----------A:" + _o.getAviso());
 		}
 		else if(requestCode == AVISO_GEO)

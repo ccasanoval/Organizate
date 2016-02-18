@@ -20,6 +20,9 @@ import com.orm.SugarContext;
 	import java.util.Iterator;
 import java.util.List;
 
+//TODO: Botones con estilo como en Encuentrame
+//TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
+//TODO: cuando abres aviso pero no lo guardas no debería crear aviso
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class MainActivity extends AppCompatActivity

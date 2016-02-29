@@ -46,4 +46,9 @@
 	<string name="desactivar_por_ahora">No me avises\nmás hoy</string>
 	<string name="leer">Lee el contenido</string>
 
+	<string name="posicion">Pos:</string>
+	<string name="actualizar_posicion">Actualizar posición</string>
+	<string name="radio">Radio</string>
+
+
 </resources>

@@ -45,7 +45,7 @@ public class CesWidgetProvider extends AppWidgetProvider
 
 		// Open the app
 		RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
-		Intent intent2 = new Intent(context.getApplicationContext(), MainActivity.class);
+		Intent intent2 = new Intent(context.getApplicationContext(), ActMain.class);
 		PendingIntent actionPendingIntent = PendingIntent.getActivity(context, 0, intent2, 0);
 		remoteViews.setOnClickPendingIntent(R.id.lblNomApp, actionPendingIntent);
 		appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);

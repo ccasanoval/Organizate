@@ -38,6 +38,11 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	public void setActivo(boolean v){_bActivo = v;}
 	public boolean getActivo(){return _bActivo;}
 
+	public double getLatitud(){return _lat;}
+	public double getLongitud(){return _lon;}
+	public float getRadio(){return _rad;}
+	public void setGeoPosicion(double lat, double lon, float rad){_lat=lat; _lon=lon; _rad=rad;}//TODO:Check valid
+
 	///-----
 	public AvisoGeo(){}
 	public String toString(){return "{id="+getId()+", act="+_bActivo+", txt="+_sTexto+", _dtAct="+_dtActivo+" }";}

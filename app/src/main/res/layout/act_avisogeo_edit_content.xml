@@ -38,15 +38,75 @@
 			android:singleLine="true"/>
 	</android.support.design.widget.TextInputLayout>
 
+	<LinearLayout
+		android:id="@+id/layPosicion"
+		android:layout_below="@+id/txtAviso_"
+		android:orientation="horizontal"
+		android:layout_centerHorizontal="true"
+		android:layout_centerVertical="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="5dp">
+
+		<TextView
+			android:id="@+id/lblPosicion_"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/posicion"
+			android:layout_marginRight="15dp"
+			android:layout_marginEnd="15dp"
+			android:layout_gravity="center_vertical"/>
+		<TextView
+			android:id="@+id/lblPosicion"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:layout_marginRight="10dp"
+			android:layout_marginEnd="10dp"
+			android:text="0.0/0.0"
+			android:layout_gravity="center_vertical"/>
+		<ImageButton
+			android:id="@+id/btnActPos"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginRight="10dp"
+			android:layout_marginEnd="10dp"
+			android:layout_gravity="center_vertical"
+			android:contentDescription="@string/actualizar_posicion"
+			android:src="@android:drawable/ic_menu_mylocation" />
+	</LinearLayout>
+
+	<LinearLayout
+		android:id="@+id/layRadio"
+		android:layout_below="@+id/layPosicion"
+		android:orientation="horizontal"
+		android:layout_centerHorizontal="true"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="10dp">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceMedium"
+			android:text="@string/radio"/>
+		<Spinner
+			android:id="@+id/spnRadio"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:prompt="@string/radio" />
+	</LinearLayout>
+
 	<fragment
 		xmlns:android="http://schemas.android.com/apk/res/android"
     	xmlns:tools="http://schemas.android.com/tools"
 		class="com.google.android.gms.maps.SupportMapFragment"
 		android:id="@+id/map"
-		android:layout_below="@+id/txtAviso_"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		tools:context=".ActAvisoGeoEdit"
+		android:layout_below="@+id/layRadio"
 		/>
 
 </RelativeLayout>

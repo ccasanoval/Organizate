@@ -1,49 +1,35 @@
 package com.cesoft.organizate;
 
-import android.Manifest;
-import android.app.PendingIntent;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-//import android.support.design.widget.Snackbar;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
-
-import com.cesoft.organizate.models.Objeto;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.orm.SugarContext;
+import android.content.Intent;
+import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+
+import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.Objeto;
+import com.orm.SugarContext;
+
 
 //MAP API CREDENTIAL: https://console.developers.google.com/apis/credentials?project=shining-medium-121911
 //GOOGLE API SIGN : https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 //LAUNCH SIGNED APK : https://www.jetbrains.com/idea/help/generating-a-signed-release-apk-through-an-artifact.html
+//TODO: How to launch release to device when debuging
 
 //TODO: Botones con estilo como en Encuentrame
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 //TODO: cuando abres aviso pero no lo guardas no debería crear aviso
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status>, LocationListener
+public class ActMain extends AppCompatActivity
 {
 	private static ExpandableListView _expListView;
 
@@ -69,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 		_expListView = (ExpandableListView) findViewById(R.id.elv_todo);
 		SugarContext.init(this);
 //datosTEST();
+//datosTESTgeo();
 //createGeofencesTEST();
 		cargarLista();
 		//------
@@ -162,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 					//http://www.anddev.org/simple_splash_screen-t811.html
 					//http://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen
 					System.err.println("EGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
-					Intent i = new Intent(MainActivity.this, ActSplash.class);
-					MainActivity.this.startActivity(i);
+					Intent i = new Intent(ActMain.this, ActSplash.class);
+					ActMain.this.startActivity(i);
 					return true;
 				}
 				return false;
@@ -175,140 +162,35 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 	public void setAvisos()
 	{
 		Intent i = new Intent(this, CesServiceAviso.class);
-		//i.setData("");
 		startService(i);
 	}
 
-	//List<Geofence> mGeofenceList;
-	private List<Geofence> mGeofenceList2 = new ArrayList<Geofence>();
-	//private CesGeofenceStore mGeofenceStorage = new CesGeofenceStore(this);
-	private CesGeofence mGeofence1, mGeofence2, mGeofence3;
-	private GoogleApiClient mGoogleApiClient;
-	public void createGeofencesTEST()
+
+	private static void datosTESTgeo()
 	{
-		mGoogleApiClient = new GoogleApiClient.Builder(this.getApplicationContext())
-				.addApi(LocationServices.API)
-				.addConnectionCallbacks(this)
-				.addOnConnectionFailedListener(this)
-				.build();
-		mGoogleApiClient.connect();
-		mLocationRequest = new LocationRequest();// This is purely optional and has nothing to do with geofencing. I added this as a way of debugging. Define the LocationRequest.
-		mLocationRequest.setInterval(10000);// We want a location update every 10 seconds.
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);// We want the location to be as accurate as possible.
+		try{
+		AvisoGeo ag;
 
-		/*mGeofenceList.add(new Geofence.Builder()
-			.setRequestId("entry.getKey")// Set the request ID of the geofence. This is a string to identify this geofence.
-			.setCircularRegion(40.4890984, -3.6512994, 1000)
-			.setExpirationDuration(Geofence.NEVER_EXPIRE)
-    		.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-    		.build());*/
-		// Create internal "flattened" objects containing the geofence data.
-		mGeofence1 = new CesGeofence("ZONA_SHT",        //id
-				40.4890984,        //lat
-				-3.6512994,        //lon
-				1000,            //radius meters
-				5 * 60 * 1000,        //geofence expiration time
-				Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
-		mGeofence2 = new CesGeofence("ZONA_OLD", 40.4228029, -3.5339735, 1000, Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
-		mGeofence3 = new CesGeofence("ZONA_NEW", 40.4172096, -3.574815, 1000, Geofence.NEVER_EXPIRE, Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT);
-		// Store these flat versions in SharedPreferences and add them to the geofence list.
-		/*mGeofenceStorage.setGeofence("1", mGeofence1);
-		mGeofenceStorage.setGeofence("2", mGeofence2);
-		mGeofenceStorage.setGeofence("3", mGeofence3);*/
-		/*mGeofenceList.add(mGeofence1.toGeofence());
-		mGeofenceList.add(mGeofence2.toGeofence());
-		mGeofenceList.add(mGeofence3.toGeofence());*/
+		ag = new AvisoGeo();
+		ag.setActivo(true);
+		ag.setTexto("Geofence uno");
+		ag.setGeoPosicion(40.4890984, -3.6512994, 1500);
+		ag.save();
 
-		mGeofenceList2.add(new Geofence.Builder()
-			.setRequestId("ZONA_SHT")
-			.setCircularRegion(40.4890984, -3.6512994, 1000)
-			.setExpirationDuration(Geofence.NEVER_EXPIRE)
-    		.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-    		.build());
-		mGeofenceList2.add(new Geofence.Builder()
-			.setRequestId("ZONA_OLD")
-			.setCircularRegion(40.4228029, -3.5339735, 1000)
-			.setExpirationDuration(Geofence.NEVER_EXPIRE)
-    		.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT)
-    		.build());
-		mGeofenceList2.add(new Geofence.Builder().setRequestId("ZONA_NEW").setCircularRegion(40.4172096, -3.574815, 1000).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
+		ag = new AvisoGeo();
+		ag.setActivo(true);
+		ag.setTexto("Geofence dos");
+		ag.setGeoPosicion(40.4228029, -3.5339735, 1500);
+		ag.save();
+
+		ag = new AvisoGeo();
+		ag.setActivo(true);
+		ag.setTexto("Geofence tres");
+		ag.setGeoPosicion(40.4170875, -3.5746174, 500);
+		ag.save();
+
+		}catch(Exception e){System.err.println("datosTESTgeo:e:"+e);}
 	}
-
-	private GeofencingRequest getGeofencingRequest()
-	{
-		GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-		builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);//INITIAL_TRIGGER_DWELL
-		builder.addGeofences(mGeofenceList2);
-		return builder.build();
-	}
-
-	PendingIntent mGeofencePendingIntent;
-	private PendingIntent getGeofencePendingIntent()
-	{
-		// Reuse the PendingIntent if we already have it.
-		if(mGeofencePendingIntent != null)
-			return mGeofencePendingIntent;
-		Intent intent = new Intent(this, CesServiceAvisoGeo.class);
-		// We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling addGeofences() and removeGeofences().
-		mGeofencePendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-		return mGeofencePendingIntent;
-	}
-
-
-	private LocationRequest mLocationRequest;
-	GeofencingRequest mGeofencingRequest;
-	@Override
-	public void onConnected(Bundle bundle)
-	{
-		if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
-		LocationServices.GeofencingApi
-				.addGeofences(mGoogleApiClient, getGeofencingRequest(), getGeofencePendingIntent())
-				.setResultCallback(this);
-
-		mGeofencingRequest = getGeofencingRequest();
-		getGeofencePendingIntent();
-		// This is for debugging only and does not affect geofencing.
-		if(ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-			&& ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-			return;
-		LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-
-		// Submitting the request to monitor geofences.
-		PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofencingRequest, mGeofencePendingIntent);
-		// Set the result callbacks listener to this class.
-		pendingResult.setResultCallback(this);
-	}
-	@Override
-	public void onConnectionSuspended(int i)
-	{
-		System.err.println("-------------------------------onConnectionSuspended:"+i);
-	}
-	@Override
-	public void onConnectionFailed(ConnectionResult connectionResult)
-	{
-		System.err.println("-------------------------------onConnectionFailed:"+connectionResult);
-	}
-	@Override
-	public void onLocationChanged(Location location)
-	{
-		System.err.println("-------------------------------onLocationChanged:"+location);
-	}
-	@Override
-	public void onResult(Status status)
-	{
-		System.err.println("-------------------------------onResult:"+status);
-	}
-
-
-	/* STOP
-	LocationServices.GeofencingApi.removeGeofences(
-            mGoogleApiClient,
-            // This is the same pending intent that was used in addGeofences().
-            getGeofencePendingIntent()
-    ).setResultCallback(this); // Result processed in onResult().
-	}
-	 */
-
 
 	//______________________________________________________________________________________________
 	/*private static void datosTEST()

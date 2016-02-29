@@ -28,9 +28,9 @@
 			android:value="true"/>
 		<meta-data
 			android:name="DOMAIN_PACKAGE_NAME"
-			android:value="com.cesoftware.Organizate"/>
+			android:value="com.cesoft.organizate"/>
 
-		<activity android:name="com.cesoft.organizate.MainActivity">
+		<activity android:name=".ActMain">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>

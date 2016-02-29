@@ -53,8 +53,8 @@ public class ActEdit extends AppCompatActivity
 
 	private static ArrayList<Objeto> _lista;
 		public static void setLista(ArrayList<Objeto> lista){_lista = lista;}
-	private static MainActivity _act;
-		public static void setParentAct(MainActivity act){_act = act;}
+	private static ActMain _act;
+		public static void setParentAct(ActMain act){_act = act;}
 
 	//______________________________________________________________________________________________
 	private String[]	_popUpContents;

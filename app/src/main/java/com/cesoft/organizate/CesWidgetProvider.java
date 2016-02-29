@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

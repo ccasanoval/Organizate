@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.widget.ImageButton;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-import com.cesoftware.Organizate.models.Objeto;
+import com.cesoft.organizate.models.Objeto;
 
 import java.util.ArrayList;
 import java.util.List;

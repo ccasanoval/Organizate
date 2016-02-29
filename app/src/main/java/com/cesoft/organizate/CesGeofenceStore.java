@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import java.util.ArrayList;
 
@@ -153,8 +153,6 @@ mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 
 
 
-
-
 	//---------------------
 
 
@@ -195,7 +193,8 @@ mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 				&& lng != INVALID_FLOAT_VALUE
 				&& radius != INVALID_FLOAT_VALUE
 				&& expirationDuration != INVALID_LONG_VALUE
-				&& transitionType != INVALID_INT_VALUE) {
+				&& transitionType != INVALID_INT_VALUE)
+		{
 			return new CesGeofence(id, lat, lng, radius, expirationDuration, transitionType);
 		}
 		// Otherwise, return null.
@@ -206,7 +205,8 @@ mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 	 * Save a geofence.
 	 * @param geofence The SimpleGeofence with the values you want to save in SharedPreferences.
 	 */
-	public void setGeofence(String id, CesGeofence geofence) {
+	public void setGeofence(String id, CesGeofence geofence)
+	{
 		// Get a SharedPreferences editor instance. Among other things, SharedPreferences
 		// ensures that updates are atomic and non-concurrent.
 		SharedPreferences.Editor prefs = mPrefs.edit();
@@ -225,7 +225,8 @@ mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 	/**
 	 * Remove a flattened geofence object from storage by removing all of its keys.
 	 */
-	public void clearGeofence(String id) {
+	public void clearGeofence(String id)
+	{
 		SharedPreferences.Editor prefs = mPrefs.edit();
 		prefs.remove(getGeofenceFieldKey(id, KEY_LATITUDE));
 		prefs.remove(getGeofenceFieldKey(id, KEY_LONGITUDE));
@@ -243,7 +244,8 @@ mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
 	 * @return The full key name of a value in SharedPreferences.
 	 */
 	public static final String KEY_PREFIX = "com.example.wearable.geofencing.KEY";
-	private String getGeofenceFieldKey(String id, String fieldName) {
+	private String getGeofenceFieldKey(String id, String fieldName)
+	{
 		return KEY_PREFIX + "_" + id + "_" + fieldName;
 	}
 

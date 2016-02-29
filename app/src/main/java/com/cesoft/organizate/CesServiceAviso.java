@@ -1,16 +1,12 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
-import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.cesoftware.Organizate.models.Aviso;
-import com.cesoftware.Organizate.models.Objeto;
+import com.cesoft.organizate.models.Aviso;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Iterator;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

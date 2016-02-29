@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import com.google.android.gms.location.Geofence;
 

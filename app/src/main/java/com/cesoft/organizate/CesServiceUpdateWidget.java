@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.cesoftware.Organizate.models.Objeto;
+import com.cesoft.organizate.models.Objeto;
 
 /**
  * Created by Cesar_Casanova on 04/01/2016.

@@ -9,3 +9,4 @@
 *.jks
 google-services.json
 gradle.properties
+google_maps_api.xml

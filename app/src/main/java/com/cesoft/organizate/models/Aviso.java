@@ -1,12 +1,10 @@
-package com.cesoftware.Organizate.models;
+package com.cesoft.organizate.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;

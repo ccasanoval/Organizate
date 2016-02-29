@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import com.cesoftware.Organizate.models.Aviso;
+import com.cesoft.organizate.models.Aviso;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Todo: Mejorar icono avisos en ActEdit

@@ -1,6 +1,6 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
-import com.cesoftware.Organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.AvisoGeo;
 
 import android.Manifest;
 import android.app.Activity;
@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,7 +23,6 @@ import java.util.ArrayList;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -33,13 +33,12 @@ import com.google.android.gms.maps.model.LatLng;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Todo: Añadir boton en ActEdit
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener
+public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback
 {
 	private AvisoGeo _a;
 	private TextView _txtAviso;
 	private Switch _swtActivo;
 	private GoogleMap _Map;
-	//private MapView _vMap;
 	ArrayList<Geofence> _Geofences;
 	ArrayList<LatLng> _GeofenceCoordinates;
 	ArrayList<Integer> _GeofenceRadius;
@@ -51,7 +50,11 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_avisogeo_edit);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+		SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+		mapFragment.getMapAsync(this);
+
+		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener()
@@ -62,8 +65,10 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 				ActAvisoGeoEdit.this.finish();
 			}
 		});
+
 		_txtAviso = (TextView) findViewById(R.id.txtAviso);
 		_swtActivo = (Switch) findViewById(R.id.bActivo);
+
 		//------------------------------------------------------------------------------------------
 		try
 		{
@@ -75,9 +80,9 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
-		_Geofences = new ArrayList<Geofence>();
-		_GeofenceCoordinates = new ArrayList<LatLng>();
-		_GeofenceRadius = new ArrayList<Integer>();
+		_Geofences = new ArrayList<>();
+		_GeofenceCoordinates = new ArrayList<>();
+		_GeofenceRadius = new ArrayList<>();
 		// Adding geofence coordinates to array.
 		_GeofenceCoordinates.add(new LatLng(43.042861, -87.911559));
 		_GeofenceCoordinates.add(new LatLng(43.042998, -87.909753));
@@ -114,7 +119,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 
 		//------------------------------------------------------------------------------------------
 
-		SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+		/*SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);
 		//_vMap = (MapView)findViewById(R.id.map);
 		//_vMap.onCreate(savedInstanceState);
@@ -131,7 +136,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 				map.getUiSettings().setZoomControlsEnabled(true);
 				setUpMap();
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -281,4 +286,11 @@ System.err.println("----------ActivityCompat.checkSelfPermission--------------")
 		return super.onOptionsItemSelected(item);
     }
 
+	//______________________________________________________________________________________________
+	// PARA OnMapReadyCallback
+	@Override
+	public void onMapReady(GoogleMap googleMap)
+	{
+		_Map = googleMap;
+	}
 }

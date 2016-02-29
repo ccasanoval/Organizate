@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate.models;
+package com.cesoft.organizate.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -36,9 +36,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import com.cesoftware.Organizate.models.Aviso;
-import com.cesoftware.Organizate.models.AvisoGeo;
-import com.cesoftware.Organizate.models.Objeto;
+import com.cesoft.organizate.models.Aviso;
+import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -494,6 +494,7 @@ public class ActEdit extends AppCompatActivity
 	private static final int AVISO_GEO = 201;
 	private void showAvisoGeo()
 	{
+		//Intent i = new Intent(this, ActMaps.class);startActivityForResult(i, AVISO_GEO);
 		Intent i = new Intent(this, ActAvisoGeoEdit.class);
 		AvisoGeo a = _o.getAvisoGeo();
 		if(a == null)

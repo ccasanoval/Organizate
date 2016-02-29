@@ -1,4 +1,4 @@
-package com.cesoftware.Organizate;
+package com.cesoft.organizate;
  
 import android.app.Activity;
 import android.os.Bundle;

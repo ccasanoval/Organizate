@@ -20,7 +20,7 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	//Geolocation
 	private String _id;
 	private double _lat, _lon;
-	private float _rad;//min 100m - max 2km?
+	private float _rad = 500;//min 100m - max 2km?
 	private long _delay;
 
 	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
@@ -41,11 +41,16 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	public double getLatitud(){return _lat;}
 	public double getLongitud(){return _lon;}
 	public float getRadio(){return _rad;}
-	public void setGeoPosicion(double lat, double lon, float rad){_lat=lat; _lon=lon; _rad=rad;}//TODO:Check valid
+	public void setGeoPosicion(double lat, double lon, float rad)
+	{//TODO:Check valid
+		_lat=lat;
+		_lon=lon;
+		_rad=rad<10?10:rad;
+	}
 
 	///-----
 	public AvisoGeo(){}
-	public String toString(){return "{id="+getId()+", act="+_bActivo+", txt="+_sTexto+", _dtAct="+_dtActivo+" }";}
+	public String toString(){return "{id="+getId()+", act="+_bActivo+", txt="+_sTexto+", _dtAct="+_dtActivo+", Pos="+_lat+"/"+_lon+":"+_rad+"}";}
 
 
 	///----- PARCELABLE
@@ -61,6 +66,9 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 		_bActivo = in.readByte() > 0;
 		_sTexto = in.readString();
 		//
+		_lat = in.readDouble();
+		_lon = in.readDouble();
+		_rad = in.readFloat();
 	}
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
@@ -71,6 +79,9 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
 		dest.writeString(_sTexto);
 		//
+		dest.writeDouble(_lat);
+		dest.writeDouble(_lon);
+		dest.writeFloat(_rad);
 	}
 	@Override
 	public int describeContents()

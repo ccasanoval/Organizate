@@ -45,5 +45,11 @@
 	<string name="fecha">Date:</string>
 	<string name="desactivar_por_ahora">Don\'t alert me again\nfor today</string>
 	<string name="leer">Read the content</string>
+	<string name="actualizar_posicion">Refresh location</string>
+	<string name="geofen_dwell">Inside Alert Zone</string>
+	<string name="geofen_in">Entering Alert Zone</string>
+	<string name="geofen_out">Exiting Alert Zone</string>
+	<string name="posicion">Pos:</string>
+	<string name="radio">Radius:</string>
 
 </resources>

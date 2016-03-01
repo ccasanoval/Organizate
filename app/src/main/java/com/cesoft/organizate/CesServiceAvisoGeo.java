@@ -42,7 +42,6 @@ public class CesServiceAvisoGeo extends IntentService
 	protected void onHandleIntent(Intent intent)
 	{
 		GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-		System.err.println("----------------------onHandleIntent");
 		if( ! geofencingEvent.hasError())
 		{
 			int transition = geofencingEvent.getGeofenceTransition();
@@ -50,23 +49,22 @@ public class CesServiceAvisoGeo extends IntentService
 			switch(transition)
 			{
 			case Geofence.GEOFENCE_TRANSITION_ENTER:
-				notificationTitle = "Geofence Entered";
-				System.err.println("onHandleIntent------------------------------Geofence Entered");
+				notificationTitle = getString(R.string.geofen_in);
+//System.err.println("onHandleIntent------------------------------Geofence Entered");
 				break;
 			case Geofence.GEOFENCE_TRANSITION_DWELL:
-				notificationTitle = "Geofence Dwell";
-				System.err.println("onHandleIntent-----------------------------Dwelling in Geofence");
+				notificationTitle = getString(R.string.geofen_dwell);
+//System.err.println("onHandleIntent-----------------------------Dwelling in Geofence");
 				break;
 			case Geofence.GEOFENCE_TRANSITION_EXIT:
-				notificationTitle = "Geofence Exit";
-				System.err.println("onHandleIntent-----------------------------Geofence Exited");
+				notificationTitle = getString(R.string.geofen_out);
+//System.err.println("onHandleIntent-----------------------------Geofence Exited");
 				break;
 			default:
 				notificationTitle = "Geofence Unknown";
-				System.err.println("onHandleIntent-----------------------------Geofence Unknown");
+//System.err.println("onHandleIntent-----------------------------Geofence Unknown");
 				break;
 			}
-
 
 			GeofencingEvent geofenceEvent = GeofencingEvent.fromIntent(intent);
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();

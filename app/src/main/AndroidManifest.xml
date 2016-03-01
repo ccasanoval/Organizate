@@ -52,11 +52,6 @@
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name="com.cesoft.organizate.ActMaps"
-			android:label="@string/editar_aviso_geo"
-			android:theme="@style/AppTheme.NoActionBar">
-		</activity>
-		<activity
 			android:name="com.cesoft.organizate.ActAvisoDlg"
 			android:label="@string/app_name"
 			android:theme="@android:style/Theme.Dialog">

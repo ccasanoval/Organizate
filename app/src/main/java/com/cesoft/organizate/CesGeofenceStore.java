@@ -32,28 +32,32 @@ import com.google.android.gms.location.LocationServices;
 public class CesGeofenceStore implements ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status>, LocationListener
 {
 	private final String TAG = this.getClass().getSimpleName();
-	private Context mContext;
-	private GoogleApiClient mGoogleApiClient;
-	private PendingIntent mPendingIntent;
-	private ArrayList<Geofence> mGeofences;
-	private GeofencingRequest mGeofencingRequest;
+	private Context _Context;
+	private GoogleApiClient _GoogleApiClient;
+	private PendingIntent _PendingIntent;
+	private ArrayList<Geofence> _aGeofences;
+	private GeofencingRequest _GeofencingRequest;
 
-	private LocationRequest mLocationRequest;
+	private final boolean _bDebug = true;
+	private LocationRequest _LocationRequest;
 
 	public CesGeofenceStore(Context context, ArrayList<Geofence> geofences)
 	{
 //mPrefs = context.getSharedPreferences(SHARED_PREFERENCES, Context.MODE_PRIVATE);
-		mContext = context;
-		mGeofences = new ArrayList<Geofence>(geofences);
-		mPendingIntent = null;
+		_Context = context;
+		_aGeofences = new ArrayList<>(geofences);
+		_PendingIntent = null;
 		// Build a new GoogleApiClient, specify that we want to use LocationServices by adding the API to the client,
 		// specify the connection callbacks are in this class as well as the OnConnectionFailed method.
-		mGoogleApiClient = new GoogleApiClient.Builder(context).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
-		mGoogleApiClient.connect();
+		_GoogleApiClient = new GoogleApiClient.Builder(context).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
+		_GoogleApiClient.connect();
 
-		mLocationRequest = new LocationRequest();// This is purely optional and has nothing to do with geofencing. I added this as a way of debugging. Define the LocationRequest.
-		mLocationRequest.setInterval(60000);// We want a location update every 60 seconds.
-		mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);// We want the location to be as accurate as possible.
+		if(_bDebug)
+		{
+			_LocationRequest = new LocationRequest();// This is purely optional and has nothing to do with geofencing. I added this as a way of debugging. Define the LocationRequest.
+			_LocationRequest.setInterval(60000);// We want a location update every 60 seconds.
+			_LocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);// We want the location to be as accurate as possible.
+		}
 	}
 
 	@Override
@@ -87,24 +91,28 @@ public class CesGeofenceStore implements ConnectionCallbacks, OnConnectionFailed
 	@Override
 	public void onConnected(Bundle connectionHint)
 	{
-System.err.println("CesGeofenceStore:onConnected");
+		System.err.println("CesGeofenceStore:onConnected");
+		if(ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
+
 		// We're connected, now we need to create a GeofencingRequest with the geofences we have stored.
-		mGeofencingRequest = new GeofencingRequest.Builder().addGeofences(mGeofences).build();
-		mPendingIntent = createRequestPendingIntent();
+		if(_aGeofences.size() > 0)
+		{
+			_GeofencingRequest = new GeofencingRequest.Builder().addGeofences(_aGeofences).build();
+			_PendingIntent = createRequestPendingIntent();
 
-		//TODO: remove after debug
-		if(ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
-		LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+			if(_bDebug && _LocationRequest != null)
+				LocationServices.FusedLocationApi.requestLocationUpdates(_GoogleApiClient, _LocationRequest, this);//TODO: remove after debug
 
-		// Submitting the request to monitor geofences.// Set the result callbacks listener to this class.
-		PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences(mGoogleApiClient, mGeofencingRequest, mPendingIntent);
-		pendingResult.setResultCallback(this);
+			// Submitting the request to monitor geofences.// Set the result callbacks listener to this class.
+			PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences(_GoogleApiClient, _GeofencingRequest, _PendingIntent);
+			pendingResult.setResultCallback(this);
+		}
 	}
 
 	public void del()
 	{
-		if(mPendingIntent != null)
-			LocationServices.GeofencingApi.removeGeofences(mGoogleApiClient, mPendingIntent);
+		if(_PendingIntent != null)
+			LocationServices.GeofencingApi.removeGeofences(_GoogleApiClient, _PendingIntent);
 	}
 
 	@Override
@@ -116,13 +124,13 @@ System.err.println("CesGeofenceStore:onConnected");
 	// This creates a PendingIntent that is to be fired when geofence transitions take place. In this instance, we are using an IntentService to handle the transitions.
 	private PendingIntent createRequestPendingIntent()
 	{
-		if(mPendingIntent == null)
+		if(_PendingIntent == null)
 		{
 			System.err.println("CesGeofenceStore:Creating PendingIntent");
-			Intent intent = new Intent(mContext, CesServiceAvisoGeo.class);
-			mPendingIntent = PendingIntent.getService(mContext, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+			Intent intent = new Intent(_Context, CesServiceAvisoGeo.class);
+			_PendingIntent = PendingIntent.getService(_Context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		}
-		return mPendingIntent;
+		return _PendingIntent;
 	}
 
 	@Override

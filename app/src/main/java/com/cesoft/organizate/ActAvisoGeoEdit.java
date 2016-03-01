@@ -22,32 +22,49 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
-
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//Todo: Añadir boton en ActEdit
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback
+public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
 {
 	private AvisoGeo _a;
 	private TextView _txtAviso;
 	private Switch _swtActivo;
 	private GoogleMap _Map;
-
 	private String[] _asRadio = {"10 m", "50 m", "100 m", "200 m", "300 m", "400 m", "500 m", "750 m", "1 Km", "2 Km", "3 Km", "4 Km", "5 Km", "7.5 Km", "10 Km"};
-	private int[]    _adRadio = { 10,     50,     100,     200,     300,     400,     500,     750,     1000,   2000,   3000,   4000,   5000,   7500,     10000};
-	private Spinner  _spnRadio;
-	private float    _radio;
-	private Location _locLast;
+	private int[] _adRadio = {10, 50, 100, 200, 300, 400, 500, 750, 1000, 2000, 3000, 4000, 5000, 7500, 10000};
+	private Spinner _spnRadio;
+	private float _radio;
+	private Location _loc, _locLast;
 	private TextView _lblPosicion;
+	private GoogleApiClient _GoogleApiClient;
+	private LocationRequest _LocationRequest;
+	private Marker _marker;
+	private Circle _circle;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -55,10 +72,8 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_avisogeo_edit);
-
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
-
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -70,14 +85,12 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 				ActAvisoGeoEdit.this.finish();
 			}
 		});
-
 		_txtAviso = (TextView) findViewById(R.id.txtAviso);
 		_swtActivo = (Switch) findViewById(R.id.bActivo);
-		_spnRadio = (Spinner)findViewById(R.id.spnRadio);
-
-		_lblPosicion = (TextView)findViewById(R.id.lblPosicion);
+		_lblPosicion = (TextView) findViewById(R.id.lblPosicion);
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, _asRadio);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		_spnRadio = (Spinner) findViewById(R.id.spnRadio);
 		_spnRadio.setAdapter(adapter);
 		_spnRadio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 		{
@@ -85,29 +98,29 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
 			{
 				_radio = _adRadio[position];
+				setMarker();//Para cambiar radio
 			}
-
 			@Override
-			public void onNothingSelected(AdapterView<?> parent)
-			{
-				_radio = 1000;//TODO:radio por defecto en settings
-			}
+			public void onNothingSelected(AdapterView<?> parent){_radio = 1000;}
 		});
-
-		//TODO:
-		/*
-		ImageButton btnMapa = (ImageButton) findViewById(R.id.btnMapa);
-		btnMapa.setOnClickListener(new View.OnClickListener()
+		ImageButton btnActPos = (ImageButton) findViewById(R.id.btnActPos);
+		btnActPos.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				Intent i = new Intent(getBaseContext(), ActMaps.class);
-				i.putExtra("objeto", _a);
-				startActivityForResult(i, ACC_MAPA);//TODO: si es guardado, borrado => refresca la vista, si no nada
+				if(_locLast != null)
+					setPosAviso(_locLast);
 			}
-		});*/
-
+		});
+		//------------------------------------------------------------------------------------------
+		_GoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
+		_GoogleApiClient.connect();
+		_LocationRequest = new LocationRequest();
+		_LocationRequest.setInterval(60000);//TODO:constant
+		_LocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		//mLocationRequestBalancedPowerAccuracy  || LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
+		pideGPS();
 		//------------------------------------------------------------------------------------------
 		try
 		{
@@ -119,94 +132,80 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
-
-		//TODO: Hacer en inicio?? en servicio de avisos?
-	/*	ArrayList<Geofence> _Geofences;
-	ArrayList<LatLng> _GeofenceCoordinates;
-	ArrayList<Integer> _GeofenceRadius;
-
-		_Geofences = new ArrayList<>();
-		_GeofenceCoordinates = new ArrayList<>();
-		_GeofenceRadius = new ArrayList<>();
-		// Adding geofence coordinates to array.
-		_GeofenceCoordinates.add(new LatLng(40.4890984, -3.6512994));
-		_GeofenceCoordinates.add(new LatLng(40.4228029, -3.5339735));
-		_GeofenceCoordinates.add(new LatLng(40.4890984, -3.6512994));
-		// Adding associated geofence radius' to array.
-		_GeofenceRadius.add(1500);
-		_GeofenceRadius.add(1500);
-		_GeofenceRadius.add(1500);
-		// Bulding the geofences and adding them to the geofence array.
-		// Performing Arts Center
-		_Geofences.add(new Geofence.Builder().setRequestId("Geofence 1").setCircularRegion(_GeofenceCoordinates.get(0).latitude, _GeofenceCoordinates.get(0).longitude, _GeofenceRadius.get(0)).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
-		_Geofences.add(new Geofence.Builder().setRequestId("Geofence 2").setCircularRegion(_GeofenceCoordinates.get(1).latitude, _GeofenceCoordinates.get(1).longitude, _GeofenceRadius.get(1)).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());
-		_Geofences.add(new Geofence.Builder().setRequestId("Geofence 3").setCircularRegion(_GeofenceCoordinates.get(2).latitude, _GeofenceCoordinates.get(2).longitude, _GeofenceRadius.get(2)).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
-		_GeofenceStore = new CesGeofenceStore(this, _Geofences);*/
-		//------------------------------------------------------------------------------------------
 	}
 
 	@Override
-	protected void onStop()
+	protected void onPause()
 	{
-		super.onStop();
+		super.onPause();
+		stopTracking();
 	}
+
 	@Override
 	protected void onResume()
 	{
 		super.onResume();
-		/*int i = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this.getBaseContext());
-		if(i != ConnectionResult.SUCCESS)//SUCCESS, SERVICE_MISSING, SERVICE_UPDATING, SERVICE_VERSION_UPDATE_REQUIRED, SERVICE_DISABLED, SERVICE_INVALID
-			GoogleApiAvailability.getInstance().getErrorDialog(this, i, 0);*/
+		startTracking();
 	}
 
-	private void setPosAct(String s){_lblPosicion.setText(s);}
-	private void setPosAct(double lat, double lon){_lblPosicion.setText(lat + "/" + lon);}
 	//______________________________________________________________________________________________
 	private void setValores()
 	{
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.getActivo());
-
-		/*_radio = _a.getRadio();
-		for(int i=0; i < _adRadio.length; i++)
+		_radio = _a.getRadio();//TODO:radio por defecto en settings
+		for(int i = 0; i < _adRadio.length; i++)
 		{
 			if(_radio == _adRadio[i])
-				{
-					_spnRadio.setSelection(i);
-					break;
-				}
-		}*/
-
-		{
-System.err.println("--------0");
-			if(_locLast == null)_locLast = new Location("dummyprovider");
-			_locLast.setLatitude(_a.getLatitud());
-			_locLast.setLongitude(_a.getLongitud());
-			setPosAct(_a.getLatitud(), _a.getLongitud());
-System.err.println("--------1");
-			System.err.println("--------2"+_a.getRadio());
-			_radio = _a.getRadio();
-			//int spinnerPosition = _adapter.getPosition("10 Km");
-			System.err.println("--------3");
-			for(int i=0; i < _adRadio.length; i++)
 			{
-				if(_radio == _adRadio[i])
-				{
-					_spnRadio.setSelection(i);
-					break;
-				}
+				_spnRadio.setSelection(i);
+				break;
 			}
 		}
 	}
+	private void setPosAviso(Location loc)
+	{
+		setPosAviso(loc.getLatitude(), loc.getLongitude());
+	}
+	private void setPosAviso(double lat, double lon)
+	{
+		if(_loc == null)_loc = new Location("dummyprovider");
+		_loc.setLatitude(lat);
+		_loc.setLongitude(lon);
+		_lblPosicion.setText(String.format("%f/%f", _loc.getLatitude(), _loc.getLongitude()));
+		setMarker();
+	}
+	private void setMarker()
+	{
+		if(_marker != null)_marker.remove();
+		LatLng pos = new LatLng(_loc.getLatitude(), _loc.getLongitude());
+		MarkerOptions mo = new MarkerOptions()
+				.position(pos)
+				.title(getString(R.string.aviso))//TODO:Anadir nombre al aviso
+				.snippet(_a.getTexto());
+		_marker = _Map.addMarker(mo);
+		_Map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+		_Map.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+		if(_circle != null)_circle.remove();
+		_circle = _Map.addCircle(new CircleOptions()
+				.center(pos)
+				.radius(_radio)
+				.strokeColor(Color.TRANSPARENT)
+				.fillColor(0x55AA0000));//Color.BLUE
+	}
+
 
 	// DB SAVE
 	private void saveValores()
 	{
+System.err.println("saveValores-------1------"+_loc.getLatitude()+","+_loc.getLongitude());
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
-		_a.setGeoPosicion(_locLast.getLatitude(), _locLast.getLongitude(), _radio);//TODO: if not null
+		_a.setGeoPosicion(_loc.getLatitude(), _loc.getLongitude(), _radio);
+System.err.println("saveValores-------2------" +_a.getLatitud() + "," + _a.getLongitud());
 		Intent data = new Intent();
-		data.putExtra("aviso", _a);
+		data.putExtra("avisoGeo", _a);
 		setResult(android.app.Activity.RESULT_OK, data);
 		finish();
 	}
@@ -220,6 +219,7 @@ System.err.println("--------1");
 		getMenuInflater().inflate(R.menu.menu, menu);
 		return true;
 	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -233,16 +233,24 @@ System.err.println("--------1");
 	public void onMapReady(GoogleMap googleMap)
 	{
 		_Map = googleMap;
-
-		if(_a != null && (_a.getLatitud()!=0 || _a.getLongitud()!=0))
+		if(_a != null && (_a.getLatitud() != 0 || _a.getLongitud() != 0))
 		{
 			LatLng latLng = new LatLng(_a.getLatitud(), _a.getLongitud());
 			CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
 			_Map.animateCamera(cameraUpdate);
 		}
-
-		if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
+		if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+			return;
 		_Map.setMyLocationEnabled(true);
+		_Map.setOnMapClickListener(new GoogleMap.OnMapClickListener()
+		{
+			@Override
+			public void onMapClick(LatLng latLng)
+			{
+				setPosAviso(latLng.latitude, latLng.longitude);
+			}
+		});
+		setPosAviso(_a.getLatitud(), _a.getLongitud());
 	}
 
 	//______________________________________________________________________________________________
@@ -250,18 +258,126 @@ System.err.println("--------1");
 	@Override
 	public void onCameraChange(CameraPosition position)
 	{
-System.err.println("---------ActAvisoGeoEdit:onCameraChange");
-		/*for(int i=0; i < _GeofenceCoordinates.size(); i++)// Makes sure the visuals remain when zoom changes.
+System.err.println("---------ActAvisoGeoEdit:onCameraChange------------");
+		if(_a != null && (_a.getLatitud() != 0 || _a.getLongitud() != 0))
+			_Map.addCircle(new CircleOptions().center(new LatLng(_a.getLatitud(), _a.getLongitud())).radius(_a.getRadio()).fillColor(0x40ff0000).strokeColor(Color.TRANSPARENT).strokeWidth(2));
+	}
+
+	//______________________________________________________________________________________________
+	//// 4 ConnectionCallbacks
+	@Override
+	public void onConnected(Bundle bundle)
+	{
+		startTracking();
+	}
+	@Override
+	public void onConnectionSuspended(int i){}
+	private void startTracking()
+	{
+		if(_GoogleApiClient != null && _GoogleApiClient.isConnected())
 		{
-			_Map.addCircle(new CircleOptions().center(_GeofenceCoordinates.get(i)).radius(_GeofenceRadius.get(i)).fillColor(0x40ff0000).strokeColor(Color.TRANSPARENT).strokeWidth(2));
-		}*/
-		if(_a != null && (_a.getLatitud()!=0 || _a.getLongitud()!=0))
-		{
-			_Map.addCircle(new CircleOptions()
-					.center(new LatLng(_a.getLatitud(), _a.getLongitud()))
-					.radius(_a.getRadio())
-					.fillColor(0x40ff0000)
-					.strokeColor(Color.TRANSPARENT).strokeWidth(2));
+			System.err.println("----------------_GoogleApiClient.isConnected()="+_GoogleApiClient.isConnected());
+			if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
+				LocationServices.FusedLocationApi.requestLocationUpdates(_GoogleApiClient, _LocationRequest, this);
 		}
 	}
+	private void stopTracking()
+	{
+		if(_GoogleApiClient != null && _GoogleApiClient.isConnected())
+		LocationServices.FusedLocationApi.removeLocationUpdates(_GoogleApiClient, this);
+	}
+	//______________________________________________________________________________________________
+	//// 4 OnConnectionFailedListener
+	@Override
+	public void onConnectionFailed(ConnectionResult connectionResult){}
+	//______________________________________________________________________________________________
+	//// 4 LocationListener
+	@Override
+	public void onLocationChanged(Location location)
+	{
+System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), location.getLongitude(), _loc.getLatitude(), _loc.getLongitude()));
+		_locLast = location;
+		if(_loc.getLatitude() == 0 && _loc.getLongitude() == 0)
+		{
+			setPosAviso(_locLast);
+		}
+	}
+	//______________________________________________________________________________________________
+	//// 4 ResultCallback
+	@Override
+	public void onResult(Status status){}
+
+
+
+	//______________________________________________________________________________________________
+	private void pideGPS()
+	{
+		//https://developers.google.com/android/reference/com/google/android/gms/location/SettingsApi
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+				.addLocationRequest(_LocationRequest)
+				//.addLocationRequest()
+				;
+		PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi.checkLocationSettings(_GoogleApiClient, builder.build());
+
+		result.setResultCallback(new ResultCallback<LocationSettingsResult>()
+		{
+     		@Override
+     		public void onResult(LocationSettingsResult result)
+			{
+         		final Status status = result.getStatus();
+         		final LocationSettingsStates le = result.getLocationSettingsStates();
+         		switch(status.getStatusCode())
+				{
+             	case LocationSettingsStatusCodes.SUCCESS:
+					System.err.println("LocationSettingsStatusCodes.SUCCESS");
+					// All location settings are satisfied. The client can initialize location requests here.
+					break;
+				case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+					System.err.println("LocationSettingsStatusCodes.RESOLUTION_REQUIRED");
+					// Location settings are not satisfied. But could be fixed by showing the user a dialog.
+					/*try
+					{
+						// Show the dialog by calling startResolutionForResult(), and check the result in onActivityResult().
+						//status.startResolutionForResult(OuterClass.this, REQUEST_CHECK_SETTINGS);
+					}
+					catch(IntentSender.SendIntentException e){}*/
+					break;
+				case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+					System.err.println("LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE");
+					// Location settings are not satisfied. However, we have no way to fix the settings so we won't show the dialog.
+					break;
+				}
+			}
+		});
+	}
+
+	/*public void turnGPSOn()
+	{
+		Intent intent = new Intent("android.location.GPS_ENABLED_CHANGE");
+		intent.putExtra("enabled", true);
+		sendBroadcast(intent);
+		String provider = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_MODE);
+		if( ! provider.contains("gps"))
+		{
+			final Intent poke = new Intent();
+			poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+			poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+			poke.setData(android.net.Uri.parse("3"));
+			sendBroadcast(poke);
+			startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+		}
+	}
+	// automatic turn off the gps
+	/*public void turnGPSOff()
+	{
+		String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_MODE);
+		if(provider.contains("gps"))
+		{
+			final Intent poke = new Intent();
+			poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
+			poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
+			poke.setData(android.net.Uri.parse("3"));
+			sendBroadcast(poke);
+		}
+	}*/
 }

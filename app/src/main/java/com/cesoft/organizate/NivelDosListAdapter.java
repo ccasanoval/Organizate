@@ -47,7 +47,7 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("objeto", _lista.get(_seccion).getHijos()[groupPosition].getHijos()[childPosition]);
+				intent.putExtra(Objeto.class.getName(), _lista.get(_seccion).getHijos()[groupPosition].getHijos()[childPosition]);
 				_context.startActivity(intent);
 			}
 		});
@@ -58,7 +58,6 @@ public class NivelDosListAdapter extends SimpleExpandableListAdapter
 			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
 			int height = v.getMeasuredHeight();
 			CesExpandableListView.setRowHeight3(height);
-System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.3:"+height);
 		}
 
         return v;
@@ -79,7 +78,7 @@ System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.3:"+height);
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("objeto", _lista.get(_seccion).getHijos()[groupPosition]);
+				intent.putExtra(Objeto.class.getName(), _lista.get(_seccion).getHijos()[groupPosition]);
 				_context.startActivity(intent);
 			}
 		});
@@ -91,7 +90,6 @@ System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.3:"+height);
 			v.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
 			int height = v.getMeasuredHeight();
 			CesExpandableListView.setRowHeight2(height);
-System.err.println("zzzzzzzzzzzzzzzzzzzzzz n2.2:"+height);
 		}
 
         return v;

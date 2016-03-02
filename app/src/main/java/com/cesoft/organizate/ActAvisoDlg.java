@@ -1,9 +1,17 @@
 package com.cesoft.organizate;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
+import android.preference.RingtonePreference;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -17,8 +25,7 @@ import com.cesoft.organizate.models.Aviso;
  * Created by Cesar_Casanova on 01/02/2016
  */
 //TODO: Make noise? => Settings
-//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? Aviso noise? Aviso time to desapear? Desactivar por (hoy|hora|...)
-//TODO: Private but free git host? gitHub make ur code public...
+//TODO: Desactivado por hoy no funciona a la primera? necesita tiempo? svc aviso?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity
 {
@@ -53,14 +60,14 @@ public class ActAvisoDlg extends Activity
 				ActAvisoDlg.this.finish();
 			}
 		});
-swtActivo.setVisibility(View.INVISIBLE);
+		swtActivo.setVisibility(View.INVISIBLE);
 		Button btnDesactivar = (Button)findViewById(R.id.btnDesactivar);
 		btnDesactivar.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
 			public void onClick(View v)
 			{
-				System.err.println("----------DESACTIVADO POR HOY");
+System.err.println("----------DESACTIVADO POR HOY");
 				_a.desactivarPorHoy();
 				ActAvisoDlg.this.finish();
 			}
@@ -78,20 +85,26 @@ swtActivo.setVisibility(View.INVISIBLE);
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			//String sAviso = this.getIntent().getStringExtra("aviso");//this.getIntent().getExtras().getString("aviso");
-			_a = this.getIntent().getParcelableExtra("aviso");
+			_a = getIntent().getParcelableExtra(Aviso.class.getName());
 			txtAviso.setText(_a.getTexto());
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActAvisoDlg:onCreate:ERROR:"+e);
+			System.err.println("ActAvisoDlg:onCreate:e:"+e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
 	}
 
 	//______________________________________________________________________________________________
-	//TODO: do the same in splash? yes
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		Util.playNotificacion(this);
+	}
+
+	//______________________________________________________________________________________________
 	static class CESHandler extends Handler
 	{
 		private ActAvisoDlg _win;

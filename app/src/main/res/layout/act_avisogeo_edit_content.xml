@@ -73,6 +73,7 @@
 			android:layout_marginRight="10dp"
 			android:layout_marginEnd="10dp"
 			android:layout_gravity="center_vertical"
+			style="@style/btnStyle"
 			android:contentDescription="@string/actualizar_posicion"
 			android:src="@android:drawable/ic_menu_mylocation" />
 	</LinearLayout>

@@ -31,7 +31,7 @@ import java.util.Calendar;
 import com.cesoft.organizate.models.Aviso;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//Todo: Mejorar icono avisos en ActEdit
+//
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
 {
@@ -42,7 +42,6 @@ public class ActAvisoEdit extends AppCompatActivity
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
 	private Aviso _a;
-	//private boolean _isNuevo=false;
 	private String[][] _asPopUp;
 
 	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
@@ -132,7 +131,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = this.getIntent().getParcelableExtra("aviso");
+			_a = this.getIntent().getParcelableExtra(Aviso.class.getName());
 			setValores();
 		}
 		catch(Exception e)
@@ -177,7 +176,7 @@ System.err.println("---------_a.getActivo()="+_a.getActivo());
 		_a.setActivo(_swtActivo.isChecked());
 System.err.println("SAVE---------_a.getActivo()=" + _a.getActivo());
 		Intent data = new Intent();
-    	data.putExtra("aviso", _a);
+    	data.putExtra(Aviso.class.getName(), _a);
 		setResult(Activity.RESULT_OK, data);
 		finish();
 	}

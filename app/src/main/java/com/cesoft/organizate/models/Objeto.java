@@ -34,11 +34,14 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	public Objeto(){}
-	//public Objeto(String s, Objeto padre){_sNombre=s; _padre=padre;}
 
 	//______________________________________________________________________________________________
 	@Override
-	public String toString(){return "{id="+getId()+", pri="+_iPrioridad+", niv="+this.getNivel()+", mod="+_dtModificado+", nom="+_sNombre+", des="+_sDescripcion+", pad="+_padre+", hij="+_hijos.length+">>"+_hijos.toString()+", avi="+_aviso+", aviGeo="+_avisoGeo+"}";}
+	public String toString()
+	{
+		return String.format("{id=%d, pri=%d, niv=%d, mod=%s, nom=%s, des=%s, pad=%s, hij=%d >> %s, avi=%s, aviGeo=%s}",
+			getId(), _iPrioridad, this.getNivel(), _dtModificado, _sNombre, _sDescripcion, _padre, _hijos.length, _hijos, _aviso, _avisoGeo);
+	}
 	//public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
 
 	//______________________________________________________________________________________________
@@ -130,7 +133,6 @@ public class Objeto extends SugarRecord implements Parcelable
 	{
 		return id;
 	}
-
 	@Override
 	public Objeto setId(Long id)
 	{
@@ -217,7 +219,7 @@ public class Objeto extends SugarRecord implements Parcelable
 					}
 				}
 			}
-			System.err.println("---"+o.toString());
+//System.err.println("---"+o.toString());
 		}
 		//calcPosiciones(lista);
 		//return nivel1;
@@ -239,7 +241,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	@Override
 	public long save()
 	{
-		System.err.println("SAVING OBJETO:------"+this);
+//System.err.println("SAVING OBJETO:------"+this);
 		if(_aviso != null)_aviso.save();
 		if(_avisoGeo != null)_avisoGeo.save();
 		return super.save();
@@ -250,15 +252,10 @@ public class Objeto extends SugarRecord implements Parcelable
 		{
 			Objeto.deleteAll(Objeto.class);
 			Aviso.deleteAll(Aviso.class);
+			AvisoGeo.deleteAll(Aviso.class);
 		}
-		catch(Exception e){System.err.println("Objeto:delTodo:ERROR:"+e);}
+		catch(Exception e){System.err.println("Objeto:delTodo:e:"+e);}
 	}
-	/*public void sav()
-	{
-		if(_aviso != null)_aviso.save();
-		if(_aviso != null)_aviso.save();
-		save();
-	}*/
 	@Override
 	public boolean delete()
 	{
@@ -350,39 +347,3 @@ public class Objeto extends SugarRecord implements Parcelable
 		}
 		}*/
 }
-
-
-/*
-*
-		ArrayList<Objeto> lista = new ArrayList<>();
-		while(it.hasNext())
-		{
-			Objeto o = it.next();
-			if(o.getPadre() == null)
-			{
-				lista.add(o);
-			}
-			else
-			{
-				boolean b = true;
-				for(Objeto o1 : lista)
-				{
-					if(o2.getId().equals(o1.getPadre().getId()))
-					{
-						o2.addHijo(o1);
-						b = false;
-						break;
-					}
-					else if(o2.getHijos().length > 0)
-					{
-						for(Objeto o3 : o2.getHijos())
-						{
-							o3.addHijo(o2);
-							b = false;
-							break;
-						}
-					}
-				}
-			}
-		}
-* */

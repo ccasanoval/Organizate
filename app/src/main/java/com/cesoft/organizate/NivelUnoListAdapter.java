@@ -98,11 +98,11 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 		dev.setAdapter(new NivelDosListAdapter(
 				_context,
 				createGroupList(groupPosition),		// groupData describes the first-level entries
-				R.layout.nivel2,				// Layout for the first-level entries
+				R.layout.nivel2,					// Layout for the first-level entries
 				new String[]{NIVEL2},				// Key in the groupData maps to display
 				new int[]{R.id.txtNivel2},			// Data under "colorName" key goes into this TextView
 				createChildList(groupPosition),		// childData describes second-level entries
-				R.layout.nivel3,				// Layout for second-level entries
+				R.layout.nivel3,					// Layout for second-level entries
 				new String[]{NIVEL3},				// Keys in childData maps to display
 				new int[]{R.id.txtNivel3},			// Data under the keys above go into these TextViews
 				groupPosition
@@ -204,12 +204,11 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("objeto", _lista.get(groupPosition));//TODO: pasar solo el id del objeto o la posicion dentro de la lista global. Hacer servicio que almacene lista global
+				intent.putExtra(Objeto.class.getName(), _lista.get(groupPosition));//TODO: pasar solo el id del objeto o la posicion dentro de la lista global. Hacer servicio que almacene lista global
 				_context.startActivity(intent);
 			}
 		});
 		btnEditar.setFocusable(false);//NO HACE CASO EN LAYOUT XML
-
 		/*if(_bIniRowHeight)
 		{
 			_bIniRowHeight = false;

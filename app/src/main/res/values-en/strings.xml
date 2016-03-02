@@ -49,7 +49,14 @@
 	<string name="geofen_dwell">Inside Alert Zone</string>
 	<string name="geofen_in">Entering Alert Zone</string>
 	<string name="geofen_out">Exiting Alert Zone</string>
-	<string name="posicion">Pos:</string>
+	<string name="posicion">Loc:</string>
 	<string name="radio">Radius:</string>
+	<string name="config">Settings</string>
+	<string name="pref_header_notifications">Notifications</string>
+	<string name="pref_ringtone_silent">Silent</string>
+	<string name="pref_title_new_message_notifications">Message notifications</string>
+	<string name="pref_title_new_message_notifications_type">Show pop-up dialog</string>
+	<string name="pref_title_ringtone">Ringtone</string>
+	<string name="pref_title_vibrate">Vibrate</string>
 
 </resources>

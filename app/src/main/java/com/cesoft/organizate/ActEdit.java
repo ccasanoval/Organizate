@@ -120,7 +120,7 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(View v)
 			{
-				hablar();
+				Util.hablar(getApplicationContext(), String.format("Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion()));
 			}
 		});
 		btnAviso.setOnClickListener(new View.OnClickListener()
@@ -176,7 +176,7 @@ public class ActEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_o = this.getIntent().getParcelableExtra("objeto");
+			_o = this.getIntent().getParcelableExtra(Objeto.class.getName());
 			if(_o != null)
 				setValores();
 			else
@@ -184,7 +184,7 @@ public class ActEdit extends AppCompatActivity
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActEdit:onCreate:ERROR:"+e);
+			System.err.println("ActEdit:onCreate:e:"+e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -310,7 +310,7 @@ public class ActEdit extends AppCompatActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				ActEdit.dbDel(_o);
-				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();//TODO: Action?
 				_act.refrescarLista();
 				ActEdit.this.finish();
 			}
@@ -320,7 +320,7 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show(); // just show a Toast, do nothing else
+				Toast.makeText(getBaseContext(), "Cancelled", Toast.LENGTH_SHORT).show();
 			}
 		});*/
 		dialog.create().show();
@@ -422,48 +422,7 @@ public class ActEdit extends AppCompatActivity
     }
 
 
-	//______________________________________________________________________________________________
-	/// TEXT TO SPEECH
-	//______________________________________________________________________________________________
-	private static TextToSpeech tts = null;
-	private void hablar()
-	{
-		String texto = String.format("Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion());
 
-		if(tts == null)
-		tts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener()
-		{
-   			@Override
-   			public void onInit(int status)
-			{
-				if(status != TextToSpeech.ERROR)
-					tts.setLanguage(getResources().getConfiguration().locale);//new Locale("es", "ES");Locale.forLanguageTag("ES")
-			}
-		});
-		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-    		ttsGreater21(tts, texto);
-		else
-    		ttsUnder20(tts, texto);
-
-	}
-	//______________________________________________________________________________________________
-	@SuppressWarnings("deprecation")
-	private void ttsUnder20(TextToSpeech tts, String texto)
-	{
-		System.err.println("------ttsUnder20");
-    	HashMap<String, String> map = new HashMap<>();
-    	map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
-    	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, map);
-	}
-	//______________________________________________________________________________________________
-	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	private void ttsGreater21(TextToSpeech tts, String texto)
-	{
-		System.err.println("------ttsGreater21");
-    	String utteranceId=this.hashCode() + "";
-    	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
-	}
 
 	//______________________________________________________________________________________________
 	// AVISO
@@ -488,22 +447,20 @@ public class ActEdit extends AppCompatActivity
 			a.setTexto(getStringAviso());
 			//_o.setAviso(a);
 		}
-		i.putExtra("aviso", a);
+		i.putExtra(Aviso.class.getName(), a);
 		startActivityForResult(i, AVISO);
 	}
 	private static final int AVISO_GEO = 201;
 	private void showAvisoGeo()
 	{
-		//Intent i = new Intent(this, ActMaps.class);startActivityForResult(i, AVISO_GEO);
 		Intent i = new Intent(this, ActAvisoGeoEdit.class);
 		AvisoGeo a = _o.getAvisoGeo();
 		if(a == null)
 		{
 			a = new AvisoGeo();
 			a.setTexto(getStringAviso());
-			//_o.setAvisoGeo(a);
 		}
-		i.putExtra("avisoGeo", a);
+		i.putExtra(AvisoGeo.class.getName(), a);
 		startActivityForResult(i, AVISO_GEO);
 	}
 	@Override
@@ -513,13 +470,13 @@ public class ActEdit extends AppCompatActivity
 		if(resultCode != RESULT_OK)return;
 		if(requestCode == AVISO)
 		{
-			_o.setAviso((Aviso)data.getParcelableExtra("aviso"));
-			System.err.println("onActivityResult----------A:" + _o.getAviso());
+			_o.setAviso((Aviso)data.getParcelableExtra(Aviso.class.getName()));
+System.err.println("onActivityResult----------A:" + _o.getAviso());
 		}
 		else if(requestCode == AVISO_GEO)
 		{
-			_o.setAvisoGeo((AvisoGeo)data.getParcelableExtra("avisoGeo"));
-			System.err.println("onActivityResult----------AG:" + _o.getAvisoGeo());
+			_o.setAvisoGeo((AvisoGeo)data.getParcelableExtra(AvisoGeo.class.getName()));
+System.err.println("onActivityResult----------AG:" + _o.getAvisoGeo());
 		}
 	}
 

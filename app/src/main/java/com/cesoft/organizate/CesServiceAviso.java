@@ -19,13 +19,14 @@ import java.util.List;
 //TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo
 public class CesServiceAviso extends IntentService
 {
-	private static final long DELAY_LOAD = 5*60*1000;//TODO: ajustar
+	private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
+	private static final long DELAY_LOAD = 6*60*1000;//TODO: ajustar
 	private static final long DELAY_CHECK = 3*60*1000;
 	private ArrayList<Aviso> _lista = new ArrayList<>();
 
 	private CesGeofenceStore _GeofenceStore;
 	private ArrayList<AvisoGeo> _listaGeo = new ArrayList<>();
-		public ArrayList<AvisoGeo> getAvisosGeo(){return _listaGeo;};
+		//public ArrayList<AvisoGeo> getAvisosGeo(){return _listaGeo;};
 
 	//______________________________________________________________________________________________
 	public CesServiceAviso()
@@ -67,7 +68,6 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 	//______________________________________________________________________________________________
 	private void cargarListaGeo()
 	{
-System.err.println("CesServiceAviso----cargarListaGeo----*************************************");
 		try
 		{
 			_listaGeo.clear();
@@ -82,13 +82,11 @@ System.err.println("CesServiceAviso----cargarListaGeo----***********************
 						.setRequestId(ag.getTexto())
 						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio())
 						.setExpirationDuration(Geofence.NEVER_EXPIRE)
-						.setLoiteringDelay(30000)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
-						.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());
+						.setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
+						.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)// | Geofence.GEOFENCE_TRANSITION_EXIT
+						.build());
 			}
 			System.err.println("CesServiceAviso---------------------cargarListaGeo:" + _listaGeo.size());
-//			aGeofences.add(new Geofence.Builder().setRequestId("Geofence 1").setCircularRegion(_GeofenceCoordinates.get(0).latitude, _GeofenceCoordinates.get(0).longitude, _GeofenceRadius.get(0)).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
-//			aGeofences.add(new Geofence.Builder().setRequestId("Geofence 2").setCircularRegion(_GeofenceCoordinates.get(1).latitude, _GeofenceCoordinates.get(1).longitude, _GeofenceRadius.get(1)).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(30000).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT).build());
-//			aGeofences.add(new Geofence.Builder().setRequestId("Geofence 3").setCircularRegion(_GeofenceCoordinates.get(2).latitude, _GeofenceCoordinates.get(2).longitude, _GeofenceRadius.get(2)).setExpirationDuration(Geofence.NEVER_EXPIRE).setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_EXIT).build());
 			_GeofenceStore = new CesGeofenceStore(this, aGeofences);
 		}
 		catch(Exception e)
@@ -100,7 +98,6 @@ System.err.println("CesServiceAviso----cargarListaGeo----***********************
 	//______________________________________________________________________________________________
 	private void cargarLista()
 	{
-System.err.println("CesServiceAviso----cargarLista----*************************************");
 		try
 		{
 			_lista.clear();
@@ -119,7 +116,6 @@ System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.siz
 	//______________________________________________________________________________________________
 	private void checkAvisos()
 	{
-System.err.println("CesServiceAviso-------checkAvisos----*************************************");
 		if(_lista == null || _lista.size() == 0)return;
 		for(Aviso a : _lista)
 		{
@@ -128,7 +124,7 @@ System.err.println("CesServiceAviso-------checkAvisos----***********************
 System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
 				Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra("aviso", a);//.getTexto()
+				intent.putExtra(Aviso.class.getName(), a);//.getTexto()
 				getApplication().startActivity(intent);
 			}
 		}

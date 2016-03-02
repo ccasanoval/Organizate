@@ -31,22 +31,23 @@ android {
     }
 }
 
-if(project.hasProperty('keyAlias')) {
+if (project.hasProperty('keyAlias')) {
     android.signingConfigs.release.keyAlias = keyAlias
 }
-if(project.hasProperty('keyPassword')) {
+if (project.hasProperty('keyPassword')) {
     android.signingConfigs.release.keyPassword = keyPassword
 }
-if(project.hasProperty('storePassword')) {
+if (project.hasProperty('storePassword')) {
     android.signingConfigs.release.storePassword = storePassword
 }
-if(project.hasProperty('storeFile')) {
+if (project.hasProperty('storeFile')) {
     android.signingConfigs.release.storeFile = storeFile
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.android.support:support-v4:23.2.0'
 }

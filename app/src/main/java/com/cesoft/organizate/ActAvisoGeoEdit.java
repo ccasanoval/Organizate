@@ -45,12 +45,14 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.orm.dsl.NotNull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
 {
+	private static final int DELAY_LOCATION = 60000;
 	private AvisoGeo _a;
 	private TextView _txtAviso;
 	private Switch _swtActivo;
@@ -101,7 +103,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 				setMarker();//Para cambiar radio
 			}
 			@Override
-			public void onNothingSelected(AdapterView<?> parent){_radio = 1000;}
+			public void onNothingSelected(AdapterView<?> parent){_radio = 500;}
 		});
 		ImageButton btnActPos = (ImageButton) findViewById(R.id.btnActPos);
 		btnActPos.setOnClickListener(new View.OnClickListener()
@@ -117,14 +119,14 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		_GoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 		_GoogleApiClient.connect();
 		_LocationRequest = new LocationRequest();
-		_LocationRequest.setInterval(60000);//TODO:constant
+		_LocationRequest.setInterval(DELAY_LOCATION);
 		_LocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 		//mLocationRequestBalancedPowerAccuracy  || LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY
 		pideGPS();
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = this.getIntent().getParcelableExtra("avisoGeo");
+			_a = this.getIntent().getParcelableExtra(AvisoGeo.class.getName());
 			setValores();
 		} catch(Exception e)
 		{
@@ -199,13 +201,11 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	// DB SAVE
 	private void saveValores()
 	{
-System.err.println("saveValores-------1------"+_loc.getLatitude()+","+_loc.getLongitude());
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
 		_a.setGeoPosicion(_loc.getLatitude(), _loc.getLongitude(), _radio);
-System.err.println("saveValores-------2------" +_a.getLatitud() + "," + _a.getLongitud());
 		Intent data = new Intent();
-		data.putExtra("avisoGeo", _a);
+		data.putExtra(AvisoGeo.class.getName(), _a);
 		setResult(android.app.Activity.RESULT_OK, data);
 		finish();
 	}
@@ -258,7 +258,6 @@ System.err.println("saveValores-------2------" +_a.getLatitud() + "," + _a.getLo
 	@Override
 	public void onCameraChange(CameraPosition position)
 	{
-System.err.println("---------ActAvisoGeoEdit:onCameraChange------------");
 		if(_a != null && (_a.getLatitud() != 0 || _a.getLongitud() != 0))
 			_Map.addCircle(new CircleOptions().center(new LatLng(_a.getLatitud(), _a.getLongitud())).radius(_a.getRadio()).fillColor(0x40ff0000).strokeColor(Color.TRANSPARENT).strokeWidth(2));
 	}
@@ -276,7 +275,7 @@ System.err.println("---------ActAvisoGeoEdit:onCameraChange------------");
 	{
 		if(_GoogleApiClient != null && _GoogleApiClient.isConnected())
 		{
-			System.err.println("----------------_GoogleApiClient.isConnected()="+_GoogleApiClient.isConnected());
+//System.err.println("----------------_GoogleApiClient.isConnected()="+_GoogleApiClient.isConnected());
 			if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
 				LocationServices.FusedLocationApi.requestLocationUpdates(_GoogleApiClient, _LocationRequest, this);
 		}
@@ -289,7 +288,7 @@ System.err.println("---------ActAvisoGeoEdit:onCameraChange------------");
 	//______________________________________________________________________________________________
 	//// 4 OnConnectionFailedListener
 	@Override
-	public void onConnectionFailed(ConnectionResult connectionResult){}
+	public void onConnectionFailed(@NotNull ConnectionResult connectionResult){}
 	//______________________________________________________________________________________________
 	//// 4 LocationListener
 	@Override
@@ -305,8 +304,7 @@ System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), 
 	//______________________________________________________________________________________________
 	//// 4 ResultCallback
 	@Override
-	public void onResult(Status status){}
-
+	public void onResult(@NotNull Status status){}
 
 
 	//______________________________________________________________________________________________
@@ -322,7 +320,7 @@ System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), 
 		result.setResultCallback(new ResultCallback<LocationSettingsResult>()
 		{
      		@Override
-     		public void onResult(LocationSettingsResult result)
+     		public void onResult(@NotNull LocationSettingsResult result)
 			{
          		final Status status = result.getStatus();
          		final LocationSettingsStates le = result.getLocationSettingsStates();

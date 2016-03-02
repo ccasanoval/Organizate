@@ -13,9 +13,9 @@ import android.os.IBinder;
 
 import com.cesoft.organizate.models.Objeto;
 
-/**
- * Created by Cesar_Casanova on 04/01/2016.
- */
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Created by Cesar_Casanova on 04/01/2016.
+////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesServiceUpdateWidget extends Service
 {
 	private static Handler _h = null;
@@ -107,7 +107,7 @@ public class CesServiceUpdateWidget extends Service
 		}
 		catch(Exception e)
 		{
-			System.err.println("CesServiceUpdateWidget: onStartCommand: ERROR: "+e);
+			System.err.println("CesServiceUpdateWidget:onStartCommand:e: "+e);
 		}
 	}
 }

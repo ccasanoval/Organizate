@@ -54,7 +54,6 @@ public class ActSplash extends Activity
 	}
 	/*private Handler splashHandler = new Handler()
 	{
-		//* @see android.os.Handler#handleMessage(android.os.Message)
 		@Override
 		public void handleMessage(Message msg)
 		{

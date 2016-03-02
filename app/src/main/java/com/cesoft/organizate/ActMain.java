@@ -1,5 +1,6 @@
 package com.cesoft.organizate;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,11 +23,13 @@ import com.orm.SugarContext;
 //MAP API CREDENTIAL: https://console.developers.google.com/apis/credentials?project=shining-medium-121911
 //GOOGLE API SIGN : https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 //LAUNCH SIGNED APK : https://www.jetbrains.com/idea/help/generating-a-signed-release-apk-through-an-artifact.html
-//TODO: How to launch release to device when debuging
 
-//TODO: Botones con estilo como en Encuentrame
+//TODO: Private but free git host? gitHub make ur code public...
+//TODO: Nueva version con Backendless
+
+//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? Aviso noise? Aviso time to desapear? Desactivar por (hoy|hora|...)
+//TODO: Estandarizar modo de aviso al usuario...
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
-//TODO: cuando abres aviso pero no lo guardas no debería crear aviso
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
@@ -62,6 +65,18 @@ public class ActMain extends AppCompatActivity
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+
+		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+		fab.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View view)
+			{
+				Intent intent = new Intent(ActMain.this, ActEdit.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}
+		});
 	}
 
 	//______________________________________________________________________________________________
@@ -79,11 +94,17 @@ public class ActMain extends AppCompatActivity
 		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		//noinspection SimplifiableIfStatement
-		if(id == R.id.nuevo)
+		/*if(id == R.id.nuevo)
 		{
 			Intent intent = new Intent(this, ActEdit.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			this.startActivity(intent);
+			startActivity(intent);
+		}*/
+		if(id == R.id.config)
+		{
+			Intent intent = new Intent(this, ActConfig.class);
+			//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -108,7 +129,7 @@ public class ActMain extends AppCompatActivity
 	public void refrescarLista()
 	{
 		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		ArrayList<Objeto> lista = Objeto.conectarHijos(it);//TODO:Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
+		ArrayList<Objeto> lista = Objeto.conectarHijos(it);//Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
 		ActEdit.setLista(lista);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 		_expListView.refreshDrawableState();
@@ -123,15 +144,15 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void setEgg()//TODO: Mejorar huevo
+	public void setEgg()//TODO: Mejorar imagen del huevo
 	{
-		Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
-		tb.setOnTouchListener(new View.OnTouchListener()
+		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
+		tb.setOnClickListener(new View.OnClickListener()
 		{
 			private int _nClicks = 0;
 			private Date _dtClicks;
-
-			public boolean onTouch(View v, MotionEvent me)
+			@Override
+			public void onClick(View v)
 			{
 				if(_nClicks == 0)
 					_dtClicks = new Date();
@@ -142,18 +163,15 @@ public class ActMain extends AppCompatActivity
 					_nClicks = 1;
 					_dtClicks = new Date();
 					System.err.println("2----click:" + _nClicks + " : " + (new Date().getTime() - _dtClicks.getTime()));
-					return true;
-				} else if(_nClicks > 7)
+				}
+				else if(_nClicks > 4)
 				{
 					_nClicks = 0;
 					//http://www.anddev.org/simple_splash_screen-t811.html
 					//http://stackoverflow.com/questions/5486789/how-do-i-make-a-splash-screen
-					System.err.println("EGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
 					Intent i = new Intent(ActMain.this, ActSplash.class);
 					ActMain.this.startActivity(i);
-					return true;
 				}
-				return false;
 			}
 		});
 	}
@@ -166,6 +184,8 @@ public class ActMain extends AppCompatActivity
 	}
 
 
+
+/*
 	private static void datosTESTgeo()
 	{
 		try{
@@ -191,7 +211,7 @@ public class ActMain extends AppCompatActivity
 
 		}catch(Exception e){System.err.println("datosTESTgeo:e:"+e);}
 	}
-
+*/
 	//______________________________________________________________________________________________
 	/*private static void datosTEST()
 	{

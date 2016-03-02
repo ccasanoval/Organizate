@@ -55,6 +55,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="2dp"
+				style="@style/btnStyle"
 				android:text="@string/mes"
 				/>
 			<LinearLayout
@@ -82,6 +83,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="2dp"
+				style="@style/btnStyle"
 				android:text="@string/dia_mes"
 				/>
 			<LinearLayout
@@ -107,6 +109,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="2dp"
+				style="@style/btnStyle"
 				android:text="@string/dia_semana"
 				/>
 			<LinearLayout
@@ -132,6 +135,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="2dp"
+				style="@style/btnStyle"
 				android:text="@string/hora"
 				/>
 			<LinearLayout
@@ -157,13 +161,14 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="2dp"
+				style="@style/btnStyle"
 				android:text="@string/minuto"
 				/>
 			<LinearLayout
-			android:id="@+id/layMinuto"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="horizontal"/>
+				android:id="@+id/layMinuto"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"/>
 		</LinearLayout>
 	</HorizontalScrollView>
 

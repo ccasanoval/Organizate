@@ -48,7 +48,6 @@ public class CesServiceAviso extends IntentService
 			while(true)
 			{
 System.err.println("CesServiceAviso:onHandleIntent:looping------------");
-				Thread.sleep(DELAY_CHECK/2);
 				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
 				{
 					cargarLista();
@@ -60,6 +59,7 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 					checkAvisos();
 					tmCheck = System.currentTimeMillis();
 				}
+				Thread.sleep(DELAY_CHECK/2);
 			}
 		}
 		catch(InterruptedException e){System.err.println("CesServiceAviso:onHandleIntent:e:"+e);}
@@ -71,7 +71,7 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 		try
 		{
 			_listaGeo.clear();
-			if(_GeofenceStore != null)_GeofenceStore.del();
+			if(_GeofenceStore != null)_GeofenceStore.clear();
 			ArrayList<Geofence> aGeofences = new ArrayList<>();
 			Iterator<AvisoGeo> it = AvisoGeo.getActivos();
 			while(it.hasNext())
@@ -79,7 +79,7 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 				AvisoGeo ag = it.next();
 				_listaGeo.add(ag);
 				aGeofences.add(new Geofence.Builder()
-						.setRequestId(ag.getTexto())
+						.setRequestId(Long.toString(ag.getId()))//ag.getTexto()
 						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio())
 						.setExpirationDuration(Geofence.NEVER_EXPIRE)
 						.setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
@@ -122,10 +122,11 @@ System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.siz
 			if(a.isDueTime())
 			{
 System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
-				Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
+				/*Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				intent.putExtra(Aviso.class.getName(), a);//.getTexto()
-				getApplication().startActivity(intent);
+				getApplication().startActivity(intent);*/
+				Util.showNotificacionDlg(getBaseContext(), a);
 			}
 		}
 	}

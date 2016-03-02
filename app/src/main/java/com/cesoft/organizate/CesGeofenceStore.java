@@ -89,7 +89,7 @@ public class CesGeofenceStore implements ConnectionCallbacks, OnConnectionFailed
 	}
 
 	//______________________________________________________________________________________________
-	public void del()
+	public void clear()
 	{
 		if(_PendingIntent != null)
 			LocationServices.GeofencingApi.removeGeofences(_GoogleApiClient, _PendingIntent);

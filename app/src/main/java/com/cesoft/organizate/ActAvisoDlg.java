@@ -21,10 +21,9 @@ import android.widget.TextView;
 
 import com.cesoft.organizate.models.Aviso;
 
-/**
- * Created by Cesar_Casanova on 01/02/2016
- */
-//TODO: Make noise? => Settings
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Created by Cesar_Casanova on 01/02/2016
+//TODO: Mejorar aspecto y al pulsar abrir tarea del aviso...
 //TODO: Desactivado por hoy no funciona a la primera? necesita tiempo? svc aviso?
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity

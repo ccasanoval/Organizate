@@ -48,8 +48,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.dsl.NotNull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+//TODO: destruir notificacion una vez que user ha clickado hasta aqui?
 public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
 {
 	private static final int DELAY_LOCATION = 60000;
@@ -142,7 +141,6 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		super.onPause();
 		stopTracking();
 	}
-
 	@Override
 	protected void onResume()
 	{
@@ -174,7 +172,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		if(_loc == null)_loc = new Location("dummyprovider");
 		_loc.setLatitude(lat);
 		_loc.setLongitude(lon);
-		_lblPosicion.setText(String.format("%f/%f", _loc.getLatitude(), _loc.getLongitude()));
+		_lblPosicion.setText(String.format("%.5f/%.5f", _loc.getLatitude(), _loc.getLongitude()));
 		setMarker();
 	}
 	private void setMarker()

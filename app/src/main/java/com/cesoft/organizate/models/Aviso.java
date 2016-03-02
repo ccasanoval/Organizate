@@ -230,18 +230,19 @@ public class Aviso extends SugarRecord implements Parcelable
 		return Aviso.findAsIterator(Aviso.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
 	}
 
+	//______________________________________________________________________________________________
 	public boolean isDueTime()
 	{
 		Calendar now = Calendar.getInstance();
-System.err.println("isDueTime-----------" + now);
+//System.err.println("isDueTime-----------" + now);
 
 		if(_dtActivo!=null &&  _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia //TODO:Mover a getAvisosActivos ?
 		{
-			System.err.println("isDueTime--------------------------ESTA DESACTIVADO TEMPORALMENTE : "+now+" : "+_dtActivo);
+//System.err.println("isDueTime--------------------------ESTA DESACTIVADO TEMPORALMENTE : "+now+" : "+_dtActivo);
 			return false;
 		}
 		_dtActivo = null;
-System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
+//System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
 
 		byte[] aMeses = getMeses();
 		byte[] aDiasMes = getDiasMes();
@@ -256,7 +257,7 @@ System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
+//System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
 		if(aDiasMes.length > 0 && aDiasMes[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -265,7 +266,7 @@ System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH))
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
+//System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
 		if(aDiasSemana.length > 0 && aDiasSemana[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -274,7 +275,7 @@ System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
+//System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
 		if(aHoras.length > 0 && aHoras[0] != Aviso.TODO)
 		{
 			boolean b = false;
@@ -283,20 +284,20 @@ System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) 
 					break;
 			if(!b)return false;
 		}
-System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
+//System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
 		if(aMinutos.length > 0 && aMinutos[0] != Aviso.TODO)
 		{
 			boolean b = false;
 			for(byte minuto : aMinutos)
 				if(b = (now.get(Calendar.MINUTE)-2 <= minuto && now.get(Calendar.MINUTE)+2 >= minuto) )
 					break;
-				else System.err.println("isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
+//				else System.err.println("Aviso:isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
 			if(!b)return false;
 		}
 		return true;
 	}
 
-
+	//______________________________________________________________________________________________
 	/// HELPING FUNCS ------------------------------------------------------------------------------
 	public static boolean contains(byte[] a, byte v)
 	{
@@ -312,13 +313,11 @@ System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
 	}
 	private static byte[] remove(byte[] a, byte v)
 	{
-System.err.println("AAA-----z:"+v);
 		if(a.length == 0)return a;
 		byte[] b = new byte[a.length-1];
 		for(int i=0, j=0; i < a.length; i++)
 			if(a[i] != v)
 				b[j++]=a[i];
-System.err.println("AAA-----"+b.length);
 		return b;
 	}
 }

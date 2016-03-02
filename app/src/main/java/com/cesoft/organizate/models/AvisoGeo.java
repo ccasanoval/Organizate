@@ -21,7 +21,7 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	private String _id;
 	private double _lat, _lon;
 	private float _rad = 500;//min 100m - max 2km?
-	private long _delay;
+	private long _delay;//TODO:remove
 
 	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	//@ Ignore
@@ -50,7 +50,7 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 
 	///-----
 	public AvisoGeo(){}
-	public String toString(){return "{id="+getId()+", act="+_bActivo+", txt="+_sTexto+", _dtAct="+_dtActivo+", Pos="+_lat+"/"+_lon+":"+_rad+"}";}
+	public String toString(){return String.format("{id=%d, act=%b, txt=%s, _dtAct=%s, Pos=%f/%f:%.0f}", getId(), _bActivo, _sTexto, _dtActivo, _lat, _lon, _rad);}
 
 
 	///----- PARCELABLE
@@ -105,7 +105,7 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	//______________________________________________________________________________________________
 	public long save()
 	{
-		System.err.println("SAVING AVISO GEO:------" + this);
+//System.err.println("SAVING AVISO GEO:------" + this);
 		return super.save();
 	}
 
@@ -115,4 +115,9 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 		return AvisoGeo.findAsIterator(AvisoGeo.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
 	}
 
+	//______________________________________________________________________________________________
+	public static AvisoGeo getById(String id)
+	{
+		return AvisoGeo.findById(AvisoGeo.class, Long.parseLong(id));
+	}
 }

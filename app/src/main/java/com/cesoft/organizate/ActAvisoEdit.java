@@ -136,7 +136,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActAvisoEdit:onCreate:ERROR:"+e);
+			System.err.println("ActAvisoEdit:onCreate:e:"+e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -150,7 +150,6 @@ public class ActAvisoEdit extends AppCompatActivity
 		//_isNuevo = false;
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.getActivo());
-System.err.println("---------_a.getActivo()="+_a.getActivo());
 		for(byte i : _a.getMeses())
 			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())
@@ -174,7 +173,6 @@ System.err.println("---------_a.getActivo()="+_a.getActivo());
 	{
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
-System.err.println("SAVE---------_a.getActivo()=" + _a.getActivo());
 		Intent data = new Intent();
     	data.putExtra(Aviso.class.getName(), _a);
 		setResult(Activity.RESULT_OK, data);

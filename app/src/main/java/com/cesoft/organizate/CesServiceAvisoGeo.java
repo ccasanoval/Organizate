@@ -2,6 +2,7 @@ package com.cesoft.organizate;
 
 import java.util.List;
 
+import com.cesoft.organizate.models.AvisoGeo;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
@@ -18,7 +19,6 @@ import android.text.TextUtils;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 27/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: Cuando pulse el geo aviso que abra la tarea correspondiente!
 //TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo=> activar solo cuando guarde...?
 public class CesServiceAvisoGeo extends IntentService
 {
@@ -60,26 +60,27 @@ public class CesServiceAvisoGeo extends IntentService
 System.err.println("onHandleIntent-----------------------------Geofence Unknown");
 				break;
 			}
-
 			GeofencingEvent geofenceEvent = GeofencingEvent.fromIntent(intent);
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();
 			for(Geofence geof : geofences)
-				sendNotification(this, geof.getRequestId(), notificationTitle);
+			{
+				AvisoGeo ag = AvisoGeo.getById(geof.getRequestId());//TODO: mostar mensaje aviso, pero ir a pantalla del objeto, no del aviso
+				sendNotification(this, ag, notificationTitle);
+			}
 		}
 	}
 
-	private void sendNotification(Context context, String notificationText, String notificationTitle)
+	private void sendNotification(Context context, AvisoGeo ag, String notificationTitle)
 	{
 		PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 		wakeLock.acquire();
-		Intent intent = new Intent(context, ActMain.class);
-		//Intent intent = new Intent(context, ActAvisoGeoEdit.class);
-		//intent.putExtra();//TODO:Add id AvisoGeo
+		Intent intent = new Intent(context, ActAvisoGeoEdit.class);//ActMain.class
+		intent.putExtra(AvisoGeo.class.getName(), ag);//TODO:Add id AvisoGeo
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
 				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
-				.setContentText(notificationText)
+				.setContentText(ag.getTexto())
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0))
 				.setAutoCancel(false);

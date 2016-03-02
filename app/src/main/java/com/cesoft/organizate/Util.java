@@ -1,15 +1,22 @@
 package com.cesoft.organizate;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Parcelable;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.NotificationCompat;
 
 import java.util.HashMap;
 
@@ -19,14 +26,14 @@ import java.util.HashMap;
 public class Util
 {
 	//______________________________________________________________________________________________
-	// NOTIFICATIONS
+	// NOTIFICATION UTILS
 	//______________________________________________________________________________________________
 	public static void playNotificacion(Context c)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		if(prefs.getBoolean("notifications_new_message", false))
 		{
-//System.err.println("-----------------------------Ding Dong!!!!!!!!!");
+System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 			String sound = prefs.getString("notifications_new_message_ringtone", "");
 			if( ! sound.isEmpty())
 				playSound(c, Uri.parse(sound));
@@ -54,6 +61,41 @@ public class Util
 		vibrator.vibrate(1000);//1seg
 		//vibrator.cancel();
     }
+
+	//______________________________________________________________________________________________
+	// NOTIFICATION
+	//______________________________________________________________________________________________
+	public static void showNotificacion(Context c, String titulo, String texto)
+	{
+		showNotificacion(c, titulo, texto, null);
+	}
+	public static void showNotificacion(Context c, String titulo, String texto, Intent intent)
+	{
+		PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
+		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+		wakeLock.acquire();
+		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
+				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
+				.setContentTitle(titulo)
+				.setContentText(texto)
+				.setDefaults(Notification.DEFAULT_ALL)
+				.setContentIntent(PendingIntent.getActivity(c, 0, intent, 0))
+				.setAutoCancel(false);
+		NotificationManager notificationManager = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(0, notificationBuilder.build());
+		wakeLock.release();
+	}
+	//______________________________________________________________________________________________
+	// NOTIFICATION DLG
+	//______________________________________________________________________________________________
+	public static void showNotificacionDlg(Context c, Parcelable o)//TODO Objeto as base class
+	{
+		Intent intent = new Intent(c, ActAvisoDlg.class);//getBaseContext()
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.putExtra(o.getClass().getName(), o);//.getTexto()
+		c.startActivity(intent);//getApplication()
+		//Util.playNotificacion(c);Aqui no funcionaria
+	}
 
 
 	//______________________________________________________________________________________________

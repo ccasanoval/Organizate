@@ -64,7 +64,7 @@ System.err.println("onHandleIntent-----------------------------Geofence Unknown"
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();
 			for(Geofence geof : geofences)
 			{
-				AvisoGeo ag = AvisoGeo.getById(geof.getRequestId());//TODO: mostar mensaje aviso, pero ir a pantalla del objeto, no del aviso
+				AvisoGeo ag = AvisoGeo.getById(geof.getRequestId());//TODO: 3  aqui coger Objeto no Aviso(mostar mensaje aviso, pero ir a pantalla del objeto, no del aviso)
 				sendNotification(this, ag, notificationTitle);
 			}
 		}
@@ -76,11 +76,11 @@ System.err.println("onHandleIntent-----------------------------Geofence Unknown"
 		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
 		wakeLock.acquire();
 		Intent intent = new Intent(context, ActAvisoGeoEdit.class);//ActMain.class
-		intent.putExtra(AvisoGeo.class.getName(), ag);//TODO:Add id AvisoGeo
+		intent.putExtra(AvisoGeo.class.getName(), ag);////TODO: 4 Aqui poner Objeto no Aviso
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
 				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
 				.setContentTitle(notificationTitle)
-				.setContentText(ag.getTexto())
+				.setContentText(ag.getTexto())////TODO: 4 Aqui poner Objeto.Aviso.texto
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0))
 				.setAutoCancel(false);

@@ -73,13 +73,13 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 			_listaGeo.clear();
 			if(_GeofenceStore != null)_GeofenceStore.clear();
 			ArrayList<Geofence> aGeofences = new ArrayList<>();
-			Iterator<AvisoGeo> it = AvisoGeo.getActivos();
+			Iterator<AvisoGeo> it = AvisoGeo.getActivos();//TODO: 1 Aqui coger los Objetos cuyos avisos esten activos
 			while(it.hasNext())
 			{
 				AvisoGeo ag = it.next();
 				_listaGeo.add(ag);
 				aGeofences.add(new Geofence.Builder()
-						.setRequestId(Long.toString(ag.getId()))//ag.getTexto()
+						.setRequestId(Long.toString(ag.getId()))//TODO: 2 Aqui pasar el objeto, no el aviso
 						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio())
 						.setExpirationDuration(Geofence.NEVER_EXPIRE)
 						.setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
@@ -122,10 +122,6 @@ System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.siz
 			if(a.isDueTime())
 			{
 System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
-				/*Intent intent = new Intent(getBaseContext(), ActAvisoDlg.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(Aviso.class.getName(), a);//.getTexto()
-				getApplication().startActivity(intent);*/
 				Util.showNotificacionDlg(getBaseContext(), a);
 			}
 		}

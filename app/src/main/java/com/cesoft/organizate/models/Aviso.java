@@ -20,18 +20,13 @@ public class Aviso extends SugarRecord implements Parcelable
 
 	private boolean _bActivo = true;
 	private String _sTexto="";
-	//private Date _dt;//eliminar fecha, es inutil...
+
 	private byte[] _aMes = new byte[0];
 	private byte[] _aDiaMes = new byte[0];
 	private byte[] _aDiaSemana = new byte[0];
 	private byte[] _aHora = new byte[0];
 	private byte[] _aMinuto = new byte[0];
-	/* Sugar no guarda array list...
-	private ArrayList<Integer> _aMes = new ArrayList<>();
-	private ArrayList<Integer> _aDiaMes = new ArrayList<>();
-	private ArrayList<Integer> _aDiaSemana = new ArrayList<>();
-	private ArrayList<Integer> _aHora = new ArrayList<>();
-	private ArrayList<Integer> _aMinuto = new ArrayList<>();*/
+	// Sugar no guarda array list... ArrayList<Integer> _aMes = new ArrayList<>();
 
 	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	//@ Ignore

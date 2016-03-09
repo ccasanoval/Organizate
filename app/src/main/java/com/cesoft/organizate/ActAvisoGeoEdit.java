@@ -177,24 +177,27 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	}
 	private void setMarker()
 	{
-		if(_marker != null)_marker.remove();
-		LatLng pos = new LatLng(_loc.getLatitude(), _loc.getLongitude());
-		MarkerOptions mo = new MarkerOptions()
-				.position(pos)
-				.title(getString(R.string.aviso))//TODO:Anadir nombre al aviso
-				.snippet(_a.getTexto());
-		_marker = _Map.addMarker(mo);
-		_Map.moveCamera(CameraUpdateFactory.newLatLng(pos));
-		_Map.animateCamera(CameraUpdateFactory.zoomTo(15));
+		try
+		{
+			if(_marker != null)_marker.remove();
+			LatLng pos = new LatLng(_loc.getLatitude(), _loc.getLongitude());
+			MarkerOptions mo = new MarkerOptions()
+					.position(pos)
+					.title(getString(R.string.aviso))//TODO:Anadir nombre al aviso
+					.snippet(_a.getTexto());
+			_marker = _Map.addMarker(mo);
+			_Map.moveCamera(CameraUpdateFactory.newLatLng(pos));
+			_Map.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-		if(_circle != null)_circle.remove();
-		_circle = _Map.addCircle(new CircleOptions()
-				.center(pos)
-				.radius(_radio)
-				.strokeColor(Color.TRANSPARENT)
-				.fillColor(0x55AA0000));//Color.BLUE
+			if(_circle != null)_circle.remove();
+			_circle = _Map.addCircle(new CircleOptions()
+					.center(pos)
+					.radius(_radio)
+					.strokeColor(Color.TRANSPARENT)
+					.fillColor(0x55AA0000));//Color.BLUE
+		}
+		catch(Exception e){System.err.println("ActAvisoGeoEdit:setMarker:e:"+e);}
 	}
-
 
 	// DB SAVE
 	private void saveValores()

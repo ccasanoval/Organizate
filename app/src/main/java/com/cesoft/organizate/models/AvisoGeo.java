@@ -12,20 +12,13 @@ import java.util.Iterator;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 12/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class AvisoGeo extends SugarRecord implements Parcelable
+public class AvisoGeo extends SugarRecord implements Parcelable, AvisoInterface
 {
-	private boolean _bActivo = true;
-	private String _sTexto="";
+	protected boolean _bActivo = true;
+	protected String _sTexto="";
 
-	//Geolocation
-	private String _id;
-	private double _lat, _lon;
-	private float _rad = 500;//min 100m - max 2km?
-	private long _delay;//TODO:remove
-
-	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	//@ Ignore
-	private Date _dtActivo;//Fecha para desactivar un dia
+	protected Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	public void desactivarPorHoy()
 	{
 		_dtActivo = Calendar.getInstance().getTime();
@@ -37,6 +30,13 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 
 	public void setActivo(boolean v){_bActivo = v;}
 	public boolean getActivo(){return _bActivo;}
+
+
+	//Geolocation
+	private String _id;
+	private double _lat, _lon;
+	private float _rad = 500;//min 100m - max 2km?
+	private long _delay;//TODO:remove
 
 	public double getLatitud(){return _lat;}
 	public double getLongitud(){return _lon;}
@@ -50,17 +50,14 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 
 	///-----
 	public AvisoGeo(){}
-	public String toString(){return String.format("{id=%d, act=%b, txt=%s, _dtAct=%s, Pos=%f/%f:%.0f}", getId(), _bActivo, _sTexto, _dtActivo, _lat, _lon, _rad);}
+	public AvisoGeo(String s){_sTexto = s;}
+	public String toString(){return String.format("{id=%d, txt=%s, act=%b, _dtAct=%s, Pos=%f/%f:%.0f}", getId(), _sTexto, _bActivo, _dtActivo, _lat, _lon, _rad);}
 
 
 	///----- PARCELABLE
 	protected AvisoGeo(Parcel in)
 	{
-		long l;
-		int i;
-		byte[] ai;
-		//
-		l = in.readLong();
+		long l = in.readLong();
 		if(l >= 0)setId(l);
 		//
 		_bActivo = in.readByte() > 0;
@@ -73,7 +70,6 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
-		int[] ai;
 		dest.writeLong(getId() != null ? getId() : -1);
 		//
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
@@ -105,14 +101,14 @@ public class AvisoGeo extends SugarRecord implements Parcelable
 	//______________________________________________________________________________________________
 	public long save()
 	{
-//System.err.println("SAVING AVISO GEO:------" + this);
+System.err.println("SAVING AVISO GEO:------" + this);
 		return super.save();
 	}
 
 	//______________________________________________________________________________________________
 	public static Iterator<AvisoGeo> getActivos()
 	{
-		return AvisoGeo.findAsIterator(AvisoGeo.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
+		return AvisoGeo.findAsIterator(AvisoGeo.class, "_B_ACTIVO > 0");
 	}
 
 	//______________________________________________________________________________________________

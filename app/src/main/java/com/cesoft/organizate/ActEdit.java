@@ -1,13 +1,10 @@
 package com.cesoft.organizate;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -33,11 +30,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
-import com.cesoft.organizate.models.Aviso;
 import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -422,8 +418,6 @@ public class ActEdit extends AppCompatActivity
     }
 
 
-
-
 	//______________________________________________________________________________________________
 	// AVISO
 	//______________________________________________________________________________________________
@@ -440,14 +434,10 @@ public class ActEdit extends AppCompatActivity
 	private void showAviso()
 	{
 		Intent i = new Intent(this, ActAvisoEdit.class);
-		Aviso a = _o.getAviso();
+		AvisoTem a = _o.getAvisoTem();
 		if(a == null)
-		{
-			a = new Aviso();
-			a.setTexto(getStringAviso());
-			//_o.setAviso(a);
-		}
-		i.putExtra(Aviso.class.getName(), a);
+			a = new AvisoTem(getStringAviso());
+		i.putExtra(AvisoTem.class.getName(), a);
 		startActivityForResult(i, AVISO);
 	}
 	private static final int AVISO_GEO = 201;
@@ -456,10 +446,7 @@ public class ActEdit extends AppCompatActivity
 		Intent i = new Intent(this, ActAvisoGeoEdit.class);
 		AvisoGeo a = _o.getAvisoGeo();
 		if(a == null)
-		{
-			a = new AvisoGeo();
-			a.setTexto(getStringAviso());
-		}
+			a = new AvisoGeo(getStringAviso());
 		i.putExtra(AvisoGeo.class.getName(), a);
 		startActivityForResult(i, AVISO_GEO);
 	}
@@ -470,8 +457,8 @@ public class ActEdit extends AppCompatActivity
 		if(resultCode != RESULT_OK)return;
 		if(requestCode == AVISO)
 		{
-			_o.setAviso((Aviso)data.getParcelableExtra(Aviso.class.getName()));
-System.err.println("onActivityResult----------A:" + _o.getAviso());
+			_o.setAvisoTem((AvisoTem) data.getParcelableExtra(AvisoTem.class.getName()));
+System.err.println("onActivityResult----------A:" + _o.getAvisoTem());
 		}
 		else if(requestCode == AVISO_GEO)
 		{

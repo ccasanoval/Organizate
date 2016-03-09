@@ -9,9 +9,9 @@ import com.orm.SugarRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 ///https://guides.codepath.com/android/Clean-Persistence-with-Sugar-ORM
-//TODO: add numero de orden dentro del nivel
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 10/12/2015
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -19,7 +19,7 @@ public class Objeto extends SugarRecord implements Parcelable
 {
 	public static final int NIVEL1 = 0;
 
-	private Long _idUsr = 0L;//Long.valueOf(0);
+	private Integer _iOrden = 0;
 	private Date _dtCreacion = new Date();
 	private Date _dtModificado = new Date();
 	private Date _dtLimite = new Date();
@@ -27,7 +27,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	private String _sNombre = "";
 	private String _sDescripcion = "";
 	private Objeto _padre = null;
-	private Aviso _aviso = null;
+	private AvisoTem _avisoTem = null;
 	private AvisoGeo _avisoGeo = null;
 	@Ignore
 	private Objeto[] _hijos = new Objeto[0];
@@ -40,9 +40,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	public String toString()
 	{
 		return String.format("{id=%d, pri=%d, niv=%d, mod=%s, nom=%s, des=%s, pad=%s, hij=%d >> %s, avi=%s, aviGeo=%s}",
-			getId(), _iPrioridad, this.getNivel(), _dtModificado, _sNombre, _sDescripcion, _padre, _hijos.length, _hijos, _aviso, _avisoGeo);
+			getId(), _iPrioridad, this.getNivel(), _dtModificado, _sNombre, _sDescripcion, _padre, _hijos.length, _hijos, _avisoTem, _avisoGeo);
 	}
-	//public static void printLista(ArrayList<Objeto> lista){System.err.println("*****************");for(Objeto o : lista)System.err.println(o);System.err.println("*****************");}
 
 	//______________________________________________________________________________________________
 	@Override
@@ -103,8 +102,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	//public Long getIdUsr(){return _idUsr;}
-	//public void setIdUsr(Long idUsr){_idUsr = idUsr;}
+	public Integer getOrden(){return _iOrden;}
+	public void setOrden(Integer iOrden){_iOrden = iOrden;}
 	//public Date getCreacion(){return _dtCreacion;}
 	public void setCreacion(Date dtCreacion){_dtCreacion = dtCreacion;}
 	//public Date getLimite(){return _dtLimite;}
@@ -121,8 +120,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	public void setPadre(Objeto padre){_padre = padre;}
 	public Objeto[] getHijos(){return _hijos;}
 	//public void setHijos(Objeto[] hijos){_hijos = hijos;}
-	public Aviso getAviso(){return _aviso;}
-	public void setAviso(Aviso aviso){_aviso = aviso;}
+	public AvisoTem getAvisoTem(){return _avisoTem;}
+	public void setAvisoTem(AvisoTem avisoTem){_avisoTem = avisoTem;}
 	public AvisoGeo getAvisoGeo(){return _avisoGeo;}
 	public void setAvisoGeo(AvisoGeo avisoGeo){_avisoGeo = avisoGeo;}
 
@@ -144,14 +143,14 @@ public class Objeto extends SugarRecord implements Parcelable
 	protected Objeto(Parcel in)
 	{
 		setId(in.readLong());
-		_idUsr = in.readLong();
+		_iOrden = in.readInt();
 		_dtCreacion = new Date(in.readLong());
 		_dtModificado = new Date(in.readLong());
 		_dtLimite = new Date(in.readLong());
 		_iPrioridad = in.readInt();
 		_sNombre = in.readString();
 		_sDescripcion = in.readString();
-		_aviso = in.readParcelable(Aviso.class.getClassLoader());
+		_avisoTem = in.readParcelable(AvisoTem.class.getClassLoader());
 		_avisoGeo = in.readParcelable(AvisoGeo.class.getClassLoader());
 		_padre = in.readParcelable(Objeto.class.getClassLoader());
 		_hijos = in.createTypedArray(Objeto.CREATOR);
@@ -160,14 +159,14 @@ public class Objeto extends SugarRecord implements Parcelable
 	public void writeToParcel(Parcel dest, int flags)
 	{
 		dest.writeLong(getId());
-		dest.writeLong(_idUsr);
+		dest.writeInt(_iOrden);
 		dest.writeLong(_dtCreacion.getTime());
 		dest.writeLong(_dtModificado.getTime());
 		dest.writeLong(_dtLimite.getTime());
 		dest.writeInt(_iPrioridad);
 		dest.writeString(_sNombre);
 		dest.writeString(_sDescripcion);
-		dest.writeParcelable(_aviso, flags);
+		dest.writeParcelable(_avisoTem, flags);
 		dest.writeParcelable(_avisoGeo, flags);
 		dest.writeParcelable(_padre, flags);
 		dest.writeTypedArray(_hijos, flags);
@@ -197,7 +196,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	public static ArrayList<Objeto> conectarHijos(Iterator<Objeto> it)
 	{
 		ArrayList<Objeto> lista = new ArrayList<>();
-		ArrayList<Objeto> nivel1 = new ArrayList<>();
+		//ArrayList<Objeto> nivel1 = new ArrayList<>();
 		while(it.hasNext())
 		{
 			lista.add(it.next());
@@ -206,7 +205,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		{
 			if(o.getPadre() == null)
 			{
-				nivel1.add(o);
+				//nivel1.add(o);
 			}
 			else
 			{
@@ -219,7 +218,6 @@ public class Objeto extends SugarRecord implements Parcelable
 					}
 				}
 			}
-//System.err.println("---"+o.toString());
 		}
 		//calcPosiciones(lista);
 		//return nivel1;
@@ -242,7 +240,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	public long save()
 	{
 //System.err.println("SAVING OBJETO:------"+this);
-		if(_aviso != null)_aviso.save();
+		if(_avisoTem != null)_avisoTem.save();
 		if(_avisoGeo != null)_avisoGeo.save();
 		return super.save();
 	}
@@ -251,20 +249,28 @@ public class Objeto extends SugarRecord implements Parcelable
 		try
 		{
 			Objeto.deleteAll(Objeto.class);
-			Aviso.deleteAll(Aviso.class);
-			AvisoGeo.deleteAll(Aviso.class);
+			AvisoTem.deleteAll(AvisoTem.class);
+			AvisoGeo.deleteAll(AvisoGeo.class);
 		}
 		catch(Exception e){System.err.println("Objeto:delTodo:e:"+e);}
 	}
 	@Override
 	public boolean delete()
 	{
-		if(_aviso != null)_aviso.delete();
+		if(_avisoTem != null)_avisoTem.delete();
 		if(_avisoGeo != null)_avisoGeo.delete();
 		for(Objeto o1 : getHijos())
 			o1.delete();
 		return super.delete();
 	}
+
+	//______________________________________________________________________________________________
+	//TODO: CesServiceAviso:cargarLista:e:android.database.sqlite.SQLiteException: no such column: AVISO_TEM._B_ACTIVO (code 1): , while compiling: SELECT * FROM OBJETO WHERE AVISO_TEM._B_ACTIVO > 0
+	public static Iterator<Objeto> getAvisosTempActivos()
+	{
+		return Objeto.findAsIterator(Objeto.class, "_AVISO_TEM._B_ACTIVO > 0");
+	}
+
 
 	//______________________________________________________________________________________________
 	/*public static void calcPosiciones(ArrayList<Objeto> lista)

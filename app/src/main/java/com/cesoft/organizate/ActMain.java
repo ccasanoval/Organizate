@@ -27,7 +27,7 @@ import com.orm.SugarContext;
 //TODO: Private but free git host? gitHub make ur code public...
 //TODO: Nueva version con Backendless
 
-//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? Aviso noise? Aviso time to desapear? Desactivar por (hoy|hora|...)
+//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? AvisoTem noise? AvisoTem time to desapear? Desactivar por (hoy|hora|...)
 //TODO: Estandarizar modo de aviso al usuario...
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
@@ -51,8 +51,8 @@ public class ActMain extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		//-----
-		setEgg();
-		setAvisos();
+		startHuevo();
+		startAvisoService();
 		//------
 		ActEdit.setParentAct(this);
 		_expListView = (ExpandableListView) findViewById(R.id.elv_todo);
@@ -121,7 +121,6 @@ public class ActMain extends AppCompatActivity
 			lista = new ArrayList<>();
 		}
 		ActEdit.setLista(lista);
-		//Objeto[] ao = new Objeto[lista.size()];lista.toArray(ao);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
 	}
 
@@ -144,7 +143,7 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void setEgg()//TODO: Mejorar imagen del huevo
+	public void startHuevo()//TODO: Mejorar imagen del huevo
 	{
 		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
 		tb.setOnClickListener(new View.OnClickListener()
@@ -177,7 +176,7 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void setAvisos()
+	public void startAvisoService()
 	{
 		Intent i = new Intent(this, CesServiceAviso.class);
 		startService(i);

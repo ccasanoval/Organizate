@@ -3,15 +3,15 @@ package com.cesoft.organizate;
 import android.app.IntentService;
 import android.content.Intent;
 
-import com.cesoft.organizate.models.Aviso;
 import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.AvisoTem;
+import com.cesoft.organizate.models.Objeto;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.LocationServices;
 import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 27/01/2016
@@ -22,11 +22,12 @@ public class CesServiceAviso extends IntentService
 	private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
 	private static final long DELAY_LOAD = 6*60*1000;//TODO: ajustar
 	private static final long DELAY_CHECK = 3*60*1000;
-	private ArrayList<Aviso> _lista = new ArrayList<>();
+
+	private ArrayList<Objeto> _lista = new ArrayList<>();
 
 	private CesGeofenceStore _GeofenceStore;
 	private ArrayList<AvisoGeo> _listaGeo = new ArrayList<>();
-		//public ArrayList<AvisoGeo> getAvisosGeo(){return _listaGeo;};
+
 
 	//______________________________________________________________________________________________
 	public CesServiceAviso()
@@ -50,7 +51,7 @@ public class CesServiceAviso extends IntentService
 System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
 				{
-					cargarLista();
+					cargarListaTem();
 					cargarListaGeo();
 					tmLoad = System.currentTimeMillis();
 				}
@@ -96,15 +97,15 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 		}
 	}
 	//______________________________________________________________________________________________
-	private void cargarLista()
+	private void cargarListaTem()
 	{
 		try
 		{
 			_lista.clear();
-			Iterator<Aviso> it = Aviso.getActivos();
+			Iterator<Objeto> it = Objeto.getAvisosTempActivos();//AvisoTem.getActivos();
 			while(it.hasNext())
 				_lista.add(it.next());
-System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.size());
+System.err.println("CesServiceAviso---*********************************************------------------cargarLista:"+_lista.size());
 		}
 		catch(Exception e)
 		{
@@ -117,12 +118,15 @@ System.err.println("CesServiceAviso---------------------cargarLista:"+_lista.siz
 	private void checkAvisos()
 	{
 		if(_lista == null || _lista.size() == 0)return;
-		for(Aviso a : _lista)
+		for(Objeto o : _lista)
 		{
-			if(a.isDueTime())
+			if(o.getAvisoTem().isDueTime())
 			{
-System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + a.getTexto());
-				Util.showNotificacionDlg(getBaseContext(), a);
+System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + o);
+				//Util.showNotificacionDlg(getBaseContext(), a);
+				Intent intent = new Intent(getBaseContext(), ActEdit.class);//TODO:Mover a notif... notif recibe Objeto
+				intent.putExtra(Objeto.class.getName(), o);
+				Util.showAviso(getBaseContext(), o.getNombre(), o.getAvisoTem(), intent);
 			}
 		}
 	}

@@ -9,28 +9,15 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 
-/**
- * Created by Cesar_Casanova on 12/01/2016
- */
+// Created by Cesar_Casanova on 12/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class Aviso extends SugarRecord implements Parcelable
+public class AvisoTem extends SugarRecord implements Parcelable, AvisoInterface
 {
-	public static final byte NADA = -1;
-	public static final byte TODO = -2;
+	protected boolean _bActivo = true;
+	protected String _sTexto="";
 
-	private boolean _bActivo = true;
-	private String _sTexto="";
-
-	private byte[] _aMes = new byte[0];
-	private byte[] _aDiaMes = new byte[0];
-	private byte[] _aDiaSemana = new byte[0];
-	private byte[] _aHora = new byte[0];
-	private byte[] _aMinuto = new byte[0];
-	// Sugar no guarda array list... ArrayList<Integer> _aMes = new ArrayList<>();
-
-	//TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	//@ Ignore
-	private Date _dtActivo;//Fecha para desactivar un dia
+	protected Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	public void desactivarPorHoy()
 	{
 		_dtActivo = Calendar.getInstance().getTime();
@@ -40,6 +27,22 @@ public class Aviso extends SugarRecord implements Parcelable
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
 
+	public void setActivo(boolean v){_bActivo = v;}
+	public boolean getActivo(){return _bActivo;}
+
+	//---
+
+	public static final byte NADA = -1;
+	public static final byte TODO = -2;
+
+	private byte[] _aMes = new byte[0];
+	private byte[] _aDiaMes = new byte[0];
+	private byte[] _aDiaSemana = new byte[0];
+	private byte[] _aHora = new byte[0];
+	private byte[] _aMinuto = new byte[0];
+	// Sugar no guarda array list... ArrayList<Integer> _aMes = new ArrayList<>();
+
+	public AvisoTem(String s){_sTexto = s;}
 
 	/// MES
 	public void addMes(byte v)
@@ -141,26 +144,21 @@ public class Aviso extends SugarRecord implements Parcelable
 		return _aMinuto;//.clone();
 	}
 
-	public void setActivo(boolean v){_bActivo = v;}
-	public boolean getActivo(){return _bActivo;}
-
 	///-----
-	public Aviso(){}
 	public String toString(){return "{id="+getId()+", act="+_bActivo+", diaM="+_aDiaMes.length+", diaS="+_aDiaSemana.length+", mes="+_aMes.length+", hor="+_aHora.length+", min="+_aMinuto.length+", txt="+_sTexto+", _dtAct="+_dtActivo+" }";}
 
 
 	///----- PARCELABLE
-	protected Aviso(Parcel in)
+	public AvisoTem(Parcel in)
 	{
-		long l;
-		int i;
-		byte[] ai;
-		//
-		l = in.readLong();
+		long l = in.readLong();
 		if(l >= 0)setId(l);
 		//
 		_bActivo = in.readByte() > 0;
 		_sTexto = in.readString();
+		//
+		int i;
+		byte[] ai;
 		//
 		ai = in.createByteArray();
 		for(i=0; i < ai.length; i++)_aMes = add(_aMes, ai[i]);
@@ -176,7 +174,6 @@ public class Aviso extends SugarRecord implements Parcelable
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
-		int[] ai;
 		dest.writeLong(getId() != null ? getId() : -1);
 		//
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
@@ -193,17 +190,17 @@ public class Aviso extends SugarRecord implements Parcelable
 	{
 		return 0;
 	}
-	public static final Creator<Aviso> CREATOR = new Creator<Aviso>()
+	public static final Creator<AvisoTem> CREATOR = new Creator<AvisoTem>()
 	{
 		@Override
-		public Aviso createFromParcel(Parcel in)
+		public AvisoTem createFromParcel(Parcel in)
 		{
-			return new Aviso(in);
+			return new AvisoTem(in);
 		}
 		@Override
-		public Aviso[] newArray(int size)
+		public AvisoTem[] newArray(int size)
 		{
-			return new Aviso[size];
+			return new AvisoTem[size];
 		}
 	};
 
@@ -220,9 +217,9 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	public static Iterator<Aviso> getActivos()
+	public static Iterator<AvisoTem> getActivos()
 	{
-		return Aviso.findAsIterator(Aviso.class, "_B_ACTIVO > 0");// .findAll(Aviso.class);
+		return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");// .findAll(AvisoTem.class);
 	}
 
 	//______________________________________________________________________________________________
@@ -244,7 +241,7 @@ public class Aviso extends SugarRecord implements Parcelable
 		byte[] aDiasSemana = getDiasSemana();
 		byte[] aHoras = getHoras();
 		byte[] aMinutos = getMinutos();
-		if(aMeses.length > 0 && aMeses[0] != Aviso.TODO)
+		if(aMeses.length > 0 && aMeses[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte mes : aMeses)
@@ -253,7 +250,7 @@ public class Aviso extends SugarRecord implements Parcelable
 			if(!b)return false;
 		}
 //System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
-		if(aDiasMes.length > 0 && aDiasMes[0] != Aviso.TODO)
+		if(aDiasMes.length > 0 && aDiasMes[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte diaMes : aDiasMes)
@@ -262,7 +259,7 @@ public class Aviso extends SugarRecord implements Parcelable
 			if(!b)return false;
 		}
 //System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
-		if(aDiasSemana.length > 0 && aDiasSemana[0] != Aviso.TODO)
+		if(aDiasSemana.length > 0 && aDiasSemana[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte diaSemana : aDiasSemana)
@@ -271,7 +268,7 @@ public class Aviso extends SugarRecord implements Parcelable
 			if(!b)return false;
 		}
 //System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
-		if(aHoras.length > 0 && aHoras[0] != Aviso.TODO)
+		if(aHoras.length > 0 && aHoras[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte hora : aHoras)
@@ -280,13 +277,13 @@ public class Aviso extends SugarRecord implements Parcelable
 			if(!b)return false;
 		}
 //System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
-		if(aMinutos.length > 0 && aMinutos[0] != Aviso.TODO)
+		if(aMinutos.length > 0 && aMinutos[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte minuto : aMinutos)
 				if(b = (now.get(Calendar.MINUTE)-2 <= minuto && now.get(Calendar.MINUTE)+2 >= minuto) )
 					break;
-//				else System.err.println("Aviso:isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
+//				else System.err.println("AvisoTem:isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
 			if(!b)return false;
 		}
 		return true;
@@ -317,126 +314,3 @@ public class Aviso extends SugarRecord implements Parcelable
 	}
 }
 
-	/*
-	// Los sustituyo por java.util.Arrays.sort(ab);
-	public static void quickSort(byte[] ab, int low, int high)//int low = 0;	int high = ab.length - 1;
-	{
-		if(ab == null || ab.length == 0)return;
-		if(low >= high)return;
-
-		// pick the pivot
-		int middle = low + (high - low) / 2;
-		byte pivot = ab[middle];
-
-		// make left < pivot and right > pivot
-		int i = low, j = high;
-		while(i <= j)
-		{
-			while(ab[i] < pivot)i++;
-			while(ab[j] > pivot)j--;
-			if(i <= j)
-			{
-				byte temp = ab[i];
-				ab[i] = ab[j];
-				ab[j] = temp;
-				i++;
-				j--;
-			}
-		}
-
-		// recursively sort two sub parts
-		if(low < j)
-			quickSort(ab, low, j);
-		if(high > i)
-			quickSort(ab, i, high);
-	}*/
-
-
-/*
-	//______________________________________________________________________________________________
-	public boolean check(Date now)
-	{
-		boolean bOk;
-		if(now == null) now = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(now);
-		int minuto = c.get(Calendar.MINUTE);
-		int hora = c.get(Calendar.HOUR_OF_DAY);
-		int diaSem = c.get(Calendar.DAY_OF_WEEK);
-		int diaMes = c.get(Calendar.DAY_OF_MONTH);
-		int mes = c.get(Calendar.MONTH);
-
-		// mes
-		bOk = false;
-		for(int v : _aMes)
-		{
-			if(v == mes)
-			{
-				bOk=true;
-				break;
-			}
-		}
-		if( ! bOk)return false;
-
-		// dia mes
-		bOk = false;
-		for(int v : _aDiaMes)
-		{
-			if(v == diaMes)
-			{
-				bOk=true;
-				break;
-			}
-		}
-		if( ! bOk)return false;
-
-		// dia semana
-		bOk = false;
-		for(int v : _aDiaSemana)
-		{
-			if(v == diaSem)
-			{
-				bOk=true;
-				break;
-			}
-		}
-		if( ! bOk)return false;
-
-		// hora
-		bOk = false;
-		for(int v : _aHora)
-		{
-			if(v == hora)
-			{
-				bOk=true;
-				break;
-			}
-		}
-		if( ! bOk)return false;
-
-		// minuto
-		bOk = false;
-		for(int v : _aMinuto)
-		{
-			if(v == minuto)
-			{
-				bOk=true;
-				break;
-			}
-		}
-		return bOk;
-	}
-* */
-
-
-	/*private static int[] convertIntegers(ArrayList<Integer> ai)
-	{
-		int[] ret = new int[ai.size()];
-		Iterator<Integer> iterator = ai.iterator();
-		for(int i=0; i < ret.length; i++)
-		{
-			ret[i] = iterator.next();//.intValue();
-System.err.println("--"+ret[i]);
-		}
-		return ret;
-	}*/

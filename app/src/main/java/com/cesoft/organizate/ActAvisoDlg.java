@@ -1,17 +1,9 @@
 package com.cesoft.organizate;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Vibrator;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -19,7 +11,7 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.cesoft.organizate.models.Aviso;
+import com.cesoft.organizate.models.AvisoTem;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 01/02/2016
@@ -31,7 +23,7 @@ public class ActAvisoDlg extends Activity
 	private static final int CLOSE_DLG = 0;
 	private static final long CLOSE_TIME = 60*1000;
 
-	private Aviso _a;
+	private AvisoTem _a;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -84,7 +76,7 @@ System.err.println("----------DESACTIVADO POR HOY");
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = getIntent().getParcelableExtra(Aviso.class.getName());
+			_a = getIntent().getParcelableExtra(AvisoTem.class.getName());//TODO Avisotem
 			txtAviso.setText(_a.getTexto());
 		}
 		catch(Exception e)

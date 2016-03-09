@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-import com.cesoft.organizate.models.Aviso;
+import com.cesoft.organizate.models.AvisoTem;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -38,10 +38,10 @@ public class ActAvisoEdit extends AppCompatActivity
 	private static String TODO;
 	private static String NADA;
 	private static final String SEP = ":";
-	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;//TODO: pasar esta logica a Aviso?
+	private final static int MES=0, DIA_MES=1, DIA_SEMANA=2, HORA=3, MINUTO=4, MAX_TIPO=5;//TODO: pasar esta logica a AvisoTem?
 	private final static int[] _anMax = {12+2, 31+2, 7+2, 24+1, 12+1};
 
-	private Aviso _a;
+	private AvisoTem _a;
 	private String[][] _asPopUp;
 
 	private int[] _aIdBtn = {R.id.btnMes, R.id.btnDiaMes, R.id.btnDiaSemana, R.id.btnHora, R.id.btnMinuto};
@@ -107,19 +107,19 @@ public class ActAvisoEdit extends AppCompatActivity
 		_aLay = new LinearLayout[_aIdLay.length];
 		for(int i=0; i < _aLay.length; i++)_aLay[i]=(LinearLayout)findViewById(_aIdLay[i]);
 
-		_asPopUp[MES][0] = TODO+SEP+Aviso.TODO;
-		_asPopUp[MES][_anMax[MES]-1] = NADA+SEP+Aviso.NADA;
-		_asPopUp[DIA_MES][0] = TODO+SEP+Aviso.TODO;
-		_asPopUp[DIA_MES][_anMax[DIA_MES]-1] = NADA+SEP+Aviso.NADA;
-		_asPopUp[HORA][_asPopUp[HORA].length-1] = NADA+SEP+Aviso.NADA;
-		_asPopUp[MINUTO][_anMax[MINUTO]-1] = NADA+SEP+Aviso.NADA;
+		_asPopUp[MES][0] = TODO+SEP+AvisoTem.TODO;
+		_asPopUp[MES][_anMax[MES]-1] = NADA+SEP+AvisoTem.NADA;
+		_asPopUp[DIA_MES][0] = TODO+SEP+AvisoTem.TODO;
+		_asPopUp[DIA_MES][_anMax[DIA_MES]-1] = NADA+SEP+AvisoTem.NADA;
+		_asPopUp[HORA][_asPopUp[HORA].length-1] = NADA+SEP+AvisoTem.NADA;
+		_asPopUp[MINUTO][_anMax[MINUTO]-1] = NADA+SEP+AvisoTem.NADA;
 		for(int i=1; i < _anMax[MES]-1; i++)		_asPopUp[MES][i]=String.valueOf(i);
 		for(int i=1; i < _anMax[DIA_MES]-1; i++)	_asPopUp[DIA_MES][i]=String.valueOf(i);
 		for(int i=0; i < _anMax[HORA]-1; i++)		_asPopUp[HORA][i]=String.valueOf(i);
 		for(int i=0; i < _anMax[MINUTO]-1; i++)		_asPopUp[MINUTO][i]=String.valueOf(i*5);
 
-		_asPopUp[DIA_SEMANA][0] = TODO+SEP+Aviso.TODO;
-		_asPopUp[DIA_SEMANA][_anMax[DIA_SEMANA]-1] = NADA+SEP+Aviso.NADA;
+		_asPopUp[DIA_SEMANA][0] = TODO+SEP+AvisoTem.TODO;
+		_asPopUp[DIA_SEMANA][_anMax[DIA_SEMANA]-1] = NADA+SEP+AvisoTem.NADA;
 		_asPopUp[DIA_SEMANA][Calendar.MONDAY] =		getResources().getString(R.string.lunes)+SEP+(Calendar.MONDAY);
 		_asPopUp[DIA_SEMANA][Calendar.TUESDAY] =	getResources().getString(R.string.martes)+SEP+(Calendar.TUESDAY);
 		_asPopUp[DIA_SEMANA][Calendar.WEDNESDAY] =	getResources().getString(R.string.miercoles)+SEP+(Calendar.WEDNESDAY);
@@ -131,7 +131,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = this.getIntent().getParcelableExtra(Aviso.class.getName());
+			_a = this.getIntent().getParcelableExtra(AvisoTem.class.getName());
 			setValores();
 		}
 		catch(Exception e)
@@ -151,9 +151,9 @@ public class ActAvisoEdit extends AppCompatActivity
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.getActivo());
 		for(byte i : _a.getMeses())
-			createItemView(MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+			createItemView(MES, i, i==AvisoTem.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())
-			createItemView(DIA_MES, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+			createItemView(DIA_MES, i, i==AvisoTem.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasSemana())
 		{
 			String item = _asPopUp[DIA_SEMANA][i];
@@ -163,7 +163,7 @@ public class ActAvisoEdit extends AppCompatActivity
 			createItemView(DIA_SEMANA, i, text);
 		}
 		for(byte i : _a.getHoras())
-			createItemView(HORA, i, i==Aviso.TODO ? TODO : String.valueOf(i));
+			createItemView(HORA, i, i==AvisoTem.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getMinutos())
 			createItemView(MINUTO, i, String.valueOf(i));
 	}
@@ -174,7 +174,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
 		Intent data = new Intent();
-    	data.putExtra(Aviso.class.getName(), _a);
+    	data.putExtra(AvisoTem.class.getName(), _a);
 		setResult(Activity.RESULT_OK, data);
 		finish();
 	}
@@ -183,7 +183,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	private View createItemView(final int iTipo, Object tag, String texto)
 	{
 		byte valor = Byte.parseByte(tag.toString());
-		if(valor == Aviso.NADA)return null;
+		if(valor == AvisoTem.NADA)return null;
 		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
 		final View item = inflater.inflate(R.layout.aviso_item, null, false);
 		//item.setTag(tag);
@@ -208,13 +208,13 @@ public class ActAvisoEdit extends AppCompatActivity
 
 	private boolean contains(int iTipo, byte nValor)
 	{
-		switch(iTipo)//TODO: Que otra manera hay? => Pasar logica a Aviso
+		switch(iTipo)//TODO: Que otra manera hay? => Pasar logica a AvisoTem
 		{
-		case MES:		return Aviso.contains(_a.getMeses(), nValor);
-		case DIA_MES:	return Aviso.contains(_a.getDiasMes(), nValor);
-		case DIA_SEMANA:return Aviso.contains(_a.getDiasSemana(), nValor);
-		case HORA:		return Aviso.contains(_a.getHoras(), nValor);
-		case MINUTO:	return Aviso.contains(_a.getMinutos(), nValor);
+		case MES:		return AvisoTem.contains(_a.getMeses(), nValor);
+		case DIA_MES:	return AvisoTem.contains(_a.getDiasMes(), nValor);
+		case DIA_SEMANA:return AvisoTem.contains(_a.getDiasSemana(), nValor);
+		case HORA:		return AvisoTem.contains(_a.getHoras(), nValor);
+		case MINUTO:	return AvisoTem.contains(_a.getMinutos(), nValor);
 		default:		return false;
 		}
 
@@ -233,7 +233,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	}
 	private void addItem(int iTipo, byte nValor)
 	{
-		switch(iTipo)//TODO: Que otra manera hay? Pasar logica a Aviso
+		switch(iTipo)//TODO: Que otra manera hay? Pasar logica a AvisoTem
 		{
 		case MES:		_a.addMes(nValor);break;
 		case DIA_MES:	_a.addDiaMes(nValor);break;
@@ -246,11 +246,11 @@ public class ActAvisoEdit extends AppCompatActivity
 	private void manageItems(int iTipo, byte nValor, String sTexto)
 	{
 		if(contains(iTipo, nValor))return;
-		if(nValor == Aviso.NADA || nValor == Aviso.TODO)
+		if(nValor == AvisoTem.NADA || nValor == AvisoTem.TODO)
 		{
-			delItem(iTipo, Aviso.TODO);
+			delItem(iTipo, AvisoTem.TODO);
 			_aLay[iTipo].removeAllViews();
-			if(nValor == Aviso.NADA)return;
+			if(nValor == AvisoTem.NADA)return;
 		}
 		createItemView(iTipo, nValor, sTexto);
 		addItem(iTipo, nValor);
@@ -304,8 +304,8 @@ public class ActAvisoEdit extends AppCompatActivity
 							String sTexto = ((TextView)v).getText().toString();
 							//Object oValor = v.getTag();
 							byte nValor;
-							if(v.getTag().toString().equals(TODO))nValor = Aviso.TODO;
-							else if(v.getTag().toString().equals(NADA))nValor = Aviso.NADA;
+							if(v.getTag().toString().equals(TODO))nValor = AvisoTem.TODO;
+							else if(v.getTag().toString().equals(NADA))nValor = AvisoTem.NADA;
 							else nValor = Byte.parseByte(v.getTag().toString());
 							manageItems(iTipo, nValor, sTexto);
 						}

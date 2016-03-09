@@ -18,6 +18,8 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 
+import com.cesoft.organizate.models.AvisoTem;
+
 import java.util.HashMap;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,10 +67,19 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	//______________________________________________________________________________________________
 	// NOTIFICATION
 	//______________________________________________________________________________________________
-	public static void showNotificacion(Context c, String titulo, String texto)
+	public static void showAviso(Context c, String sTitulo, AvisoTem a, Intent intent)//TODO: general no avisotem
 	{
-		showNotificacion(c, titulo, texto, null);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+		if(prefs.getBoolean("notifications_new_message_type", false))
+		{
+			showNotificacionDlg(c, a);
+		}
+		else
+		{
+			showNotificacion(c, sTitulo, a.getTexto(), intent);
+		}
 	}
+	//______________________________________________________________________________________________
 	public static void showNotificacion(Context c, String titulo, String texto, Intent intent)
 	{
 		PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
@@ -86,9 +97,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		wakeLock.release();
 	}
 	//______________________________________________________________________________________________
-	// NOTIFICATION DLG
-	//______________________________________________________________________________________________
-	public static void showNotificacionDlg(Context c, Parcelable o)//TODO Objeto as base class
+	public static void showNotificacionDlg(Context c, Parcelable o)
 	{
 		Intent intent = new Intent(c, ActAvisoDlg.class);//getBaseContext()
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

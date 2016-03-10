@@ -51,10 +51,12 @@ public class AvisoGeo extends AvisoAbs
 	public double getLongitud(){return _lon;}
 	public float getRadio(){return _rad;}
 	public void setGeoPosicion(double lat, double lon, float rad)
-	{//TODO:Check valid
-		_lat=lat;
-		_lon=lon;
-		_rad=rad<10?10:rad;
+	{
+		if(lat <= 85 && lat >= -85)
+			_lat=lat;
+		if(lon <= 180 && lon >= -180)
+			_lon=lon;
+		_rad = rad < 10 ? 10 : rad;
 	}
 
 	///-----

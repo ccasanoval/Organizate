@@ -1,5 +1,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+	<SwitchPreference
+		android:defaultValue="true"
+		android:key="is_auto_arranque"
+		android:title="@string/pref_title_is_auto_arranque"/>
 	<!-- Exportar e importar -->
 
 </PreferenceScreen>

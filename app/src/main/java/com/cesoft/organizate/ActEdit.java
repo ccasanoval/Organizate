@@ -38,7 +38,16 @@ import com.cesoft.organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-//TODO: mejorar icono app para subirlo a playstore
+/*Snackbar snackbar = Snackbar
+        .make(coordinatorLayout, "Message is deleted", Snackbar.LENGTH_LONG)
+        .setAction("UNDO", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar snackbar1 = Snackbar.make(coordinatorLayout, "Message is restored!", Snackbar.LENGTH_SHORT);
+                snackbar1.show();
+            }
+        });
+snackbar.show();*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {
@@ -298,7 +307,7 @@ public class ActEdit extends AppCompatActivity
 	private void borrar(final View v)
 	{
 		AlertDialog.Builder dialog = new AlertDialog.Builder(ActEdit.this);
-		dialog.setTitle(ActEdit.this.getString(R.string.eliminar));
+		dialog.setTitle(getString(R.string.eliminar));
 		dialog.setMessage(ActEdit.this.getString(R.string.seguro_eliminar));
 		dialog.setPositiveButton("OK", new DialogInterface.OnClickListener()
 		{
@@ -306,7 +315,7 @@ public class ActEdit extends AppCompatActivity
 			public void onClick(DialogInterface dialog, int which)
 			{
 				ActEdit.dbDel(_o);
-				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).setAction("Action", null).show();//TODO: Action?
+				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).show();
 				_act.refrescarLista();
 				ActEdit.this.finish();
 			}

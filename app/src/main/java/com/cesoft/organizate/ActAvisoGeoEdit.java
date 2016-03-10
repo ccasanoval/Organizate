@@ -48,7 +48,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.orm.dsl.NotNull;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: destruir notificacion una vez que user ha clickado hasta aqui?
 public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
 {
 	private static final int DELAY_LOCATION = 60000;
@@ -102,7 +101,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 				setMarker();//Para cambiar radio
 			}
 			@Override
-			public void onNothingSelected(AdapterView<?> parent){_radio = 500;}
+			public void onNothingSelected(AdapterView<?> parent){_radio = 50;}
 		});
 		ImageButton btnActPos = (ImageButton) findViewById(R.id.btnActPos);
 		btnActPos.setOnClickListener(new View.OnClickListener()
@@ -183,7 +182,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 			LatLng pos = new LatLng(_loc.getLatitude(), _loc.getLongitude());
 			MarkerOptions mo = new MarkerOptions()
 					.position(pos)
-					.title(getString(R.string.aviso))//TODO:Anadir nombre al aviso
+					.title(getString(R.string.aviso))
 					.snippet(_a.getTexto());
 			_marker = _Map.addMarker(mo);
 			_Map.moveCamera(CameraUpdateFactory.newLatLng(pos));
@@ -350,33 +349,4 @@ System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), 
 		});
 	}
 
-	/*public void turnGPSOn()
-	{
-		Intent intent = new Intent("android.location.GPS_ENABLED_CHANGE");
-		intent.putExtra("enabled", true);
-		sendBroadcast(intent);
-		String provider = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_MODE);
-		if( ! provider.contains("gps"))
-		{
-			final Intent poke = new Intent();
-			poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
-			poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-			poke.setData(android.net.Uri.parse("3"));
-			sendBroadcast(poke);
-			startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-		}
-	}
-	// automatic turn off the gps
-	/*public void turnGPSOff()
-	{
-		String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_MODE);
-		if(provider.contains("gps"))
-		{
-			final Intent poke = new Intent();
-			poke.setClassName("com.android.settings", "com.android.settings.widget.SettingsAppWidgetProvider");
-			poke.addCategory(Intent.CATEGORY_ALTERNATIVE);
-			poke.setData(android.net.Uri.parse("3"));
-			sendBroadcast(poke);
-		}
-	}*/
 }

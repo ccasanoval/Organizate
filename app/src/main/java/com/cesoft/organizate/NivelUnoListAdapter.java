@@ -204,7 +204,7 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 			{
 				Intent intent = new Intent(_context, ActEdit.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(Objeto.class.getName(), _lista.get(groupPosition));//TODO: pasar solo el id del objeto o la posicion dentro de la lista global. Hacer servicio que almacene lista global
+				intent.putExtra(Objeto.class.getName(), _lista.get(groupPosition));
 				_context.startActivity(intent);
 			}
 		});

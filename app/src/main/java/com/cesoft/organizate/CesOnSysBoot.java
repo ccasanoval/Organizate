@@ -12,9 +12,8 @@ public class CesOnSysBoot extends BroadcastReceiver
  	@Override
 	public void onReceive(Context context, Intent intent)
 	{
-System.err.println("------------------CesOnSysBoot : onReceive : action="+intent.getAction());
-		//TODO: mirar en bbdd si la configuracion dice que quiere arranque en boot o no...
-		if(intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED))
+System.err.println("------------------CesOnSysBoot : onReceive : action="+intent.getAction()+":::"+Util.isAutoArranque(context));
+		if(intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED) && Util.isAutoArranque(context))
 		{
 			Intent serviceIntent = new Intent(context, CesServiceAviso.class);
 			context.startService(serviceIntent);

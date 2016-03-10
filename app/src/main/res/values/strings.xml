@@ -1,10 +1,10 @@
 <resources>
 	<string name="app_name">Organízate!</string>
-	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-localización. \n2016 by Cesar Casanova \nCreative Commons NC-SA</string>
+	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-posicionamiento.\n\n</string>
 	<string name="app_lice_tit">Licencia:</string>
-	<string name="app_lice">2016 by Cesar Casanova, Creative Commons NC-SA</string>
-	<string name="app_vers_tit">Verisón:</string>
-	<string name="app_vers">2016 - V 1.0</string>
+	<string name="app_lice" translatable="false">2016 Cesar Casanova Creative Commons NC-SA</string>
+	<string name="app_vers_tit">Versión:</string>
+	<string name="app_vers" translatable="false">2016 - V 1.0</string>
 
 	<string name="aviso">Aviso!</string>
 	<string name="cerrar">Cerrar</string>
@@ -23,9 +23,6 @@
 	<string name="fec_creado">Creado</string>
 	<string name="fec_modificado">Modificado</string>
 	<string name="fec_limite">Límite</string>
-
-	<string name="usuario">Usuario</string>
-	<string name="clave">Clave</string>
 
 	<string name="seguro_eliminar">¿Seguro que desea eliminar?</string>
 	<string name="sintareas">Sin tareas</string>
@@ -58,9 +55,10 @@
 	<string name="geofen_in">Entrando en zona de Aviso</string>
 	<string name="geofen_out">Fuera de zona de Aviso</string>
 	<string name="geofen_dwell">En zona de Aviso</string>
+	<string name="aviso_tem">Aviso de tiempo</string>
 
 	<string name="config">Preferencias</string>
-	<string name="title_activity_act_config">Settings</string>
+	<string name="title_activity_act_config">Configuración</string>
 
 
 
@@ -72,6 +70,7 @@
 
 	<!-- Example settings for Data & Sync -->
 	<string name="pref_header_data_sync">Datos</string>
+	<string name="pref_title_is_auto_arranque">Arracar Avisos al Inicio</string>
 		<!-- EXPORTAR e IMPORTAR ... -->
 
 	<!-- Example settings for Notifications -->

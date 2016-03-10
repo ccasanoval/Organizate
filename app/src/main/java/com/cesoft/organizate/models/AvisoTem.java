@@ -239,11 +239,9 @@ public class AvisoTem extends AvisoAbs
 		Calendar now = Calendar.getInstance();
 //System.err.println("isDueTime-----------" + now);
 
-		if(_dtActivo!=null &&  _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia //TODO:Mover a getAvisosActivos ?
-		{
-//System.err.println("isDueTime--------------------------ESTA DESACTIVADO TEMPORALMENTE : "+now+" : "+_dtActivo);
+		if(_dtActivo!=null && _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia
 			return false;
-		}
+
 		_dtActivo = null;
 //System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
 

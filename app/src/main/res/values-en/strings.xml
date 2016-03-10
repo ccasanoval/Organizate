@@ -19,9 +19,6 @@
 	<string name="fec_modificado">Modified</string>
 	<string name="fec_limite">Due time</string>
 
-	<string name="usuario">User</string>
-	<string name="clave">Password</string>
-
 	<string name="seguro_eliminar">Are you sure you want to delete it?</string>
 	<string name="sintareas">No tasks</string>
 
@@ -33,8 +30,8 @@
 	<string name="sabado"   >Sa</string>
 	<string name="domingo"  >Su</string>
 
-	<string name="todo">Todo</string>
-	<string name="nada">Nada</string>
+	<string name="todo">All</string>
+	<string name="nada">Nothing</string>
 
 	<string name="activo">Active</string>
 	<string name="mes">+Month</string>
@@ -58,5 +55,13 @@
 	<string name="pref_title_new_message_notifications_type">Show pop-up dialog</string>
 	<string name="pref_title_ringtone">Ringtone</string>
 	<string name="pref_title_vibrate">Vibrate</string>
+	<string name="app_lice_tit">Licence</string>
+	<string name="app_vers_tit">Version:</string>
+	<string name="app_desc">\nApplication for the managemente of your personal tasks. It counts with date and geo-position alerts.\n\n</string>
+	<string name="pref_header_data_sync">Data</string>
+	<string name="pref_header_general">About this App...</string>
+	<string name="pref_title_is_auto_arranque">Start Alerts at Boot</string>
+	<string name="title_activity_act_config">Settings</string>
+	<string name="aviso_tem">Date Alert</string>
 
 </resources>

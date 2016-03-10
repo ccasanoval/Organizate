@@ -27,8 +27,7 @@ import com.orm.SugarContext;
 //TODO: Private but free git host? gitHub make ur code public...
 //TODO: Nueva version con Backendless
 
-//TODO:Settings dialog: Avisos? Run at Startup? Widget Time change? AvisoTem noise? AvisoTem time to desapear? Desactivar por (hoy|hora|...)
-//TODO: Estandarizar modo de aviso al usuario...
+//TODO:Settings dialog: Widget Time change? Desactivar por (hoy|hora|...)
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 ////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -51,7 +51,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		if(sound == null)
 			sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 		Ringtone r = RingtoneManager.getRingtone(c, sound);
-		r.play();
+		if(r != null)r.play();
 	}
 	//______________________________________________________________________________________________
 	private static void vibrate(Context c)
@@ -72,15 +72,15 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		if(prefs.getBoolean("notifications_new_message_type", true))
 		{
-			showNotificacionDlg(c, a);
+			showNotificacionDlg(c, a, intent);
 		}
 		else
 		{
-			showNotificacion(c, sTitulo, a.getTexto(), intent);
+			showNotificacion(c, sTitulo, a, intent);
 		}
 	}
 	//______________________________________________________________________________________________
-	private static void showNotificacion(Context c, String titulo, String texto, Intent intent)
+	private static void showNotificacion(Context c, String titulo, AvisoAbs a, Intent intent)
 	{
 		PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
@@ -88,21 +88,22 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
 				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
 				.setContentTitle(titulo)
-				.setContentText(texto)
+				.setContentText(a.getTexto())
 				.setDefaults(Notification.DEFAULT_ALL)
 				.setContentIntent(PendingIntent.getActivity(c, 0, intent, 0))
-				.setAutoCancel(false);
+				.setAutoCancel(true);
 		NotificationManager notificationManager = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(0, notificationBuilder.build());
+		notificationManager.notify(a.getId().intValue(), notificationBuilder.build());
 		wakeLock.release();
 	}
 	//______________________________________________________________________________________________
-	private static void showNotificacionDlg(Context c, Parcelable p)
+	private static void showNotificacionDlg(Context c, AvisoAbs a, Intent intent)
 	{
-		Intent intent = new Intent(c, ActAvisoDlg.class);//getBaseContext()
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra(p.getClass().getName(), p);//.getTexto()
-		c.startActivity(intent);//getApplication()
+		Intent i = new Intent(c, ActAvisoDlg.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		i.putExtra("aviso", a);
+		i.putExtra("intent", intent);
+		c.startActivity(i);
 		//Util.playNotificacion(c);Aqui no funcionaria
 	}
 
@@ -146,5 +147,15 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		//System.err.println("------ttsGreater21");
     	String utteranceId=c.hashCode() + "";
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+	}
+
+	//______________________________________________________________________________________________
+	/// CONFIG
+	//______________________________________________________________________________________________
+	public static boolean isAutoArranque(Context c)
+	{
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
+System.err.println("isAutoArranque------"+prefs.getBoolean("is_auto_arranque", true));
+		return prefs.getBoolean("is_auto_arranque", true);
 	}
 }

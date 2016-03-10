@@ -203,11 +203,7 @@ public class Objeto extends SugarRecord implements Parcelable
 		}
 		for(Objeto o : lista)
 		{
-			if(o.getPadre() == null)
-			{
-				//nivel1.add(o);
-			}
-			else
+			if(o.getPadre() != null)
 			{
 				for(Objeto o1 : lista)
 				{
@@ -264,16 +260,6 @@ public class Objeto extends SugarRecord implements Parcelable
 		return super.delete();
 	}
 
-	//______________________________________________________________________________________________
-	//TODO: CesServiceAviso:cargarLista:e:android.database.sqlite.SQLiteException: no such column: AVISO_TEM._B_ACTIVO (code 1): , while compiling: SELECT * FROM OBJETO WHERE AVISO_TEM._B_ACTIVO > 0
-	public static Iterator<AvisoTem> getAvisosTempActivos()
-	{
-		/*List<Objeto> ao = new ArrayList<>();
-		List<AvisoTem> aa = AvisoTem.findWithQuery(AvisoTem.class, "_B_ACTIVO > 0");
-		for(AvisoTem a : aa)Objeto o = Objeto.fi*/
-		//return Objeto.findAsIterator(Objeto.class, "_AVISO_TEM is not null and _AVISO_TEM._B_ACTIVO > 0");
-		return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");
-	}
 	//______________________________________________________________________________________________
 	public static Objeto getById(String id)
 	{

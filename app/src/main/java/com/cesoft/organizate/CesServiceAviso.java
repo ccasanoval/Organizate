@@ -123,7 +123,7 @@ System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO********
 				//Util.showNotificacionDlg(getBaseContext(), a);
 				Intent intent = new Intent(getBaseContext(), ActEdit.class);
 				intent.putExtra(Objeto.class.getName(), o);
-				Util.showAviso(getBaseContext(), o.getNombre(), o.getAvisoTem(), intent);
+				Util.showAviso(getBaseContext(), getString(R.string.aviso_tem), o.getAvisoTem(), intent);
 			}
 		}
 	}

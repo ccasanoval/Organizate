@@ -1,6 +1,7 @@
 package com.cesoft.organizate;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,19 +12,21 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.cesoft.organizate.models.AvisoTem;
+import com.cesoft.organizate.models.AvisoAbs;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 01/02/2016
-//TODO: Mejorar aspecto y al pulsar abrir tarea del aviso...
-//TODO: Desactivado por hoy no funciona a la primera? necesita tiempo? svc aviso?
+//TODO: Mejorar aspecto: Añadir icono... color de fondo, etc... rounded corners => manifest : android:theme="@android:style/Theme.Dialog"
+//TODO: A veces salta dos veces????
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity
 {
 	private static final int CLOSE_DLG = 0;
 	private static final long CLOSE_TIME = 60*1000;
 
-	private AvisoTem _a;
+	private AvisoAbs _a;
+	private Intent _i;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -58,7 +61,6 @@ public class ActAvisoDlg extends Activity
 			@Override
 			public void onClick(View v)
 			{
-System.err.println("----------DESACTIVADO POR HOY");
 				_a.desactivarPorHoy();
 				ActAvisoDlg.this.finish();
 			}
@@ -73,11 +75,22 @@ System.err.println("----------DESACTIVADO POR HOY");
 			}
 		});
 
+		txtAviso.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				ActAvisoDlg.this.startActivity(_i);
+				ActAvisoDlg.this.finish();
+			}
+		});
+
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = getIntent().getParcelableExtra(AvisoTem.class.getName());//TODO Avisotem
+			_a = getIntent().getParcelableExtra("aviso");
 			txtAviso.setText(_a.getTexto());
+			_i = getIntent().getParcelableExtra("intent");
 		}
 		catch(Exception e)
 		{

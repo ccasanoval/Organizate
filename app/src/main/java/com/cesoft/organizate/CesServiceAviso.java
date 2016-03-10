@@ -74,16 +74,13 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 			_listaGeo.clear();
 			if(_GeofenceStore != null)_GeofenceStore.clear();
 			ArrayList<Geofence> aGeofences = new ArrayList<>();
-			Iterator<AvisoGeo> it = AvisoGeo.getActivos();//TODO: 1 Aqui coger los Objetos cuyos avisos esten activos
+			Iterator<AvisoGeo> it = AvisoGeo.getActivos();
 			while(it.hasNext())
 			{
 				AvisoGeo ag = it.next();
 				_listaGeo.add(ag);
-				aGeofences.add(new Geofence.Builder()
-						.setRequestId(Long.toString(ag.getId()))//TODO: 2 Aqui pasar el objeto, no el aviso
-						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio())
-						.setExpirationDuration(Geofence.NEVER_EXPIRE)
-						.setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
+				aGeofences.add(new Geofence.Builder().setRequestId(Long.toString(ag.getObjeto().getId()))
+						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio()).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
 						.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)// | Geofence.GEOFENCE_TRANSITION_EXIT
 						.build());
 			}
@@ -102,9 +99,9 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 		try
 		{
 			_lista.clear();
-			Iterator<Objeto> it = Objeto.getAvisosTempActivos();//AvisoTem.getActivos();
+			Iterator<AvisoTem> it = AvisoTem.getActivos();
 			while(it.hasNext())
-				_lista.add(it.next());
+				_lista.add(it.next().getObjeto());
 System.err.println("CesServiceAviso---*********************************************------------------cargarLista:"+_lista.size());
 		}
 		catch(Exception e)
@@ -124,7 +121,7 @@ System.err.println("CesServiceAviso---******************************************
 			{
 System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + o);
 				//Util.showNotificacionDlg(getBaseContext(), a);
-				Intent intent = new Intent(getBaseContext(), ActEdit.class);//TODO:Mover a notif... notif recibe Objeto
+				Intent intent = new Intent(getBaseContext(), ActEdit.class);
 				intent.putExtra(Objeto.class.getName(), o);
 				Util.showAviso(getBaseContext(), o.getNombre(), o.getAvisoTem(), intent);
 			}

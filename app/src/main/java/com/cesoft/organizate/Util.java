@@ -18,7 +18,7 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 
-import com.cesoft.organizate.models.AvisoTem;
+import com.cesoft.organizate.models.AvisoAbs;
 
 import java.util.HashMap;
 
@@ -33,14 +33,14 @@ public class Util
 	public static void playNotificacion(Context c)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-		if(prefs.getBoolean("notifications_new_message", false))
+		if(prefs.getBoolean("notifications_new_message", true))//true o false ha de coincidir con lo que tengas en pref_notificacion.xml
 		{
 System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 			String sound = prefs.getString("notifications_new_message_ringtone", "");
 			if( ! sound.isEmpty())
 				playSound(c, Uri.parse(sound));
 
-			if(prefs.getBoolean("notifications_new_message_vibrate", false))
+			if(prefs.getBoolean("notifications_new_message_vibrate", true))
 				vibrate(c);
 		}
 	}
@@ -67,10 +67,10 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	//______________________________________________________________________________________________
 	// NOTIFICATION
 	//______________________________________________________________________________________________
-	public static void showAviso(Context c, String sTitulo, AvisoTem a, Intent intent)//TODO: general no avisotem
+	public static void showAviso(Context c, String sTitulo, AvisoAbs a, Intent intent)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-		if(prefs.getBoolean("notifications_new_message_type", false))
+		if(prefs.getBoolean("notifications_new_message_type", true))
 		{
 			showNotificacionDlg(c, a);
 		}
@@ -80,7 +80,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		}
 	}
 	//______________________________________________________________________________________________
-	public static void showNotificacion(Context c, String titulo, String texto, Intent intent)
+	private static void showNotificacion(Context c, String titulo, String texto, Intent intent)
 	{
 		PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
@@ -97,11 +97,11 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		wakeLock.release();
 	}
 	//______________________________________________________________________________________________
-	public static void showNotificacionDlg(Context c, Parcelable o)
+	private static void showNotificacionDlg(Context c, Parcelable p)
 	{
 		Intent intent = new Intent(c, ActAvisoDlg.class);//getBaseContext()
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.putExtra(o.getClass().getName(), o);//.getTexto()
+		intent.putExtra(p.getClass().getName(), p);//.getTexto()
 		c.startActivity(intent);//getApplication()
 		//Util.playNotificacion(c);Aqui no funcionaria
 	}

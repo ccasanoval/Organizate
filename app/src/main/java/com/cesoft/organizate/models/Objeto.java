@@ -9,7 +9,7 @@ import com.orm.SugarRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
+
 
 ///https://guides.codepath.com/android/Clean-Persistence-with-Sugar-ORM
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,90 +266,18 @@ public class Objeto extends SugarRecord implements Parcelable
 
 	//______________________________________________________________________________________________
 	//TODO: CesServiceAviso:cargarLista:e:android.database.sqlite.SQLiteException: no such column: AVISO_TEM._B_ACTIVO (code 1): , while compiling: SELECT * FROM OBJETO WHERE AVISO_TEM._B_ACTIVO > 0
-	public static Iterator<Objeto> getAvisosTempActivos()
+	public static Iterator<AvisoTem> getAvisosTempActivos()
 	{
-		return Objeto.findAsIterator(Objeto.class, "_AVISO_TEM._B_ACTIVO > 0");
+		/*List<Objeto> ao = new ArrayList<>();
+		List<AvisoTem> aa = AvisoTem.findWithQuery(AvisoTem.class, "_B_ACTIVO > 0");
+		for(AvisoTem a : aa)Objeto o = Objeto.fi*/
+		//return Objeto.findAsIterator(Objeto.class, "_AVISO_TEM is not null and _AVISO_TEM._B_ACTIVO > 0");
+		return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");
 	}
-
-
 	//______________________________________________________________________________________________
-	/*public static void calcPosiciones(ArrayList<Objeto> lista)
+	public static Objeto getById(String id)
 	{
-		ArrayList<Objeto> n1 = filtroN(lista, NIVEL1);
-		ArrayList<Objeto> n2 = filtroN(lista, NIVEL1);
-		ArrayList<Objeto> n3 = filtroN(lista, NIVEL1);
-
-		int i = 0;
-		for(Objeto o1 : n1)
-		{
-			o1.setPosicion(NIVEL1, i++);
-			if(o1.getHijos().length > 0)
-			{
-				for(Objeto o2 : n1)
-				{
-				}
-			}
-		}
-	}*/
-
-
-	////////////////////////////////////////////////////////////////////////////////////////////////
-/*	static class Iterador implements Iterable<Objeto>
-	{
-		private ArrayList<Objeto> _lista;
-		public Iterador(ArrayList<Objeto> lista, boolean bPadres)
-		{
-			_lista = new ArrayList<>();
-			for(Objeto o1 : lista)
-			{
-				_lista.add(o1);
-				for(Objeto o2 : o1.getHijos())
-				{
-					_lista.add(o2);
-					if( ! bPadres)
-						for(Objeto o3 : o2.getHijos())
-							_lista.add(o3);
-				}
-			}
-		}
-		public Iterator<Objeto> iterator()
-		{
-			return new PadreIterator();
-		}
-		////////////////////////////////////////////////////////////////////////////
-		private class PadreIterator implements Iterator<Objeto>
-		{
-			private int _i=0;
-			public PadreIterator()
-			{
-			}
-			public boolean hasNext()
-			{
-				return _i < Iterador.this._lista.size()-1;
-			}
-			public Objeto next()
-			{
-				if(this.hasNext())
-					return Iterador.this._lista.get(_i++);
-				throw new NoSuchElementException();
-			}
-			public void remove()
-			{
-				throw new UnsupportedOperationException();
-			}
-		}
+		return Objeto.findById(Objeto.class, Long.parseLong(id));
 	}
-		/*
-		// Long way
-		Iterator<Integer> it = range.iterator();
-		while(it.hasNext()) {
-		int cur = it.next();
-		System.out.println(cur);
-		}
 
-		// Shorter, nicer way:		// Read ":" as "in"
-		for(Integer cur : range) {
-		System.out.println(cur);
-		}
-		}*/
 }

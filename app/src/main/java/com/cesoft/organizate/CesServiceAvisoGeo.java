@@ -3,6 +3,7 @@ package com.cesoft.organizate;
 import java.util.List;
 
 import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.Objeto;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
@@ -64,31 +65,12 @@ System.err.println("onHandleIntent-----------------------------Geofence Unknown"
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();
 			for(Geofence geof : geofences)
 			{
-				AvisoGeo ag = AvisoGeo.getById(geof.getRequestId());//TODO: 3  aqui coger Objeto no AvisoTem(mostar mensaje aviso, pero ir a pantalla del objeto, no del aviso)
-				sendNotification(this, ag, notificationTitle);
+				Objeto o = Objeto.getById(geof.getRequestId());
+				Intent i = new Intent(this, ActEdit.class);
+				intent.putExtra(Objeto.class.getName(), o);
+				Util.showAviso(this, notificationTitle, o.getAvisoGeo(), i);
 			}
 		}
 	}
 
-	private void sendNotification(Context context, AvisoGeo ag, String notificationTitle)
-	{
-		Intent intent = new Intent(context, ActAvisoGeoEdit.class);//ActMain.class
-		intent.putExtra(AvisoGeo.class.getName(), ag);////TODO: 4 Aqui poner Objeto no AvisoTem
-		Util.showAviso(context, notificationTitle, ag, intent);
-		/*
-		PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
-		wakeLock.acquire();
-		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
-				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
-				.setContentTitle(notificationTitle)
-				.setContentText(ag.getTexto())////TODO: 4 Aqui poner Objeto.AvisoTem.texto
-				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentIntent(PendingIntent.getActivity(context, 0, intent, 0))
-				.setAutoCancel(false);
-		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(0, notificationBuilder.build());
-		//Util.playNotificacion(this);Es una notificacion, ya lo hace ella...
-		wakeLock.release();*/
-	}
 }

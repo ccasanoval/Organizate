@@ -4,18 +4,31 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.orm.SugarRecord;
+import com.orm.dsl.Ignore;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 12/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class AvisoGeo extends SugarRecord implements Parcelable, AvisoInterface
+public class AvisoGeo extends AvisoAbs
 {
 	protected boolean _bActivo = true;
 	protected String _sTexto="";
+
+	/*@Ignore
+	protected Objeto _o;
+		public Objeto getObjeto(){return _o;}
+		public void setObjeto(Objeto o){_o=o;}*/
+	public Objeto getObjeto()
+	{
+		List<Objeto> ao = Objeto.find(Objeto.class, "_AVISO_GEO = ?", getId().toString());
+		if(ao.size() > 0)return ao.get(0);
+		return null;
+	}
 
 	//@ Ignore
 	protected Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
@@ -24,19 +37,15 @@ public class AvisoGeo extends SugarRecord implements Parcelable, AvisoInterface
 		_dtActivo = Calendar.getInstance().getTime();
 		save();
 	}
-
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
-
 	public void setActivo(boolean v){_bActivo = v;}
 	public boolean getActivo(){return _bActivo;}
 
-
-	//Geolocation
+	//---Geolocation
 	private String _id;
 	private double _lat, _lon;
 	private float _rad = 500;//min 100m - max 2km?
-	private long _delay;//TODO:remove
 
 	public double getLatitud(){return _lat;}
 	public double getLongitud(){return _lon;}
@@ -49,7 +58,7 @@ public class AvisoGeo extends SugarRecord implements Parcelable, AvisoInterface
 	}
 
 	///-----
-	public AvisoGeo(){}
+	public AvisoGeo(){}//NO BORRAR: Necesario para sugar
 	public AvisoGeo(String s){_sTexto = s;}
 	public String toString(){return String.format("{id=%d, txt=%s, act=%b, _dtAct=%s, Pos=%f/%f:%.0f}", getId(), _sTexto, _bActivo, _dtActivo, _lat, _lon, _rad);}
 
@@ -110,10 +119,10 @@ System.err.println("SAVING AVISO GEO:------" + this);
 	{
 		return AvisoGeo.findAsIterator(AvisoGeo.class, "_B_ACTIVO > 0");
 	}
-
 	//______________________________________________________________________________________________
 	public static AvisoGeo getById(String id)
 	{
 		return AvisoGeo.findById(AvisoGeo.class, Long.parseLong(id));
 	}
+
 }

@@ -204,6 +204,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
 		_a.setGeoPosicion(_loc.getLatitude(), _loc.getLongitude(), _radio);
+		_a.reactivarPorHoy();
 		Intent data = new Intent();
 		data.putExtra(AvisoGeo.class.getName(), _a);
 		setResult(android.app.Activity.RESULT_OK, data);

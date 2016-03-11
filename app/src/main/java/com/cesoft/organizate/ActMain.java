@@ -30,6 +30,7 @@ import com.orm.SugarContext;
 //TODO:Settings dialog: Widget Time change? Desactivar por (hoy|hora|...)
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
+//TODO: Hacer capturas pantalla para playstore y manual de usuario.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
 {
@@ -142,7 +143,7 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void startHuevo()//TODO: Mejorar imagen del huevo
+	public void startHuevo()
 	{
 		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
 		tb.setOnClickListener(new View.OnClickListener()
@@ -154,13 +155,11 @@ public class ActMain extends AppCompatActivity
 			{
 				if(_nClicks == 0)
 					_dtClicks = new Date();
-				System.err.println("1----click:" + _nClicks + " : " + (new Date().getTime() - _dtClicks.getTime()));
 				_nClicks++;
 				if(new Date().getTime() - _dtClicks.getTime() > 1000)
 				{
 					_nClicks = 1;
 					_dtClicks = new Date();
-					System.err.println("2----click:" + _nClicks + " : " + (new Date().getTime() - _dtClicks.getTime()));
 				}
 				else if(_nClicks > 4)
 				{

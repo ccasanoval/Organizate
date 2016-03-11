@@ -37,6 +37,13 @@ public class AvisoGeo extends AvisoAbs
 		_dtActivo = Calendar.getInstance().getTime();
 		save();
 	}
+	public void reactivarPorHoy()
+	{
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.DATE, -2);
+		_dtActivo = cal.getTime();
+		save();
+	}
 	public void setTexto(String s){_sTexto = s;}
 	public String getTexto(){return _sTexto;}
 	public void setActivo(boolean v){_bActivo = v;}

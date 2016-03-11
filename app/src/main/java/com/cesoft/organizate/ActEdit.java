@@ -37,6 +37,7 @@ import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//http://www.androidhive.info/2015/09/android-material-design-snackbar-example/
 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
 /*Snackbar snackbar = Snackbar
         .make(coordinatorLayout, "Message is deleted", Snackbar.LENGTH_LONG)

@@ -33,6 +33,7 @@ public class ActAvisoDlg extends Activity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(android.view.Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.act_aviso_dlg);
 
 		// Automatic close

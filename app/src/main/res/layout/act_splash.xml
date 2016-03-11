@@ -11,7 +11,8 @@
 
 	<TextView android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:text="By Cesar Casanova - 2016 Creative Commons"
+		android:text="@string/app_lice"
+		android:textColor="#004499"
 		android:layout_gravity="center"/>
 
   </LinearLayout>

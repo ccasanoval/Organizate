@@ -173,6 +173,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 		_a.setTexto(_txtAviso.getText().toString());
 		_a.setActivo(_swtActivo.isChecked());
+		_a.reactivarPorHoy();
 		Intent data = new Intent();
     	data.putExtra(AvisoTem.class.getName(), _a);
 		setResult(Activity.RESULT_OK, data);

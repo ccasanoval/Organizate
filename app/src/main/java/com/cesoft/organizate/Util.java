@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -65,6 +66,18 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
     }
 
 	//______________________________________________________________________________________________
+	private static void showLights(Context c, int color)
+	{
+		NotificationManager notif = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
+		notif.cancel(1); // clear previous notification
+		final Notification notification = new Notification();
+		notification.ledARGB = color;
+		notification.ledOnMS = 1000;
+		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
+		notif.notify(1, notification);
+	}
+
+	//______________________________________________________________________________________________
 	// NOTIFICATION
 	//______________________________________________________________________________________________
 	public static void showAviso(Context c, String sTitulo, AvisoAbs a, Intent intent)
@@ -87,11 +100,15 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		wakeLock.acquire();
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
 				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
+				.setLargeIcon(android.graphics.BitmapFactory.decodeResource(c.getResources(), R.mipmap.ic_launcher))
 				.setContentTitle(titulo)
 				.setContentText(a.getTexto())
+				.setContentIntent(PendingIntent.getActivity(c, a.getId().intValue(), intent, PendingIntent.FLAG_ONE_SHOT))
+				.setAutoCancel(true)
 				.setDefaults(Notification.DEFAULT_ALL)
-				.setContentIntent(PendingIntent.getActivity(c, 0, intent, 0))
-				.setAutoCancel(true);
+				//.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
+        		//.setSound(Uri.parse(""))
+				;
 		NotificationManager notificationManager = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(a.getId().intValue(), notificationBuilder.build());
 		wakeLock.release();

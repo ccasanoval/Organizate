@@ -1,0 +1,7 @@
+https://play.google.com/apps/publish/?dev_acc=11164117065791896000#ApkPlace:p=com.cesoft.organizate
+
+Mejorar aviso: añadir lista de fechas y horas con calendario!
+Mejorar aspecto?
+Que avise al salir del formulario si no deseas guardar los cambios, por ejemplo al guardar el aviso por fecha, si despues no da a guardar la tarea sino a retroceder que le avise: dirty flag 
+Fragments y mejorar para tablet
+Opcion Lector de aviso con voz natural

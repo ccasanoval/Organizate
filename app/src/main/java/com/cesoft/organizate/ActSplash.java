@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO: Mejorar imagen de splash!
@@ -14,7 +15,7 @@ public class ActSplash extends Activity
 	private static final int STOPSPLASH1 = 0;
 	private static final int STOPSPLASH2 = 1;
 	private static final long SPLASHTIME1 = 3500;
-	private static final long SPLASHTIME2 = 5000;
+	private static final long SPLASHTIME2 = 6000;
    
 	private ImageView _splash;
 
@@ -31,6 +32,19 @@ public class ActSplash extends Activity
 		msg = new Message();
 		msg.what = STOPSPLASH2;
 		splashHandler.sendMessageDelayed(msg, SPLASHTIME2);
+
+		// Cerrar al clickar
+		View.OnClickListener click = new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v)
+			{
+				ActSplash.this.finish();
+			}
+		};
+		_splash.setOnClickListener(click);
+		TextView tv = (TextView)findViewById(R.id.splashscreen2);
+		tv.setOnClickListener(click);
 	}
    
 	private static class CESHandler extends Handler
@@ -42,6 +56,7 @@ public class ActSplash extends Activity
 		{
 			switch(msg.what)
 			{
+			//case STOPSPLASH0: setOnClickListener para cerrar ventana y asi no cerrar sin querer...
 			case STOPSPLASH1:
 				_win._splash.setVisibility(View.GONE);
 				break;

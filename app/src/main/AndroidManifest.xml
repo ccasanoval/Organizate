@@ -33,7 +33,6 @@
 		<activity android:name=".ActMain">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
-
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
@@ -60,6 +59,10 @@
 		<activity
 			android:name=".ActSplash"
 			android:theme="@style/Theme.Transparent">
+		</activity>
+		<activity
+			android:name=".ActConfig"
+			android:label="@string/title_activity_act_config">
 		</activity>
 
 		<receiver android:name=".CesWidgetProvider">
@@ -104,10 +107,6 @@
 			android:name="com.google.android.geo.API_KEY"
 			android:value="@string/google_maps_key"/>
 
-		<activity
-			android:name=".ActConfig"
-			android:label="@string/title_activity_act_config">
-		</activity>
 	</application>
 
 </manifest>

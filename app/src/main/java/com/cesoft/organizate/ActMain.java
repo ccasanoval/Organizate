@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.content.Intent;
@@ -15,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
-import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.Objeto;
 import com.orm.SugarContext;
 
@@ -24,13 +22,26 @@ import com.orm.SugarContext;
 //GOOGLE API SIGN : https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 //LAUNCH SIGNED APK : https://www.jetbrains.com/idea/help/generating-a-signed-release-apk-through-an-artifact.html
 
-//TODO: Private but free git host? gitHub make ur code public...
-//TODO: Nueva version con Backendless
+/*
+GoogleService failed to initialize, status: 10, Missing an expected resource: 'R.string.google_app_id' for initializing Google services.
+Possible causes are missing google-services.json or com.google.gms.google-services gradle plugin.
+Scheduler not set. Not logging error/warn.
+Uploading is not possible. App measurement disabled
+
+https://developers.google.com/identity/sign-in/android/start?hl=en
+https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
+*/
+
+//TODO: Searchable : https://developer.android.com/guide/topics/search/search-dialog.html?hl=es
+//TODO: backup : https://developer.android.com/preview/backup/index.html
+//TODO: proguard ?
+//TODO: Nueva version con Backendless & Firebase
 
 //TODO:Settings dialog: Widget Time change? Desactivar por (hoy|hora|...)
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 //TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
-//TODO: Hacer capturas pantalla para playstore y manual de usuario.
+
+//TODO: Private but free git host? gitHub make ur code public...
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
 {
@@ -67,6 +78,7 @@ public class ActMain extends AppCompatActivity
 		setSupportActionBar(toolbar);
 
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+		if(fab != null)
 		fab.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -102,9 +114,9 @@ public class ActMain extends AppCompatActivity
 		}*/
 		if(id == R.id.config)
 		{
-			Intent intent = new Intent(this, ActConfig.class);
-			//intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+			//Intent intent = new Intent(this, ActConfig.class);
+			//startActivity(intent);
+			startActivityForResult(new Intent(this, ActConfig.class), 69);
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -135,17 +147,10 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	public void selectObjeto(Objeto o)
-	{
-		//TODO:dejar abierto el nodo modificado, Guardar es estados visible de los objetos para dejarlos luego igual???
-		//Recorre la lista de objetos y mira flag: abierto o cerrado, si esta abierto despliegalo...
-		//_expListView.setSelectedChild(groupPosition, childPosition, true);
-	}
-
-	//______________________________________________________________________________________________
 	public void startHuevo()
 	{
 		Toolbar tb = (Toolbar)findViewById(R.id.toolbar);
+		if(tb != null)
 		tb.setOnClickListener(new View.OnClickListener()
 		{
 			private int _nClicks = 0;

@@ -2,7 +2,7 @@
 	<string name="app_name">Organízate!</string>
 	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-posicionamiento.\n\n</string>
 	<string name="app_lice_tit">Licencia:</string>
-	<string name="app_lice" translatable="false">2016 Cesar Casanova Creative Commons NC-SA</string>
+	<string name="app_lice" translatable="false">2016 Cesar Casanova\nCreative Commons NC-SA</string>
 	<string name="app_vers_tit">Versión:</string>
 	<string name="app_vers" translatable="false">2016 - V 1.0</string>
 
@@ -61,8 +61,6 @@
 	<string name="title_activity_act_config">Configuración</string>
 
 
-
-
 	<!-- Strings related to Settings -->
 
 	<!-- Example General settings -->
@@ -71,7 +69,7 @@
 	<!-- Example settings for Data & Sync -->
 	<string name="pref_header_data_sync">Datos</string>
 	<string name="pref_title_is_auto_arranque">Arracar Avisos al Inicio</string>
-		<!-- EXPORTAR e IMPORTAR ... -->
+	<!-- EXPORTAR e IMPORTAR ... -->
 
 	<!-- Example settings for Notifications -->
 	<string name="pref_header_notifications">Avisos</string>

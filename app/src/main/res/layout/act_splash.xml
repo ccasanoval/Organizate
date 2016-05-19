@@ -4,15 +4,21 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content">
 
-	<ImageView android:id="@+id/splashscreen" android:layout_width="wrap_content"
+	<ImageView
+		android:id="@+id/splashscreen"
+		android:layout_width="wrap_content"
 		android:layout_height="fill_parent"
 		android:src="@mipmap/splash"
+		android:contentDescription="@string/app_name"
 		android:layout_gravity="center" />
 
-	<TextView android:layout_width="fill_parent"
+	<TextView
+		android:id="@+id/splashscreen2"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/app_lice"
 		android:textColor="#004499"
+		android:textSize="24sp"
 		android:layout_gravity="center"/>
 
   </LinearLayout>

@@ -253,7 +253,7 @@ public class ActEdit extends AppCompatActivity
 			for(Objeto o : _lista)
 				o.save();
 		_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
-		_act.selectObjeto(_o);
+		//_act.selectObjeto(_o);///TODO: Seleccoionar item
 		ActEdit.this.finish();
 	}
 

@@ -11,6 +11,12 @@ import java.util.Date;
 import java.util.Iterator;
 
 
+/* When using proguard
+As stated in the README from the github repo, if you are using proguard, you should ensure that entities remain un-obfuscated so table and columns are named correctly.
+To do so, add this line to proguard-rules.pro:
+-keep class com.cesoft.organizate.models.** { *; }
+*/
+
 ///https://guides.codepath.com/android/Clean-Persistence-with-Sugar-ORM
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 10/12/2015
@@ -235,10 +241,20 @@ public class Objeto extends SugarRecord implements Parcelable
 	@Override
 	public long save()
 	{
-//System.err.println("SAVING OBJETO:------"+this);
-		if(_avisoTem != null)_avisoTem.save();
-		if(_avisoGeo != null)_avisoGeo.save();
-		return super.save();
+System.err.println("SAVING OBJETO:------A:"+this);
+		try
+		{
+			if(_avisoTem != null)_avisoTem.save();
+System.err.println("SAVING OBJETO:------B:"+this);
+			if(_avisoGeo != null)_avisoGeo.save();
+System.err.println("SAVING OBJETO:------C:"+this);
+			return super.save();
+		}
+		catch(Exception e)
+		{
+			System.err.println("Objeto:save:e:"+e+" : "+this);
+			return -1;
+		}
 	}
 	public static void delTodo()
 	{

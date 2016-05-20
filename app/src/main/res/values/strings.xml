@@ -1,82 +1,70 @@
 <resources>
-	<string name="app_name">Organízate!</string>
-	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-posicionamiento.\n\n</string>
-	<string name="app_lice_tit">Licencia:</string>
-	<string name="app_lice" translatable="false">2016 Cesar Casanova\nCreative Commons NC-SA</string>
-	<string name="app_vers_tit">Versión:</string>
-	<string name="app_vers" translatable="false">2016 - V 1.0</string>
+	<string name="app_name">Organize!</string>
 
-	<string name="aviso">Aviso!</string>
-	<string name="cerrar">Cerrar</string>
+	<string name="app_lice" translatable="false">2016 Cesar Casanova\n      ( CESoft )\nCreative Commons NC-SA</string>
+	<string name="app_vers" translatable="false">2016 - Ver. %s</string>
+	<string name="app_lice_tit">Licence</string>
+	<string name="app_vers_tit">Version:</string>
+	<string name="app_desc">\nApplication for the management of your personal tasks. It counts with date and geo-position alerts.\n</string>
 
-	<string name="editar">Editar</string>
-	<string name="eliminar">Eliminar</string>
-	<string name="nuevo">Añadir</string>
-	<string name="volver">Volver</string>
-	<string name="editar_aviso">Editar Aviso</string>
-	<string name="editar_aviso_geo">Editar Aviso Geo</string>
+	<string name="aviso">Alert!</string>
+	<string name="cerrar">Close</string>
 
-	<string name="nombre">Nombre</string>
-	<string name="descripcion">Descripción</string>
-	<string name="nodo_padre">*Nodo Raíz*</string>
-	<string name="prioridad">Prioridad</string>
-	<string name="fec_creado">Creado</string>
-	<string name="fec_modificado">Modificado</string>
-	<string name="fec_limite">Límite</string>
+	<string name="editar">Edit</string>
+	<string name="eliminar">Remove</string>
+	<string name="nuevo">Add</string>
+	<string name="volver">Get Back</string>
+	<string name="editar_aviso">Edit the Warning</string>
+	<string name="editar_aviso_geo">Edit the GeoWarning</string>
 
-	<string name="seguro_eliminar">¿Seguro que desea eliminar?</string>
-	<string name="sintareas">Sin tareas</string>
+	<string name="nombre">Name</string>
+	<string name="descripcion">Description</string>
+	<string name="nodo_padre">*Top Node*</string>
+	<string name="prioridad">Priority</string>
+	<string name="fec_creado">Created</string>
+	<string name="fec_modificado">Modified</string>
+	<string name="fec_limite">Due time</string>
 
-	<string name="lunes">Lu</string>
-	<string name="martes">Ma</string>
-	<string name="miercoles">Mi</string>
-	<string name="jueves">Ju</string>
-	<string name="viernes">Vi</string>
-	<string name="sabado">Sa</string>
-	<string name="domingo">Do</string>
+	<string name="seguro_eliminar">Are you sure you want to delete it?</string>
+	<string name="sintareas">No tasks</string>
 
-	<string name="todo">Todo</string>
-	<string name="nada">Nada</string>
+	<string name="lunes"    >Mo</string>
+	<string name="martes"   >Tu</string>
+	<string name="miercoles">We</string>
+	<string name="jueves"   >Th</string>
+	<string name="viernes"  >Fr</string>
+	<string name="sabado"   >Sa</string>
+	<string name="domingo"  >Su</string>
 
-	<string name="activo">Activo</string>
-	<string name="fecha">Fecha:</string>
-	<string name="mes">+Mes</string>
-	<string name="dia_mes">+Día Mes</string>
-	<string name="dia_semana">+Día Sem.</string>
-	<string name="hora">+Hora</string>
-	<string name="minuto">+Minuto</string>
-	<string name="desactivar_por_ahora">No me avises\nmás hoy</string>
-	<string name="leer">Lee el contenido</string>
+	<string name="todo">All</string>
+	<string name="nada">Nothing</string>
 
-	<string name="posicion">Pos:</string>
-	<string name="actualizar_posicion">Actualizar posición</string>
-	<string name="radio">Radio</string>
-
-	<string name="geofen_in">Entrando en zona de Aviso</string>
-	<string name="geofen_out">Fuera de zona de Aviso</string>
-	<string name="geofen_dwell">En zona de Aviso</string>
-	<string name="aviso_tem">Aviso de tiempo</string>
-
-	<string name="config">Preferencias</string>
-	<string name="title_activity_act_config">Configuración</string>
-
-
-	<!-- Strings related to Settings -->
-
-	<!-- Example General settings -->
-	<string name="pref_header_general">Sobre esta App...</string>
-
-	<!-- Example settings for Data & Sync -->
-	<string name="pref_header_data_sync">Datos</string>
-	<string name="pref_title_is_auto_arranque">Arracar Avisos al Inicio</string>
-	<!-- EXPORTAR e IMPORTAR ... -->
-
-	<!-- Example settings for Notifications -->
-	<string name="pref_header_notifications">Avisos</string>
-	<string name="pref_title_new_message_notifications_type">Mostrar diálogo pop-up</string> <!-- o en barra de estado : status bar -->
-	<string name="pref_title_new_message_notifications">Avisos</string>
-	<string name="pref_title_ringtone">Sonido</string>
-	<string name="pref_ringtone_silent">Silencio</string>
-	<string name="pref_title_vibrate">Vibrar</string>
+	<string name="activo">Active</string>
+	<string name="mes">+Month</string>
+	<string name="dia_mes">+Mnth.Day</string>
+	<string name="dia_semana">+Week Day</string>
+	<string name="hora">+Hour</string>
+	<string name="minuto">+Minute</string>
+	<string name="fecha">Date:</string>
+	<string name="desactivar_por_ahora">Don\'t alert me again\nfor today</string>
+	<string name="leer">Read the content</string>
+	<string name="actualizar_posicion">Refresh location</string>
+	<string name="geofen_dwell">Inside Alert Zone</string>
+	<string name="geofen_in">Entering Alert Zone</string>
+	<string name="geofen_out">Exiting Alert Zone</string>
+	<string name="posicion">Loc:</string>
+	<string name="radio">Radius:</string>
+	<string name="config">Settings</string>
+	<string name="pref_header_notifications">Notifications</string>
+	<string name="pref_ringtone_silent">Silent</string>
+	<string name="pref_title_new_message_notifications">Message notifications</string>
+	<string name="pref_title_new_message_notifications_type">Show pop-up dialog</string>
+	<string name="pref_title_ringtone">Ringtone</string>
+	<string name="pref_title_vibrate">Vibrate</string>
+	<string name="pref_header_data_sync">Data</string>
+	<string name="pref_header_general">About this App…</string>
+	<string name="pref_title_is_auto_arranque">Start Alerts at Boot</string>
+	<string name="title_activity_act_config">Settings</string>
+	<string name="aviso_tem">Date Alert</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -45,7 +46,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.orm.dsl.NotNull;
+
+import java.util.Locale;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
@@ -77,6 +79,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+		if(fab != null)
 		fab.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -91,19 +94,23 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, _asRadio);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		_spnRadio = (Spinner) findViewById(R.id.spnRadio);
-		_spnRadio.setAdapter(adapter);
-		_spnRadio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+		if(_spnRadio!=null)
 		{
-			@Override
-			public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+			_spnRadio.setAdapter(adapter);
+			_spnRadio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
 			{
-				_radio = _adRadio[position];
-				setMarker();//Para cambiar radio
-			}
-			@Override
-			public void onNothingSelected(AdapterView<?> parent){_radio = 50;}
-		});
+				@Override
+				public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
+				{
+					_radio = _adRadio[position];
+					setMarker();//Para cambiar radio
+				}
+				@Override
+				public void onNothingSelected(AdapterView<?> parent){_radio = 50;}
+			});
+		}
 		ImageButton btnActPos = (ImageButton) findViewById(R.id.btnActPos);
+		if(btnActPos != null)
 		btnActPos.setOnClickListener(new View.OnClickListener()
 		{
 			@Override
@@ -171,7 +178,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		if(_loc == null)_loc = new Location("dummyprovider");
 		_loc.setLatitude(lat);
 		_loc.setLongitude(lon);
-		_lblPosicion.setText(String.format("%.5f/%.5f", _loc.getLatitude(), _loc.getLongitude()));
+		_lblPosicion.setText(Util.formatLatLon(_loc.getLatitude(), _loc.getLongitude()));
 		setMarker();
 	}
 	private void setMarker()
@@ -289,23 +296,21 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	//______________________________________________________________________________________________
 	//// 4 OnConnectionFailedListener
 	@Override
-	public void onConnectionFailed(@NotNull ConnectionResult connectionResult){}
+	public void onConnectionFailed(@NonNull ConnectionResult connectionResult){}
 	//______________________________________________________________________________________________
 	//// 4 LocationListener
 	@Override
 	public void onLocationChanged(Location location)
 	{
-System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), location.getLongitude(), _loc.getLatitude(), _loc.getLongitude()));
+System.err.println(String.format(Locale.ENGLISH, "%f, %f   -  %f : %f", location.getLatitude(), location.getLongitude(), _loc.getLatitude(), _loc.getLongitude()));
 		_locLast = location;
 		if(_loc.getLatitude() == 0 && _loc.getLongitude() == 0)
-		{
 			setPosAviso(_locLast);
-		}
 	}
 	//______________________________________________________________________________________________
 	//// 4 ResultCallback
 	@Override
-	public void onResult(@NotNull Status status){}
+	public void onResult(@NonNull Status status){}
 
 
 	//______________________________________________________________________________________________
@@ -321,7 +326,7 @@ System.err.println(String.format("%f, %f   -  %f : %f", location.getLatitude(), 
 		result.setResultCallback(new ResultCallback<LocationSettingsResult>()
 		{
      		@Override
-     		public void onResult(@NotNull LocationSettingsResult result)
+     		public void onResult(@NonNull LocationSettingsResult result)
 			{
          		final Status status = result.getStatus();
          		final LocationSettingsStates le = result.getLocationSettingsStates();

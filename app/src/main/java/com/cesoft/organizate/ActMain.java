@@ -32,14 +32,20 @@ https://developers.google.com/identity/sign-in/android/start?hl=en
 https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 */
 
+//TODO: Toolbar en settings
+//TODO: mejorar sistema de fecha de aviso: lista de fecha-horas  y mejorar aspecto botones...
+//TODO: importar y exportar por correo
+//TODO: Mejorar widget: Botones para navegar por tareas y mejorar aspecto :https://developer.android.com/design/patterns/widgets.html
+//TODO: Nueva version con Backendless & Firebase
+//TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio !!!!!!
+
+//TODO: indexed by google  https://moz.com/blog/how-to-get-your-app-content-indexed-by-google
 //TODO: Searchable : https://developer.android.com/guide/topics/search/search-dialog.html?hl=es
 //TODO: backup : https://developer.android.com/preview/backup/index.html
 //TODO: proguard ?
-//TODO: Nueva version con Backendless & Firebase
 
 //TODO:Settings dialog: Widget Time change? Desactivar por (hoy|hora|...)
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
-//TODO: Cuando el elemento ocupa dos lineas, contar una extra row al calcular espacio
 
 //TODO: Private but free git host? gitHub make ur code public...
 ////////////////////////////////////////////////////////////////////////////////////////////////////

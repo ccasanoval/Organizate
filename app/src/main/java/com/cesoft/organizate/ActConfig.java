@@ -3,6 +3,7 @@ package com.cesoft.organizate;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -141,7 +142,7 @@ public class ActConfig extends PreferenceActivity
 		return PreferenceFragment.class.getName().equals(fragmentName) || GeneralPreferenceFragment.class.getName().equals(fragmentName) || DataSyncPreferenceFragment.class.getName().equals(fragmentName) || NotificationPreferenceFragment.class.getName().equals(fragmentName);
 	}
 
-	// This fragment shows general preferences only. It is used when the activity is showing a two-pane settings UI.
+	//--------------------------------------- SOBRE ESTA APP ---------------------------------------
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class GeneralPreferenceFragment extends PreferenceFragment
 	{
@@ -151,12 +152,18 @@ public class ActConfig extends PreferenceActivity
 			super.onCreate(savedInstanceState);
 			addPreferencesFromResource(R.xml.pref_general);
 			setHasOptionsMenu(true);
+
+			try{
+				PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+				Preference customPref = findPreference("version");//Look at pref_general.xml
+				customPref.setSummary(String.format(getString(R.string.app_vers), pInfo.versionName));
+			}catch(Exception e){System.err.println("ActConfig:GeneralPreferenceFragment:onCreate:e:"+e);}
+
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences to their values.
 			// When their values change, their summaries are updated to reflect the new value, per the Android Design guidelines.
-			bindPreferenceSummaryToValue(findPreference("example_text"));
-			bindPreferenceSummaryToValue(findPreference("example_list"));
+			//bindPreferenceSummaryToValue(findPreference("example_text"));
+			//bindPreferenceSummaryToValue(findPreference("example_list"));
 		}
-
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item)
 		{
@@ -170,7 +177,7 @@ public class ActConfig extends PreferenceActivity
 		}
 	}
 
-	// This fragment shows notification preferences only. It is used when the activity is showing a two-pane settings UI.
+	//--------------------------------------- NOTIFICACIONES ---------------------------------------
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class NotificationPreferenceFragment extends PreferenceFragment
 	{
@@ -184,7 +191,6 @@ public class ActConfig extends PreferenceActivity
 			// When their values change, their summaries are updated to reflect the new value, per the Android Design guidelines.
 			bindPreferenceSummaryToValue(findPreference("notifications_new_message_ringtone"));
 		}
-
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item)
 		{
@@ -198,7 +204,7 @@ public class ActConfig extends PreferenceActivity
 		}
 	}
 
-	// This fragment shows data and sync preferences only. It is used when the activity is showing a two-pane settings UI.
+	//--------------------------------------- DATOS ---------------------------------------
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public static class DataSyncPreferenceFragment extends PreferenceFragment
 	{
@@ -210,7 +216,7 @@ public class ActConfig extends PreferenceActivity
 			setHasOptionsMenu(true);
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences to their values.
 			// When their values change, their summaries are updated to reflect the new value, per the Android Design guidelines.
-			bindPreferenceSummaryToValue(findPreference("sync_frequency"));
+			//bindPreferenceSummaryToValue(findPreference("sync_frequency"));
 		}
 
 		@Override

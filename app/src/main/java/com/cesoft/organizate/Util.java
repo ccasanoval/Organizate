@@ -22,6 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import com.cesoft.organizate.models.AvisoAbs;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 02/03/2016
@@ -174,5 +175,11 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 System.err.println("isAutoArranque------"+prefs.getBoolean("is_auto_arranque", true));
 		return prefs.getBoolean("is_auto_arranque", true);
+	}
+
+
+	public static String formatLatLon(double lat, double lon)
+	{
+		 return String.format("%.5f/%.5f", lat, lon);//Locale.ENGLISH,
 	}
 }

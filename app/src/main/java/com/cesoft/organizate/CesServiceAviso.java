@@ -117,10 +117,12 @@ System.err.println("CesServiceAviso---******************************************
 		if(_lista == null || _lista.size() == 0)return;
 		for(Objeto o : _lista)
 		{
+			if(o == null)
+				System.err.println("CesServiceAviso:checkAvisos: o == null !!!!!!!!!!!!!!!!!!! ");
+			else
 			if(o.getAvisoTem().isDueTime())
 			{
-System.err.println("CesServiceAviso-------checkAvisos----ACTIVA EL AVISO*****************************************************" + o);
-				//Util.showNotificacionDlg(getBaseContext(), a);
+System.err.println("CesServiceAviso:checkAvisos:----ACTIVA EL AVISO*****************************************************" + o);
 				Intent intent = new Intent(getBaseContext(), ActEdit.class);
 				intent.putExtra(Objeto.class.getName(), o);
 				Util.showAviso(getBaseContext(), getString(R.string.aviso_tem), o.getAvisoTem(), intent);

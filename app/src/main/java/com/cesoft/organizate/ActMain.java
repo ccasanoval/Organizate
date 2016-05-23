@@ -18,6 +18,7 @@ import com.cesoft.organizate.models.Objeto;
 import com.orm.SugarContext;
 
 
+// PLAY STORE DEVELOPER CONSOLE : https://play.google.com/apps/publish/?hl=es&dev_acc=11164117065791896000
 //MAP API CREDENTIAL: https://console.developers.google.com/apis/credentials?project=shining-medium-121911
 //GOOGLE API SIGN : https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 //LAUNCH SIGNED APK : https://www.jetbrains.com/idea/help/generating-a-signed-release-apk-through-an-artifact.html
@@ -32,8 +33,7 @@ https://developers.google.com/identity/sign-in/android/start?hl=en
 https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 */
 
-//TODO: Toolbar en settings
-//TODO: mejorar sistema de fecha de aviso: lista de fecha-horas  y mejorar aspecto botones...
+
 //TODO: importar y exportar por correo
 //TODO: Mejorar widget: Botones para navegar por tareas y mejorar aspecto :https://developer.android.com/design/patterns/widgets.html
 //TODO: Nueva version con Backendless & Firebase
@@ -48,6 +48,10 @@ https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=D
 //TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 
 //TODO: Private but free git host? gitHub make ur code public...
+
+//TODO: mejorar sistema de fecha de aviso: lista de fecha-horas  y mejorar aspecto botones...
+//TODO: Revisar "no molestar por hoy"
+//TODO: Toolbar en settings : problema, se cambio modo de barra por lista...
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
 {

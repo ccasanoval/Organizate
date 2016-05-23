@@ -28,13 +28,13 @@
 	<string name="seguro_eliminar">Are you sure you want to delete it?</string>
 	<string name="sintareas">No tasks</string>
 
-	<string name="lunes"    >Mo</string>
-	<string name="martes"   >Tu</string>
+	<string name="lunes">Mo</string>
+	<string name="martes">Tu</string>
 	<string name="miercoles">We</string>
-	<string name="jueves"   >Th</string>
-	<string name="viernes"  >Fr</string>
-	<string name="sabado"   >Sa</string>
-	<string name="domingo"  >Su</string>
+	<string name="jueves">Th</string>
+	<string name="viernes">Fr</string>
+	<string name="sabado">Sa</string>
+	<string name="domingo">Su</string>
 
 	<string name="todo">All</string>
 	<string name="nada">Nothing</string>
@@ -64,7 +64,8 @@
 	<string name="pref_header_data_sync">Data</string>
 	<string name="pref_header_general">About this App…</string>
 	<string name="pref_title_is_auto_arranque">Start Alerts at Boot</string>
-	<string name="title_activity_act_config">Settings</string>
+	<string name="pref_title_send_by_email">Export to eMail</string>
 	<string name="aviso_tem">Date Alert</string>
+	<string name="title_activity_act_config">Settings</string>
 
 </resources>

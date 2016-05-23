@@ -1,11 +1,6 @@
 package com.cesoft.organizate.models;
 
 import android.os.Parcel;
-import android.os.Parcelable;
-
-import com.orm.SugarRecord;
-import com.orm.dsl.Ignore;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -30,7 +25,7 @@ public class AvisoTem extends AvisoAbs
 	}
 
 	//@ Ignore
-	protected Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
+	protected Date _dtActivo = new Date(0);//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	public void desactivarPorHoy()
 	{
 		_dtActivo = Calendar.getInstance().getTime();
@@ -38,9 +33,8 @@ public class AvisoTem extends AvisoAbs
 	}
 	public void reactivarPorHoy()
 	{
-		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.DATE, -2);
-		_dtActivo = cal.getTime();
+		//Calendar cal = Calendar.getInstance();cal.add(Calendar.DATE, -2);//cal.getTime();
+		_dtActivo = new Date(0);
 		save();
 	}
 	public void setTexto(String s){_sTexto = s;}
@@ -172,6 +166,7 @@ public class AvisoTem extends AvisoAbs
 		long l = in.readLong();
 		if(l >= 0)setId(l);
 		//
+		_dtActivo.setTime(in.readLong());
 		_bActivo = in.readByte() > 0;
 		_sTexto = in.readString();
 		//
@@ -194,6 +189,7 @@ public class AvisoTem extends AvisoAbs
 	{
 		dest.writeLong(getId() != null ? getId() : -1);
 		//
+		dest.writeLong(_dtActivo.getTime());
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
 		dest.writeString(_sTexto);
 		//
@@ -225,7 +221,7 @@ public class AvisoTem extends AvisoAbs
 	//______________________________________________________________________________________________
 	public long save()
 	{
-		System.err.println("SAVING AVISO:------" + this);
+		System.err.println("Aviso:save:------------" + this);
 		java.util.Arrays.sort(_aMes);//quickSort(_aMes, 0, _aMes.length - 1);
 		java.util.Arrays.sort(_aDiaMes);
 		java.util.Arrays.sort(_aDiaSemana);
@@ -244,13 +240,12 @@ public class AvisoTem extends AvisoAbs
 	public boolean isDueTime()
 	{
 		Calendar now = Calendar.getInstance();
-//System.err.println("isDueTime-----------" + now);
+System.err.println("isDueTime-----"+this.getTexto()+"****************************************************************------now=" + now.getTime() + " _dtActivo="+(_dtActivo.getTime())+" : ");
 
-		if(_dtActivo!=null && _dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia
+		if(_dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia
 			return false;
 
-		_dtActivo = null;
-//System.err.println("isDueTime-----------5 m:"+now.get(Calendar.MONTH)+1);
+System.err.println("isDueTime-----------5 ");
 
 		byte[] aMeses = getMeses();
 		byte[] aDiasMes = getDiasMes();

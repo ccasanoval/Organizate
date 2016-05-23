@@ -1,6 +1,6 @@
 <resources>
 	<string name="app_name">Organízate!</string>
-	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-posicionamiento.\n\n</string>
+	<string name="app_desc">\nAplicación para la gestión de tareas personales, con avisos por fecha y geo-posicionamiento.\n</string>
 	<string name="app_lice_tit">Licencia:</string>
 	<string name="app_vers_tit">Versión:</string>
 
@@ -76,5 +76,6 @@
 	<string name="pref_title_ringtone">Sonido</string>
 	<string name="pref_ringtone_silent">Silencio</string>
 	<string name="pref_title_vibrate">Vibrar</string>
+	<string name="pref_title_send_by_email">Exportar por eMail</string>
 
 </resources>

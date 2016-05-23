@@ -6,4 +6,9 @@
 		android:title="@string/pref_title_is_auto_arranque"/>
 	<!-- Exportar e importar -->
 
+	<!-- Preference
+		android:summary="@string/descripcion_exportar_email"
+		android:key="send_by_email"
+		android:title="@string/pref_title_send_by_email"/ -->
+
 </PreferenceScreen>

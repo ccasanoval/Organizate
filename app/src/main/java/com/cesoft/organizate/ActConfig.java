@@ -1,6 +1,7 @@
 package com.cesoft.organizate;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -16,9 +17,12 @@ import android.preference.PreferenceActivity;
 import android.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.PreferenceScreen;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 import java.util.List;
 
@@ -31,13 +35,108 @@ import java.util.List;
  */
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //TODO: Utilizar sugar para guardar config, asi puedes exportar todo de una vez?
-public class ActConfig extends PreferenceActivity
+public class ActConfig extends PreferenceActivity //AppCompatActivity
 {
+	/*@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		int id = item.getItemId();
+		if(id == android.R.id.home)
+		{
+			finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	@Override
+	public void onHeaderClick(Header header, int position)
+	{
+		super.onHeaderClick(header, position);
+		if(header.id == R.id.send_by_email)
+		{
+			setResult(Activity.RESULT_OK, new Intent());
+			finish();
+		}
+	}*/
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setupActionBar();
+
+		/*Preference export = findPreference("send_by_email");
+		if(export != null)
+		export.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener()
+		{
+			public boolean onPreferenceClick(Preference preference)
+			{
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("message/rfc822");
+				//i.putExtra(Intent.EXTRA_EMAIL, new String[]{"recipient@example.com"});
+				i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name) +" : Export");
+				i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+				try
+				{
+    				startActivity(Intent.createChooser(i, "Send mail..."));
+				}
+				catch (android.content.ActivityNotFoundException ex)
+				{
+    				//Toast.makeText(MyActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+				return true;
+			}
+		});*/
+
+		/*setContentView(R.layout.act_config);
+        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar)findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getFragmentManager().beginTransaction().replace(R.id.content_frame, new MyPreferenceFragment()).commit();
+
+        layout : act_config.xml
+        <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:minHeight="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    <FrameLayout
+        android:id="@+id/content_frame"
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
+        */
+	}
+	/*public static class MyPreferenceFragment extends PreferenceFragment
+	{
+    	@Override
+    	public void onCreate(final Bundle savedInstanceState)
+		{
+        	super.onCreate(savedInstanceState);
+        	addPreferencesFromResource(R.xml.pref_headers);//pref_general
+    	}
+	}*/
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void onBuildHeaders(List<Header> target)
+	{
+		loadHeadersFromResource(R.xml.pref_headers, target);
 	}
 
 	private void setupActionBar()
@@ -112,16 +211,6 @@ public class ActConfig extends PreferenceActivity
 		}
 	};
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	public void onBuildHeaders(List<Header> target)
-	{
-		loadHeadersFromResource(R.xml.pref_headers, target);
-	}
-
 	// Binds a preference's summary to its value. More specifically, when the preference's value is changed, its summary (line of text below the preference title)
 	// is updated to reflect the value. The summary is also immediately updated upon calling this method. The exact display format is dependent on the type of preference.
 	private static void bindPreferenceSummaryToValue(Preference preference)
@@ -133,7 +222,7 @@ public class ActConfig extends PreferenceActivity
 			// Trigger the listener immediately with the preference's current value.
 			sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
 		}
-		catch(Exception e){}//Para secciones que no hacen nada, como 'sobre esta app...'
+		catch(Exception e){System.err.println("ActConfig:bindPreferenceSummaryToValue:e:"+e);}//Para secciones que no hacen nada, como 'sobre esta app...'
 	}
 
 	// This method stops fragment injection in malicious applications. Make sure to deny any unknown fragments here.

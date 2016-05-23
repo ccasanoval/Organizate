@@ -9,6 +9,7 @@ import com.orm.SugarRecord;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 
 /* When using proguard
@@ -45,7 +46,7 @@ public class Objeto extends SugarRecord implements Parcelable
 	@Override
 	public String toString()
 	{
-		return String.format("{id=%d, pri=%d, niv=%d, mod=%s, nom=%s, des=%s, pad=%s, hij=%d >> %s, avi=%s, aviGeo=%s}",
+		return String.format(Locale.ENGLISH, "{id=%d, pri=%d, niv=%d, mod=%s, nom=%s, des=%s, pad=%s, hij=%d >> %s, avi=%s, aviGeo=%s}",
 			getId(), _iPrioridad, this.getNivel(), _dtModificado, _sNombre, _sDescripcion, _padre, _hijos.length, _hijos, _avisoTem, _avisoGeo);
 	}
 
@@ -108,8 +109,8 @@ public class Objeto extends SugarRecord implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	public Integer getOrden(){return _iOrden;}
-	public void setOrden(Integer iOrden){_iOrden = iOrden;}
+	//public Integer getOrden(){return _iOrden;}
+	//public void setOrden(Integer iOrden){_iOrden = iOrden;}
 	//public Date getCreacion(){return _dtCreacion;}
 	public void setCreacion(Date dtCreacion){_dtCreacion = dtCreacion;}
 	//public Date getLimite(){return _dtLimite;}
@@ -131,19 +132,6 @@ public class Objeto extends SugarRecord implements Parcelable
 	public AvisoGeo getAvisoGeo(){return _avisoGeo;}
 	public void setAvisoGeo(AvisoGeo avisoGeo){_avisoGeo = avisoGeo;}
 
-
-	//______________________________________________________________________________________________
-	/*@Override
-	public Long getId()
-	{
-		return id;
-	}
-	@Override
-	public Objeto setId(Long id)
-	{
-		this.id = id;
-		return this;
-	}*/
 
 	//______________________________________________________________________________________________
 	protected Objeto(Parcel in)
@@ -241,13 +229,10 @@ public class Objeto extends SugarRecord implements Parcelable
 	@Override
 	public long save()
 	{
-System.err.println("SAVING OBJETO:------A:"+this);
 		try
 		{
 			if(_avisoTem != null)_avisoTem.save();
-System.err.println("SAVING OBJETO:------B:"+this);
 			if(_avisoGeo != null)_avisoGeo.save();
-System.err.println("SAVING OBJETO:------C:"+this);
 			return super.save();
 		}
 		catch(Exception e)

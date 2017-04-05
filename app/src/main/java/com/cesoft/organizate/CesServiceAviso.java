@@ -7,7 +7,6 @@ import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
 import com.google.android.gms.location.Geofence;
-import com.orm.SugarContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,7 +15,7 @@ import java.util.Iterator;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 27/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo
+//TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 public class CesServiceAviso extends IntentService
 {
 	private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
@@ -42,7 +41,6 @@ public class CesServiceAviso extends IntentService
 	{
 		try
 		{
-			SugarContext.init(this);
 			//String dataString = workIntent.getDataString();
 			long tmLoad = System.currentTimeMillis() - 2*DELAY_LOAD;
 			long tmCheck = System.currentTimeMillis() - 2*DELAY_LOAD;
@@ -79,10 +77,10 @@ System.err.println("CesServiceAviso:onHandleIntent:looping------------");
 			{
 				AvisoGeo ag = it.next();
 				_listaGeo.add(ag);
-				aGeofences.add(new Geofence.Builder().setRequestId(Long.toString(ag.getObjeto().getId()))
+				/*aGeofences.add(new Geofence.Builder().setRequestId(Long.toString(ag.getObjeto().getId()))
 						.setCircularRegion(ag.getLatitud(), ag.getLongitud(), ag.getRadio()).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
 						.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)// | Geofence.GEOFENCE_TRANSITION_EXIT
-						.build());
+						.build());*/
 			}
 			System.err.println("CesServiceAviso---------------------cargarListaGeo:" + _listaGeo.size());
 			_GeofenceStore = new CesGeofenceStore(this, aGeofences);

@@ -2,6 +2,7 @@ package com.cesoft.organizate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -17,8 +18,12 @@ import java.util.Map;
 public class NivelDosListAdapter extends SimpleExpandableListAdapter
 {
 	//______________________________________________________________________________________________
-	private static ArrayList<Objeto> _lista;
-	public static void setLista(ArrayList<Objeto> lista){_lista=lista;}
+	private static List<Objeto> _lista;
+	public static void setLista(List<Objeto> lista)
+	{
+		_lista=lista;
+		//for(Objeto o : _lista) Log.e("NivelDosListAdapter", "setLista:-----------"+o);
+	}
 	private static boolean _bIniRowHeight2 = true, _bIniRowHeight3 = true;
 
 	private Context _context;

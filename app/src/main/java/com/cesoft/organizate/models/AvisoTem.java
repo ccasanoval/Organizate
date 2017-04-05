@@ -10,17 +10,15 @@ import java.util.List;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class AvisoTem extends AvisoAbs
 {
-	protected boolean _bActivo = true;
-	protected String _sTexto="";
-
 	/*@Ignore
 	protected Objeto _o;
 		public Objeto getObjeto(){return _o;}
 		public void setObjeto(Objeto o){_o=o;}*/
 	public Objeto getObjeto()
 	{
-		List<Objeto> ao = Objeto.find(Objeto.class, "_AVISO_TEM = ?", getId().toString());
-		if(ao.size() > 0)return ao.get(0);
+		//TODO
+		/*List<Objeto> ao = Objeto.find(Objeto.class, "_AVISO_TEM = ?", getId().toString());
+		if(ao.size() > 0)return ao.get(0);*/
 		return null;
 	}
 
@@ -37,10 +35,6 @@ public class AvisoTem extends AvisoAbs
 		_dtActivo = new Date(0);
 		save();
 	}
-	public void setTexto(String s){_sTexto = s;}
-	public String getTexto(){return _sTexto;}
-	public void setActivo(boolean v){_bActivo = v;}
-	public boolean getActivo(){return _bActivo;}
 
 	//---Temp
 	public static final byte NADA = -1;
@@ -52,6 +46,59 @@ public class AvisoTem extends AvisoAbs
 	private byte[] _aHora = new byte[0];
 	private byte[] _aMinuto = new byte[0];
 	// Sugar no guarda array list... ArrayList<Integer> _aMes = new ArrayList<>();
+
+	//TODO : limitar a 8 que es el maximo numero de bytes de INTEGER en SQLite
+	public static final int MAX_FECHAS = 8;
+	public long getMesesDb(){return code(_aMes);}
+	public long getDiasMesDb(){return code(_aDiaMes);}
+	public long getDiasSemanaDb(){return code(_aDiaSemana);}
+	public long getHorasDb(){return code(_aHora);}
+	public long getMinutosDb(){return code(_aMinuto);}
+	public void setMesesDb(long v){_aMes=decode(v);}
+	public void setDiasMesDb(long v){_aDiaMes=decode(v);}
+	public void setDiasSemanaDb(long v){_aDiaSemana=decode(v);}
+	public void setHorasDb(long v){_aHora=decode(v);}
+	public void setMinutosDb(long v){_aMinuto=decode(v);}
+	//
+	public AvisoTem(String id, String texto, boolean activo, long mes, long diaMes, long diaSem, long hora, long minuto)
+	{
+		_id = id;
+		_sTexto = texto;
+		_bActivo = activo;
+		_aMes=decode(mes);
+		_aDiaMes=decode(diaMes);
+		_aDiaSemana=decode(diaSem);
+		_aHora=decode(hora);
+		_aMinuto=decode(minuto);
+	}
+	//
+	private static long code(byte[] ab)
+	{
+		if(ab == null || ab.length == 0)return 0L;
+		long res = 0;
+		for(int i=0; i < MAX_FECHAS && i < ab.length; i++)
+		{
+			res = res << 8;
+			res += ab[i];
+		}
+		return res;
+	}
+	private static byte[] decode(long l)
+	{
+		if(l == 0)return new byte[0];
+		int i;
+		byte[] ab = new byte[8];
+		for(i=0; i < MAX_FECHAS; i++)
+		{
+			ab[i] = (byte)(l & 0xff);
+			l = l >> 8;
+			if(l == 0)break;
+		}
+		byte[] res = new byte[i+1];
+		for(i=0; i < res.length; i++)res[i]=ab[i];
+		return res;
+	}
+
 
 	public AvisoTem(){}//NO BORRAR: Necesario para sugar
 	public AvisoTem(String s){_sTexto = s;}
@@ -163,8 +210,7 @@ public class AvisoTem extends AvisoAbs
 	///----- PARCELABLE
 	public AvisoTem(Parcel in)
 	{
-		long l = in.readLong();
-		if(l >= 0)setId(l);
+		setId(in.readString());
 		//
 		_dtActivo.setTime(in.readLong());
 		_bActivo = in.readByte() > 0;
@@ -187,7 +233,7 @@ public class AvisoTem extends AvisoAbs
 	@Override
 	public void writeToParcel(Parcel dest, int flags)
 	{
-		dest.writeLong(getId() != null ? getId() : -1);
+		dest.writeString(getId());
 		//
 		dest.writeLong(_dtActivo.getTime());
 		dest.writeByte(_bActivo?(byte)1:(byte)0);
@@ -227,13 +273,15 @@ public class AvisoTem extends AvisoAbs
 		java.util.Arrays.sort(_aDiaSemana);
 		java.util.Arrays.sort(_aHora);
 		java.util.Arrays.sort(_aMinuto);
-		return super.save();
+		//return super.save();
+		return 0;//TODO
 	}
 
 	//______________________________________________________________________________________________
 	public static Iterator<AvisoTem> getActivos()
 	{
-		return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");// .findAll(AvisoTem.class);
+		//return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");// .findAll(AvisoTem.class);
+		return null;//TODO
 	}
 
 	//______________________________________________________________________________________________

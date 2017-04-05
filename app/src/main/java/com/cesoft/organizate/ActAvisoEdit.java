@@ -150,7 +150,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 		//_isNuevo = false;
 		_txtAviso.setText(_a.getTexto());
-		_swtActivo.setChecked(_a.getActivo());
+		_swtActivo.setChecked(_a.isActivo());
 		for(byte i : _a.getMeses())
 			createItemView(MES, i, i==AvisoTem.TODO ? TODO : String.valueOf(i));
 		for(byte i : _a.getDiasMes())

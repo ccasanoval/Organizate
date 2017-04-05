@@ -34,8 +34,7 @@
 			android:layout_height="wrap_content"
 			android:hint="@string/descripcion"
 			android:inputType="textMultiLine"
-			android:maxLines="3"
-			android:singleLine="true"/>
+			android:maxLines="3"/>
 	</android.support.design.widget.TextInputLayout>
 
 	<HorizontalScrollView

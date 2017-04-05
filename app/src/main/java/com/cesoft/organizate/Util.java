@@ -7,12 +7,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Parcelable;
 import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
@@ -104,14 +102,14 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 				.setLargeIcon(android.graphics.BitmapFactory.decodeResource(c.getResources(), R.mipmap.ic_launcher))
 				.setContentTitle(titulo)
 				.setContentText(a.getTexto())
-				.setContentIntent(PendingIntent.getActivity(c, a.getId().intValue(), intent, PendingIntent.FLAG_ONE_SHOT))
+				.setContentIntent(PendingIntent.getActivity(c, a.getId().hashCode(), intent, PendingIntent.FLAG_ONE_SHOT))
 				.setAutoCancel(true)
 				.setDefaults(Notification.DEFAULT_ALL)
 				//.setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE)
         		//.setSound(Uri.parse(""))
 				;
 		NotificationManager notificationManager = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.notify(a.getId().intValue(), notificationBuilder.build());
+		notificationManager.notify(a.getId().hashCode(), notificationBuilder.build());
 		wakeLock.release();
 	}
 	//______________________________________________________________________________________________
@@ -138,8 +136,9 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
    			@Override
    			public void onInit(int status)
 			{
-				if(status != TextToSpeech.ERROR)
-					tts.setLanguage(c.getResources().getConfiguration().locale);//new Locale("es", "ES");Locale.forLanguageTag("ES")
+				//if(status != TextToSpeech.ERROR)
+				if(status == TextToSpeech.SUCCESS)
+					tts.setLanguage(Locale.getDefault());//new Locale("es", "ES");Locale.forLanguageTag("ES")
 			}
 		});
 		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
@@ -164,6 +163,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	{
 		//System.err.println("------ttsGreater21");
     	String utteranceId=c.hashCode() + "";
+		//if(status == TextToSpeech.SUCCESS) {
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
 	}
 

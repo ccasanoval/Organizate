@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;//TODO: Check support libraries : need, do i use it?
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,10 +32,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
+import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
+import com.squareup.sqlbrite.BriteDatabase;
+
+import javax.inject.Inject;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //http://www.androidhive.info/2015/09/android-material-design-snackbar-example/
@@ -52,15 +59,18 @@ snackbar.show();*/
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActEdit extends AppCompatActivity
 {
-	private static final int TOP_NODE = -1;
+	private static final String TAG = ActEdit.class.getSimpleName();
+
 	private static final String PADRE = "+ ";
 	private static final String HIJO = "   - ";
 	private static final String SEP = "::";
 
-	private static ArrayList<Objeto> _lista;
-		public static void setLista(ArrayList<Objeto> lista){_lista = lista;}
-	private static ActMain _act;
-		public static void setParentAct(ActMain act){_act = act;}
+	/*private List<Objeto> _lista;
+		public void setLista(List<Objeto> lista){_lista = lista;}
+	ActMain _act;
+		public void setParentAct(ActMain act){_act = act;}*/
+
+	@Inject	BriteDatabase db;
 
 	//______________________________________________________________________________________________
 	private String[]	_popUpContents;
@@ -70,7 +80,7 @@ public class ActEdit extends AppCompatActivity
 	private ImageButton _btnHablar;
 
 	private boolean		_isNuevo=false;
-	private long		_idPadre = TOP_NODE;
+	private String		_idPadre = Objeto.TOP_NODE;
 	private Objeto		_o;
 	private EditText	_txtNombre;
 	private EditText	_txtDescripcion;
@@ -89,6 +99,8 @@ public class ActEdit extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_edit);
+
+		App.getComponent(this).inject(this);
 
 		_txtNombre = (EditText)findViewById(R.id.txtNombre);
 		_txtDescripcion = (EditText)findViewById(R.id.txtDescripcion);
@@ -126,7 +138,7 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(View v)
 			{
-				Util.hablar(getApplicationContext(), String.format("Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion()));
+				Util.hablar(getApplicationContext(), String.format(Locale.getDefault(), "Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion()));
 			}
 		});
 		btnAviso.setOnClickListener(new View.OnClickListener()
@@ -148,9 +160,10 @@ public class ActEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 
 		List<String> lst = new ArrayList<>();
-		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+TOP_NODE);
-		if(_lista != null &&_lista.size()>0)
-		for(Objeto o : Objeto.filtroN(_lista, Objeto.NIVEL1))
+		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+Objeto.TOP_NODE);
+		List<Objeto> lista = App.getLista(this);
+		if(lista != null && lista.size()>0)
+		for(Objeto o : Objeto.filtroN(lista, Objeto.NIVEL1))
 		{
 			lst.add(PADRE + o.getNombre() + SEP + o.getId());
 			if(o.getHijos().length > 0)
@@ -183,6 +196,7 @@ public class ActEdit extends AppCompatActivity
 		try
 		{
 			_o = this.getIntent().getParcelableExtra(Objeto.class.getName());
+Log.e(TAG, "--------------------------------"+_o);
 			if(_o != null)
 				setValores();
 			else
@@ -216,7 +230,7 @@ public class ActEdit extends AppCompatActivity
 		Objeto oPadre = _o.getPadre();
 		if(oPadre == null)
 		{
-			_idPadre = -1;
+			_idPadre = Objeto.TOP_NODE;
 			//_btnPadre.setText();
 		}
 		else
@@ -234,44 +248,47 @@ public class ActEdit extends AppCompatActivity
 		_o.setDescripcion(_txtDescripcion.getText().toString());
 		_o.setPrioridad((int) _rbPrioridad.getRating());
 		_o.setModificado(new Date());
+		_o.setIdPadre(_idPadre);
+		List<Objeto> lista = App.getLista(this);
 		if(_isNuevo)
 		{
-			//if(_o.getPadre() == null)_lista.add(_o);
+			_o.setId(UUID.randomUUID().toString());
 			_o.setCreacion(new Date());
-			_lista.add(_o);
+			lista.add(_o);
 		}
 		else
 		{
-			_lista.set(_lista.indexOf(_o), _o);
+			lista.set(lista.indexOf(_o), _o);
 		}
 
-		fixPadres();
+		_o.fixPadres(lista);
 
 		//BBDD---------------------------------------------------------
+		DbObjeto.saveAll(db, lista);
+
+		/*
 		clearDataBase();
 		if(_lista != null && _lista.size() > 0)
 			for(Objeto o : _lista)
-				o.save();
-		_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
+				o.save();*/
+		//_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
 		//_act.selectObjeto(_o);///TODO: Seleccoionar item
 		ActEdit.this.finish();
 	}
 
 	//______________________________________________________________________________________________
-	public static void clearDataBase()
-	{
-		Objeto.delTodo();
-	}
+	//public static void clearDataBase()	{		Objeto.delTodo();	}
 
 	//______________________________________________________________________________________________
 	// Reordena padres
-	private void fixPadres()
+	/*private void fixPadres()
 	{
-		if(   !(_o.getPadre() == null && _idPadre == TOP_NODE)
+		App app = (App)getApplication();
+		if(   !(_o.getPadre() == null && _idPadre == Objeto.TOP_NODE)
 			&& (_o.getPadre() == null || _o.getPadre().getId() != _idPadre))
 		{
 			if(_o.getPadre() != null)_o.getPadre().delHijo(_o);
-			for(Objeto o1 : _lista)
+			for(Objeto o1 : app._lista)
 			{
 				if(o1.getId().equals(_idPadre))
 				{
@@ -296,14 +313,9 @@ public class ActEdit extends AppCompatActivity
 				}
 			}
 		}
-	}
+	}*/
 
 	//______________________________________________________________________________________________
-	// DB DELETE
-	private static void dbDel(Objeto o)
-	{
-		o.delete();
-	}
 
 	private void borrar(final View v)
 	{
@@ -315,9 +327,9 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				ActEdit.dbDel(_o);
+				DbObjeto.delete(db, _o);
 				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).show();
-				_act.refrescarLista();
+				//_act.refrescarLista();
 				ActEdit.this.finish();
 			}
 		});
@@ -401,7 +413,7 @@ public class ActEdit extends AppCompatActivity
 			selectedItemText = selectedItemText.replace(HIJO, "").replace(PADRE, "");
 			act._btnPadre.setText(selectedItemText);
 			// get the id
-			_idPadre = Long.parseLong(v.getTag().toString());
+			_idPadre = v.getTag().toString();
 			//Toast.makeText(mContext, "ID is: " + _idPadre, Toast.LENGTH_SHORT).show();
 		}
 	}

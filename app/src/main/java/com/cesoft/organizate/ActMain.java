@@ -1,8 +1,10 @@
 package com.cesoft.organizate;
 
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,10 +14,18 @@ import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
+
+import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.Objeto;
-import com.orm.SugarContext;
+import com.squareup.sqlbrite.BriteDatabase;
+
+import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 
 // PLAY STORE DEVELOPER CONSOLE : https://play.google.com/apps/publish/?hl=es&dev_acc=11164117065791896000
@@ -55,14 +65,65 @@ https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=D
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
 {
+	private static final String TAG = ActMain.class.getSimpleName();
+
 	private static ExpandableListView _expListView;
+
+	@Inject BriteDatabase db;
+	private Subscription subscription;
 
 	//______________________________________________________________________________________________
 	@Override
 	protected void onDestroy()
 	{
 		super.onDestroy();
-		//SugarContext.terminate();//look at manifest//No lo llamamos para que widget pueda consultar bbdd
+	}
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		try
+		{
+		subscription = db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
+			.mapToList(DbObjeto.MAPPER)
+			.observeOn(AndroidSchedulers.mainThread())
+			.doOnError(new Action1<Throwable>()
+			{
+				@Override
+				public void call(Throwable throwable)
+				{
+					Log.e(TAG, "onResume:createQuery:doOnError------------------------------------------------"+throwable);
+				}
+			})
+			.subscribe(new Action1<List<Objeto>>()
+			{
+				@Override
+				public void call(List<Objeto> objetos)
+				{
+					try
+					{
+						Objeto.conectarHijos(objetos);
+						Log.e(TAG, "onResume:createQuery:subscribe------------------------------------------------"+objetos.size());
+						//for(Objeto o : lista)Log.e(TAG, "onResume:-----------"+o);
+					}
+					catch(Exception e)
+					{
+						objetos = new ArrayList<>();
+					}
+					App.setLista(ActMain.this, objetos);
+					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, objetos));
+				}
+			});
+		}
+		catch(Exception e)
+		{
+			Log.e(TAG, "onResume:e:-----------------------------------------------------------------",e);
+		}
+	}
+	@Override public void onPause()
+	{
+		super.onPause();
+		subscription.unsubscribe();
 	}
 
 	//______________________________________________________________________________________________
@@ -75,9 +136,10 @@ public class ActMain extends AppCompatActivity
 		startHuevo();
 		startAvisoService();
 		//------
-		ActEdit.setParentAct(this);
-		_expListView = (ExpandableListView) findViewById(R.id.elv_todo);
-		SugarContext.init(this);
+		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
+
+		App.getComponent(this).inject(this);
+
 //datosTEST();
 //datosTESTgeo();
 //createGeofencesTEST();
@@ -134,26 +196,26 @@ public class ActMain extends AppCompatActivity
 	//______________________________________________________________________________________________
 	private void cargarLista()
 	{
-		ArrayList<Objeto> lista;
+		/*ArrayList<DbObjeto> lista;
 		try
 		{
-			lista = Objeto.conectarHijos(Objeto.findAll(Objeto.class));
+			lista = DbObjeto.conectarHijos(DbObjeto.findAll(DbObjeto.class));
 		} catch(Exception e)
 		{
 			lista = new ArrayList<>();
 		}
 		ActEdit.setLista(lista);
-		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
+		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));*/
 	}
 
 	//______________________________________________________________________________________________
 	public void refrescarLista()
 	{
-		Iterator<Objeto> it = Objeto.findAll(Objeto.class);
-		ArrayList<Objeto> lista = Objeto.conectarHijos(it);//Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
+		/*Iterator<DbObjeto> it = DbObjeto.findAll(DbObjeto.class);
+		ArrayList<DbObjeto> lista = DbObjeto.conectarHijos(it);//Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
 		ActEdit.setLista(lista);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
-		_expListView.refreshDrawableState();
+		_expListView.refreshDrawableState();*/
 	}
 
 	//______________________________________________________________________________________________
@@ -228,78 +290,78 @@ public class ActMain extends AppCompatActivity
 	/*private static void datosTEST()
 	{
 		int i=0;
-		Objeto[] lista = new Objeto[13];
-		Objeto o0, o1, o2;
+		DbObjeto[] lista = new DbObjeto[13];
+		DbObjeto o0, o1, o2;
 
-		Objeto.deleteAll(Objeto.class);
+		DbObjeto.deleteAll(DbObjeto.class);
 
-		o0 = new Objeto("HEALTH", null);
-			o1 = new Objeto("SLEEP WELL", o0);
+		o0 = new DbObjeto("HEALTH", null);
+			o1 = new DbObjeto("SLEEP WELL", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Don't loose time No TV", o1);
+				o2 = new DbObjeto("Don't loose time No TV", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("After diner go bed", o1);
+				o2 = new DbObjeto("After diner go bed", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Count & Plan sleep hours", o1);
+				o2 = new DbObjeto("Count & Plan sleep hours", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Don't waste daytime 4 recover", o1);
+				o2 = new DbObjeto("Don't waste daytime 4 recover", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("EXERCISE", o0);
+			o1 = new DbObjeto("EXERCISE", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("GYM 2-3 times a week", o1);
+				o2 = new DbObjeto("GYM 2-3 times a week", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Home weights once", o1);
+				o2 = new DbObjeto("Home weights once", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("EAT WELL", o0);
+			o1 = new DbObjeto("EAT WELL", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Fresh Vegs & Fruit", o1);
+				o2 = new DbObjeto("Fresh Vegs & Fruit", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("No shitty food!", o1);
+				o2 = new DbObjeto("No shitty food!", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Protein shakes", o1);
+				o2 = new DbObjeto("Protein shakes", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("METRO", o0);
+			o1 = new DbObjeto("METRO", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Care 4ur clothes", o1);
+				o2 = new DbObjeto("Care 4ur clothes", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Care 4ur skin", o1);
+				o2 = new DbObjeto("Care 4ur skin", o1);
 				o1.addHijo(o2);
 		lista[i++]=o0;
 
-		o0 = new Objeto("WEALTH", null);
-			o1 = new Objeto("RENT T HOUSE", o0);
+		o0 = new DbObjeto("WEALTH", null);
+			o1 = new DbObjeto("RENT T HOUSE", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Change Sofa", o1);
+				o2 = new DbObjeto("Change Sofa", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Clean terrace", o1);
+				o2 = new DbObjeto("Clean terrace", o1);
 				o1.addHijo(o2);
-				o2 = new Objeto("Sell bike parts", o1);
+				o2 = new DbObjeto("Sell bike parts", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("DONT SPEND WITHOUT NEED", o0);
+			o1 = new DbObjeto("DONT SPEND WITHOUT NEED", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Don't abuse AliExpress", o1);
+				o2 = new DbObjeto("Don't abuse AliExpress", o1);
 				o1.addHijo(o2);
 		lista[i++]=o0;
 
-		o0 = new Objeto("TIME", null);
-			o1 = new Objeto("PLAN ACTIVITIES", o0);
+		o0 = new DbObjeto("TIME", null);
+			o1 = new DbObjeto("PLAN ACTIVITIES", o0);
 			o0.addHijo(o1);
-				o2 = new Objeto("Day, Week, Month schedules", o1);
+				o2 = new DbObjeto("Day, Week, Month schedules", o1);
 				o1.addHijo(o2);
-			o1 = new Objeto("MULTITASKING", o0);
+			o1 = new DbObjeto("MULTITASKING", o0);
 			o0.addHijo(o1);
 		lista[i++]=o0;
-		o0 = new Objeto("CUATRO", null);
+		o0 = new DbObjeto("CUATRO", null);
 		lista[i++]=o0;
 
 		for(int j=0; j < i; j++)
 		{
 			long id = lista[j].save();
-			Objeto[] ao =  lista[j].getHijos();
+			DbObjeto[] ao =  lista[j].getHijos();
 			for(int k=0; k < ao.length; k++)
 			{
 				ao[k].save();
-				Objeto[] ao2 =  ao[k].getHijos();
+				DbObjeto[] ao2 =  ao[k].getHijos();
 				for(int l=0; l < ao2.length; l++)
 					ao2[l].save();
 			}

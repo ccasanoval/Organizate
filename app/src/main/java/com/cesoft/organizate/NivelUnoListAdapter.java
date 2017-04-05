@@ -2,6 +2,7 @@ package com.cesoft.organizate;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -24,19 +25,19 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 	private static final String NIVEL3 = "NIVEL3";
 
 	private Context _context;
-	private ArrayList<Objeto> _lista;
+	private List<Objeto> _lista;
 	private LayoutInflater _inflater;
 	private ExpandableListView _topExpList;
 	private CesExpandableListView _listViewCache[];
 
 	//______________________________________________________________________________________________
-    public NivelUnoListAdapter(Context context, ExpandableListView topExpList, ArrayList<Objeto> lista)
+    public NivelUnoListAdapter(Context context, ExpandableListView topExpList, List<Objeto> lista)
     {
         _context = context;
         _topExpList = topExpList;
 		_inflater = LayoutInflater.from(context);
 
-		ArrayList<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);
+		List<Objeto> nivel1 = Objeto.filtroN(lista, Objeto.NIVEL1);
         _lista = nivel1;
 		_listViewCache = new CesExpandableListView[nivel1.size()];
 		NivelDosListAdapter.setLista(nivel1);

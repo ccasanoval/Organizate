@@ -61,16 +61,16 @@ public class CesServiceUpdateWidget extends Service
 		{
 			String s="";
 			ArrayList<Objeto> lista;// = new ArrayList<>();
-			//Iterator<Objeto> it =(Iterator<Objeto>)Objeto.findAll(Objeto.class);while(it.hasNext())lista.add(it.next());
-			lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
+			//Iterator<DbObjeto> it =(Iterator<DbObjeto>)DbObjeto.findAll(DbObjeto.class);while(it.hasNext())lista.add(it.next());
+			/*lista = (ArrayList<DbObjeto>)DbObjeto.findWithQuery(DbObjeto.class, "select * from DbObjeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
 			if(lista == null || lista.size() < 1)
-				lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto where _padre is not null order by _i_prioridad desc");
+				lista = (ArrayList<DbObjeto>)DbObjeto.findWithQuery(DbObjeto.class, "select * from DbObjeto where _padre is not null order by _i_prioridad desc");
 			if(lista == null || lista.size() < 1)
-				lista = (ArrayList<Objeto>)Objeto.findWithQuery(Objeto.class, "select * from Objeto order by _i_prioridad desc");
+				lista = (ArrayList<DbObjeto>)DbObjeto.findWithQuery(DbObjeto.class, "select * from DbObjeto order by _i_prioridad desc");
 
 			if(lista != null && lista.size() > 0)
 			{
-				Objeto o = lista.get(0);
+				DbObjeto o = lista.get(0);
 				if(lista.size() > 1)
 				{
 					for(int i=0; i < lista.size()-1; i++)
@@ -84,7 +84,7 @@ public class CesServiceUpdateWidget extends Service
 				}
 				_id = o.getId();
 				s = o.getNombre();
-			}
+			}*/
 
 			AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this.getApplicationContext());
 			int[] allWidgetIds = intent.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS);

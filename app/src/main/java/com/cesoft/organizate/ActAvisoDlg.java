@@ -51,7 +51,7 @@ public class ActAvisoDlg extends Activity
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
 			{
 				_a.setActivo(isChecked);
-				_a.save();
+				//_a.save();
 				ActAvisoDlg.this.finish();
 			}
 		});

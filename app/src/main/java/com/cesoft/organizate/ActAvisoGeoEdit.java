@@ -158,7 +158,7 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	private void setValores()
 	{
 		_txtAviso.setText(_a.getTexto());
-		_swtActivo.setChecked(_a.getActivo());
+		_swtActivo.setChecked(_a.isActivo());
 		_radio = _a.getRadio();//TODO:radio por defecto en settings
 		for(int i = 0; i < _adRadio.length; i++)
 		{

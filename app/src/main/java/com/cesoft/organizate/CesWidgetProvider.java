@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import com.orm.SugarContext;
 
 //http://www.vogella.com/tutorials/AndroidWidgets/article.html
 //http://developer.android.com/intl/es/guide/topics/appwidgets/index.html
@@ -28,7 +27,7 @@ public class CesWidgetProvider extends AppWidgetProvider
 	@Override
 	public void onEnabled(Context context)
 	{
-		SugarContext.init(context);
+
 	}
 	//onDisabled(Context)
 

@@ -29,12 +29,14 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import com.cesoft.organizate.models.AvisoTem;
+import com.cesoft.organizate.util.Log;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoEdit extends AppCompatActivity
 {
+	private static final String TAG = ActAvisoEdit.class.getSimpleName();
 	private static String TODO;
 	private static String NADA;
 	private static final String SEP = ":";
@@ -132,12 +134,12 @@ public class ActAvisoEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_a = this.getIntent().getParcelableExtra(AvisoTem.class.getName());
+			_a = getIntent().getParcelableExtra(AvisoTem.class.getName());
 			setValores();
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActAvisoEdit:onCreate:e:"+e);
+			Log.e(TAG, "ActAvisoEdit:onCreate:e:"+e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.cesoft.organizate.models.AvisoAbs;
 import com.cesoft.organizate.util.Log;
+import com.cesoft.organizate.util.Util;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

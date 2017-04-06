@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cesoft.organizate.util.Log;
+import com.cesoft.organizate.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -40,8 +42,6 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.Locale;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraIdleListener, OnMapReadyCallback,
@@ -72,16 +72,22 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		setContentView(R.layout.act_avisogeo_edit);
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-		if (fab != null)
+		//
+		ActionBar actionBar = getSupportActionBar();
+		if(actionBar!=null)actionBar.setDisplayHomeAsUpEnabled(true);
+		//
+		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+		if(fab != null)
 			fab.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
 					ActAvisoGeoEdit.this.finish();
 				}
 			});
+
 		_txtAviso = (TextView) findViewById(R.id.txtAviso);
 		_swtActivo = (Switch) findViewById(R.id.bActivo);
 		_lblPosicion = (TextView) findViewById(R.id.lblPosicion);
@@ -219,7 +225,15 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		saveValores();
+		switch(item.getItemId())
+		{
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+			case R.id.action_user:
+				saveValores();
+				return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 

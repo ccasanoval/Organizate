@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;//TODO: Check support libraries : need, do i use it?
@@ -39,6 +40,7 @@ import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.util.Util;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Inject;
@@ -114,8 +116,11 @@ public class ActEdit extends AppCompatActivity
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		//
+		ActionBar actionBar = getSupportActionBar();
+		if(actionBar!=null)actionBar.setDisplayHomeAsUpEnabled(true);
+		//
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-
 		//------------------------------------------------------------------------------------------
 		fab.setOnClickListener(new View.OnClickListener()
 		{
@@ -195,8 +200,8 @@ public class ActEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
 		try
 		{
-			_o = this.getIntent().getParcelableExtra(Objeto.class.getName());
-Log.e(TAG, "--------------------------------"+_o);
+			_o = getIntent().getParcelableExtra(Objeto.class.getName());
+//Log.e(TAG, "onCreate--------------------------------"+_o);
 			if(_o != null)
 				setValores();
 			else
@@ -432,10 +437,15 @@ Log.e(TAG, "--------------------------------"+_o);
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		int id = item.getItemId();
-		//noinspection SimplifiableIfStatement
-		//if(id == R.id.)return true;
-		saveValores();
+		switch(item.getItemId())
+		{
+			case android.R.id.home:
+				onBackPressed();
+				return true;
+			case R.id.action_user:
+				saveValores();
+				return true;
+		}
 		return super.onOptionsItemSelected(item);
     }
 

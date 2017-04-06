@@ -1,6 +1,10 @@
 package com.cesoft.organizate;
 
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +22,7 @@ import java.util.List;
 
 import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.svc.CesServiceAviso;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Inject;
@@ -87,7 +92,7 @@ public class ActMain extends AppCompatActivity
 				public void call(Throwable throwable)
 				{
 					Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+throwable);
-					Toast.makeText(ActMain.this, "Error al cargar lista de tareas", Toast.LENGTH_LONG).show();//TODO i18n
+					Toast.makeText(ActMain.this, getString(R.string.error_carga_lista), Toast.LENGTH_LONG).show();
 				}
 			})
 			.subscribe(new Action1<List<Objeto>>()
@@ -95,17 +100,21 @@ public class ActMain extends AppCompatActivity
 				@Override
 				public void call(List<Objeto> lista)
 				{
-					Toast.makeText(ActMain.this, "Cargando...", Toast.LENGTH_SHORT).show();//TODO i18n
+					Toast.makeText(ActMain.this, getString(R.string.cargando), Toast.LENGTH_SHORT).show();
 					Objeto.conectarHijos(lista);
 					Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
 					//	lista = new ArrayList<>();
 					App.setLista(ActMain.this, lista);
 					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, lista));
 
-					if(Objeto.hayAvisoActivo(lista))
+					if(Objeto.hayAvisoActivo(lista) && pideGPS())
+					{
 						CesServiceAviso.start(ActMain.this);
+					}
 					else
+					{
 						CesServiceAviso.stop();
+					}
 				}
 			});
 
@@ -270,6 +279,25 @@ public class ActMain extends AppCompatActivity
 		});
 	}
 
+
+	//----------------------------------------------------------------------------------------------
+	public boolean pideGPS()
+	{
+		//if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && ! ha.canAccessLocation())activarGPS(true);
+		int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+		if(permissionCheck == PackageManager.PERMISSION_DENIED)
+		{
+			ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 6969);
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults)
+	{
+		CesServiceAviso.stop();
+		CesServiceAviso.start(ActMain.this);
+	}
 }
 
 

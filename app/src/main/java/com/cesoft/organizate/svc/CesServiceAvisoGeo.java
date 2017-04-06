@@ -1,7 +1,11 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.svc;
 
 import java.util.List;
 
+import com.cesoft.organizate.ActEdit;
+import com.cesoft.organizate.App;
+import com.cesoft.organizate.R;
+import com.cesoft.organizate.util.Util;
 import com.cesoft.organizate.models.Objeto;
 import com.cesoft.organizate.util.Log;
 import com.google.android.gms.location.Geofence;
@@ -51,22 +55,24 @@ public class CesServiceAvisoGeo extends IntentService
 				break;
 			default:
 				notificationTitle = "Geofence Unknown";
-Log.e("CesServiceAvisoGeo","onHandleIntent-----------------------------Geofence Unknown");
+Log.e("CesSvcAGeo","onHandleIntent------------------------------------------------------------------Geofence Unknown");
 				break;
 			}
+Log.e("CesSvcAGeo","onHandleIntent------------------------------------------------------------------"+notificationTitle);
 			GeofencingEvent geofenceEvent = GeofencingEvent.fromIntent(intent);
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();
 			for(Geofence geof : geofences)
 			{
-				List<Objeto> lista = App.getLista(this);//TODO: mejor consulta en bbdd ???
+				List<Objeto> lista = App.getLista(this);//es mejor consulta en bbdd ???
 				String id = geof.getRequestId();
 				for(Objeto o : lista)
 				{
 					if(o.getId().equals(id))
 					{
-						Intent i = new Intent(this, ActEdit.class);
-						intent.putExtra(Objeto.class.getName(), o);
-						Util.showAviso(this, notificationTitle, o.getAvisoGeo(), i);
+						Log.e("CesSvcAGeo", "checkAvisos:----ACTIVA EL AVISO GEO*****************************************************" + o);
+						Intent i = new Intent(getBaseContext(), ActEdit.class);
+						i.putExtra(Objeto.class.getName(), o);
+						Util.showAviso(getBaseContext(), getString(R.string.aviso_tem), o.getAvisoTem(), i);
 						break;
 					}
 				}

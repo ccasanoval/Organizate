@@ -18,8 +18,6 @@ public final class App extends Application
 {
 	private TodoComponent mainComponent;
 	private List<Objeto> _lista;//TODO: mejor en un modulo de datos globales!!!
-	private List<AvisoGeo> _listaAvisoGeo;//TODO: prescindible...
-	private List<AvisoTem> _listaAvisoTem;//TODO: prescindible...
 
 	@Override public void onCreate()
 	{
@@ -40,23 +38,5 @@ public final class App extends Application
 	public static void setLista(Context context, List<Objeto> lista)
 	{
 		((App)context.getApplicationContext())._lista = lista;
-	}
-
-	//----------------------------------------------------------------------------------------------
-	public static List<AvisoGeo> getListaAvisoGeo(Context context)
-	{
-		return ((App)context.getApplicationContext())._listaAvisoGeo;
-	}
-	public static void setListaAvisoGeo(Context context, List<AvisoGeo> lista)
-	{
-		((App)context.getApplicationContext())._listaAvisoGeo = lista;
-	}
-	public static List<AvisoTem> getListaAvisoTem(Context context)
-	{
-		return ((App)context.getApplicationContext())._listaAvisoTem;
-	}
-	public static void setListaAvisoTem(Context context, List<AvisoTem> lista)
-	{
-		((App)context.getApplicationContext())._listaAvisoTem = lista;
 	}
 }

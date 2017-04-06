@@ -1,4 +1,4 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.svc;
 
 import java.util.ArrayList;
 
@@ -49,42 +49,44 @@ class CesGeofenceStore implements ConnectionCallbacks, OnConnectionFailedListene
 	public void onResult(@NonNull Status result)
 	{
 		if(result.isSuccess())
-			Log.e(TAG,"CesGeofenceStore:onResult------------------Success!");
+			Log.e(TAG, "onResult---------------------------------------------------------------------Success!");
 		else if(result.hasResolution())
-			Log.e(TAG,"CesGeofenceStore:onResult------------------hasResolution");
+			Log.e(TAG, "onResult---------------------------------------------------------------------hasResolution");
 		else if(result.isCanceled())
-			Log.e(TAG,"CesGeofenceStore:onResult------------------Canceled");
+			Log.e(TAG, "onResult---------------------------------------------------------------------Canceled");
 		else if(result.isInterrupted())
-			Log.e(TAG,"CesGeofenceStore:onResult------------------Interrupted");
+			Log.e(TAG, "onResult---------------------------------------------------------------------Interrupted");
 	}
+
 	//// 4 OnConnectionFailedListener
 	@Override
 	public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
 	{
-		Log.e(TAG,"CesGeofenceStore:e:Connection failed --------------------------------------------");
+		Log.e(TAG, "Connection failed --------------------------------------------------------------");
 	}
+
 	//// 4 ConnectionCallbacks
 	@Override
 	public void onConnected(Bundle connectionHint)
 	{
 		GeofencingRequest _GeofencingRequest;
-		Log.e(TAG,"CesGeofenceStore:onConnected-----------------------------------------------------");
-		if(ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)return;
-
 		// We're connected, now we need to create a GeofencingRequest with the geofences we have stored.
 		if(_aGeofences.size() > 0)
 		{
 			_GeofencingRequest = new GeofencingRequest.Builder().addGeofences(_aGeofences).build();
 			_PendingIntent = createRequestPendingIntent();
 			// Submitting the request to monitor geofences.
+			if(ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(_Context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+				return;
 			PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences(_GoogleApiClient, _GeofencingRequest, _PendingIntent);
 			pendingResult.setResultCallback(this);// Set the result callbacks listener to this class.
+Log.e(TAG, "onConnected-3---------------------------------------------------------------------------");
 		}
 	}
 	@Override
 	public void onConnectionSuspended(int cause)
 	{
-		Log.e(TAG,"CesGeofenceStore:e:Connection suspended");
+		Log.e(TAG,"Connection suspended-------------------------------------------------------------"+cause);
 	}
 
 	//______________________________________________________________________________________________

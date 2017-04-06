@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -31,6 +32,7 @@ import java.util.Calendar;
 
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.util.Log;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -65,16 +67,20 @@ public class ActAvisoEdit extends AppCompatActivity
 
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
+		//
+		ActionBar actionBar = getSupportActionBar();
+		if(actionBar!=null)actionBar.setDisplayHomeAsUpEnabled(true);
+		//
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
 		if(fab != null)
-		fab.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
+			fab.setOnClickListener(new View.OnClickListener()
 			{
-				ActAvisoEdit.this.finish();
-			}
-		});
+				@Override
+				public void onClick(View view)
+				{
+					ActAvisoEdit.this.finish();
+				}
+			});
 
 		_txtAviso = (TextView)findViewById(R.id.txtAviso);
 		_swtActivo = (Switch)findViewById(R.id.bActivo);
@@ -172,7 +178,7 @@ public class ActAvisoEdit extends AppCompatActivity
 			createItemView(MINUTO, i, String.valueOf(i));
 	}
 
-	// DB SAVE
+	// SAVE
 	private void saveValores()
 	{
 		_a.setTexto(_txtAviso.getText().toString());
@@ -238,27 +244,27 @@ public class ActAvisoEdit extends AppCompatActivity
 	}
 	private void addItem(int iTipo, byte nValor)
 	{
-		String msg = "Maximo numero de items";
+		String msg = getString(R.string.max_num_items);
 		switch(iTipo)//TODO: Que otra manera hay? Pasar logica a AvisoTem
 		{
 		case MES:
-			if(_a.isLimitMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			if(_a.isLimitMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 			else _a.addMes(nValor);
 			break;
 		case DIA_MES:
-			if(_a.isLimitDiaMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			if(_a.isLimitDiaMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 			else _a.addDiaMes(nValor);
 			break;
 		case DIA_SEMANA:
-			if(_a.isLimitDiaSemana()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			if(_a.isLimitDiaSemana()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 			else _a.addDiaSemana(nValor);
 			break;
 		case HORA:
-			if(_a.isLimitHora()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			if(_a.isLimitHora()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 			else _a.addHora(nValor);
 			break;
 		case MINUTO:
-			if(_a.isLimitMinuto()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			if(_a.isLimitMinuto()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 			else _a.addMinuto(nValor);
 			break;
 		}
@@ -290,7 +296,15 @@ public class ActAvisoEdit extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		saveValores();
+		switch(item.getItemId())
+		{
+		case android.R.id.home:
+			onBackPressed();
+			return true;
+		case R.id.action_user:
+			saveValores();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
     }
 

@@ -1,4 +1,4 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.util;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -11,14 +11,14 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 
+import com.cesoft.organizate.ActAvisoDlg;
+import com.cesoft.organizate.R;
 import com.cesoft.organizate.models.AvisoAbs;
-import com.cesoft.organizate.util.Log;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -26,6 +26,7 @@ import java.util.Locale;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 02/03/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//TODO: divide en varios por utilidad...
 public class Util
 {
 	private static final String TAG = Util.class.getSimpleName();
@@ -87,6 +88,7 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 		if(prefs.getBoolean("notifications_new_message_type", true))
 		{
 			showNotificacionDlg(c, a, intent);
+			showNotificacion(c, sTitulo, a, intent);
 		}
 		else
 		{
@@ -96,9 +98,9 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 	//______________________________________________________________________________________________
 	private static void showNotificacion(Context c, String titulo, AvisoAbs a, Intent intent)
 	{
-		PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
-		PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
-		wakeLock.acquire();
+		//PowerManager pm = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
+		//PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
+		//wakeLock.acquire();
 		NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(c)
 				.setSmallIcon(android.R.drawable.ic_menu_mylocation)//R.mipmap.ic_launcher)
 				.setLargeIcon(android.graphics.BitmapFactory.decodeResource(c.getResources(), R.mipmap.ic_launcher))
@@ -112,7 +114,7 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 				;
 		NotificationManager notificationManager = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.notify(a.getId().hashCode(), notificationBuilder.build());
-		wakeLock.release();
+		//wakeLock.release();
 	}
 	//______________________________________________________________________________________________
 	private static void showNotificacionDlg(Context c, AvisoAbs a, Intent intent)
@@ -175,13 +177,13 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 	public static boolean isAutoArranque(Context c)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-Log.e(TAG,"isAutoArranque------"+prefs.getBoolean("is_auto_arranque", true));
+//Log.e(TAG,"isAutoArranque-----------------------------------------------------------------"+prefs.getBoolean("is_auto_arranque", true));
 		return prefs.getBoolean("is_auto_arranque", true);
 	}
 
 
 	public static String formatLatLon(double lat, double lon)
 	{
-		 return String.format("%.5f/%.5f", lat, lon);//Locale.ENGLISH,
+		 return String.format(Locale.ENGLISH, "%.5f/%.5f", lat, lon);//Locale.ENGLISH,
 	}
 }

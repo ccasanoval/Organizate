@@ -1,9 +1,13 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.svc;
 
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 
+import com.cesoft.organizate.ActEdit;
+import com.cesoft.organizate.App;
+import com.cesoft.organizate.R;
+import com.cesoft.organizate.util.Util;
 import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.Objeto;
 import com.cesoft.organizate.util.Log;
@@ -20,7 +24,7 @@ import java.util.List;
 public class CesServiceAviso extends IntentService
 {
 	private static final String TAG = CesServiceAviso.class.getSimpleName();
-	//private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
+	private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
 	private static final long DELAY_LOAD = 10*60*1000;//TODO: ajustar
 	private static final long DELAY_CHECK = 5*60*1000;
 
@@ -95,14 +99,21 @@ Log.e(TAG, "onHandleIntent:looping----------------------------------------------
 			_listaGeo.clear();
 			if(_GeofenceStore != null)_GeofenceStore.clear();
 			ArrayList<Geofence> aGeofences = new ArrayList<>();
-
-			List<AvisoGeo> lista = App.getListaAvisoGeo(this);
-			if(lista != null)
-			for(AvisoGeo a : lista)
-				if(a.isActivo())
+			List<Objeto> lista = App.getLista(this);
+			for(Objeto o : lista)
+			{
+				if(o.getAvisoGeo() != null && o.getAvisoGeo().isActivo())
+				{
+					AvisoGeo a = o.getAvisoGeo();
 					_listaGeo.add(a);
-
-			Log.e(TAG, "-------------------------------cargarListaGeo:" + _listaGeo.size());
+					aGeofences.add(new Geofence.Builder().setRequestId(a.getId())
+							.setCircularRegion(a.getLatitud(), a.getLongitud(), a.getRadio()).setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(GEOFEN_DWELL_TIME)// Required when we use the transition type of GEOFENCE_TRANSITION_DWELL
+							.setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL)// | Geofence.GEOFENCE_TRANSITION_EXIT
+							.build());
+				}
+			}
+Log.e(TAG, "-------------------------------cargarListaGeo 9:" + _listaGeo.size());
+			//aGeofences =
 			_GeofenceStore = new CesGeofenceStore(this, aGeofences);
 		}
 		catch(Exception e)
@@ -140,7 +151,7 @@ Log.e(TAG, "------*********************************************-----------------
 			else
 			if(o.getAvisoTem().isDueTime())
 			{
-Log.e(TAG, "CesServiceAviso:checkAvisos:----ACTIVA EL AVISO*****************************************************" + o);
+Log.e(TAG, "checkAvisos:----ACTIVA EL AVISO*****************************************************" + o);
 				Intent intent = new Intent(getBaseContext(), ActEdit.class);
 				intent.putExtra(Objeto.class.getName(), o);
 				Util.showAviso(getBaseContext(), getString(R.string.aviso_tem), o.getAvisoTem(), intent);

@@ -1,4 +1,4 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.svc;
 
 import android.os.Handler;
 import android.widget.RemoteViews;
@@ -9,6 +9,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.cesoft.organizate.R;
 import com.cesoft.organizate.util.Log;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

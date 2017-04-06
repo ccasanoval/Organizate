@@ -1,4 +1,4 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate.svc;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -7,6 +7,9 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
+
+import com.cesoft.organizate.ActMain;
+import com.cesoft.organizate.R;
 
 
 //http://www.vogella.com/tutorials/AndroidWidgets/article.html

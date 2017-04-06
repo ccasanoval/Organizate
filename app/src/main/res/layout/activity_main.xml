@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
 	tools:context=".ActMain">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/toolbar_"
@@ -35,4 +40,6 @@
 		android:layout_alignParentBottom="true"
     	android:layout_margin="@dimen/fab_margin"
 		android:src="@android:drawable/ic_menu_add"/>
-</RelativeLayout>
+
+	</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

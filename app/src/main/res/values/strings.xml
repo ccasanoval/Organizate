@@ -1,14 +1,14 @@
 <resources>
 	<string name="app_name">Organize!</string>
 
-	<string name="google_maps_key"></string>
-
-	<string name="app_lice" translatable="false">2016 Cesar Casanova\n      ( CESoft )\nCreative Commons NC-SA</string>
+	<string name="google_maps_key" translatable="false"></string>
+	<string name="app_lice" translatable="false">2016 Cesar Casanova ( CESoft )\nCreative Commons NC-SA</string>
 	<string name="app_vers" translatable="false">2016 - Ver. %s</string>
 	<string name="app_lice_tit">Licence</string>
 	<string name="app_vers_tit">Version:</string>
 	<string name="app_desc">\nApplication for the management of your personal tasks. It counts with date and geo-position alerts.\n</string>
 
+	<string name="guardar">Save</string>
 	<string name="aviso">Alert!</string>
 	<string name="cerrar">Close</string>
 
@@ -69,5 +69,9 @@
 	<string name="pref_title_send_by_email">Export to eMail</string>
 	<string name="aviso_tem">Date Alert</string>
 	<string name="title_activity_act_config">Settings</string>
+
+	<string name="error_carga_lista">Error while loading tasks list</string>
+	<string name="cargando">Loading…</string>
+	<string name="max_num_items">Maximum number of items reached</string>
 
 </resources>

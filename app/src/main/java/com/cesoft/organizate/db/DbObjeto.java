@@ -1,25 +1,23 @@
 package com.cesoft.organizate.db;
 
+import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.util.Log;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.util.Log;
 
 import java.util.Date;
 import java.util.List;
 
 import rx.functions.Func1;
 
-
+//TODO: transactions : http://www.programcreek.com/java-api-examples/index.php?api=com.squareup.sqlbrite.BriteDatabase
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class DbObjeto
 {
 	private static final String TAG = DbObjeto.class.getSimpleName();
-
-	public static final String TABLE = "tarea";
-	public static final String QUERY = "SELECT * FROM "+TABLE+" ";
 
 	static final String ID = "_id";
 	static final String NOMBRE = "nombre";
@@ -30,6 +28,19 @@ public class DbObjeto
 	static final String MODIFICADO = "modificado";
 	static final String LIMITE = "limite";
 	static final String ID_PADRE = "id_padre";
+
+	public static final String TABLE = "tarea";
+	//public static final String QUERY = "SELECT * FROM "+TABLE+" ";
+	public static final String QUERY =
+			"SELECT * "
+					//+DbObjeto.TABLE+".*, "
+					//+DbAvisoTem.TABLE+".*, "
+					//+DbAvisoGeo.TABLE+".*, "
+					//+DbAvisoTem.TABLE+"."+DbAvisoTem.ACTIVO+" as "
+				+" FROM "+DbObjeto.TABLE
+				+" LEFT OUTER JOIN "+DbAvisoTem.TABLE+" ON "+DbObjeto.TABLE+"."+ID+" = "+DbAvisoTem.TABLE+"."+DbAvisoTem.ID
+				+" LEFT OUTER JOIN "+DbAvisoGeo.TABLE+" ON "+DbObjeto.TABLE+"."+ID+" = "+DbAvisoGeo.TABLE+"."+DbAvisoGeo.ID
+				;
 
 	//CREATE TABLE IF NOT EXISTS
 	static final String SQL_CREATE_TABLE =
@@ -54,6 +65,7 @@ public class DbObjeto
 	{
 		@Override public Objeto call(final Cursor cursor)
 		{
+			/*
 			String id = Db.getString(cursor, ID);
 			String nombre = Db.getString(cursor, NOMBRE);
 			String descripcion = Db.getString(cursor, DESCRIPCION);
@@ -63,7 +75,46 @@ public class DbObjeto
 			Date modificado = new Date(Db.getLong(cursor, MODIFICADO));
 			Date limite = new Date(Db.getLong(cursor, LIMITE));
 			String idPadre = Db.getString(cursor, ID_PADRE);
-			return new Objeto(id, nombre, descripcion, orden, prioridad, creacion, modificado, limite, idPadre);
+
+			//String texto = Db.
+			Log.e(TAG, "----------------------------- columns: "+cursor.getColumnCount());
+			for(int i=0; i < cursor.getColumnCount(); i++)
+					Log.e(TAG, "cols: "+cursor.getColumnName(i));
+			*/
+			int i = -1;
+			// Objeto
+			String id = cursor.getString(++i);//TODO: array ordenado por cambios...
+			Date creacion = new Date(cursor.getLong(++i));
+			Date modificado = new Date(cursor.getLong(++i));
+			Date limite = new Date(cursor.getLong(++i));
+			int orden = cursor.getInt(++i);
+			int prioridad = cursor.getInt(++i);
+			String nombre = cursor.getString(++i);
+			String descripcion = cursor.getString(++i);
+			String idPadre = cursor.getString(++i);
+			// AvisoTem
+			//String idAT = cursor.getString(++i);
+			++i;
+			String textoAT = cursor.getString(++i);
+			boolean activoAT = cursor.getInt(++i) > 0;
+			long mes = cursor.getLong(++i);
+			long diames = cursor.getLong(++i);
+			long diasem = cursor.getLong(++i);
+			long hora = cursor.getLong(++i);
+			long minuto = cursor.getLong(++i);
+			// AvisoGeo
+			//String idAG = cursor.getString(++i);
+			++i;
+			String textoAG = cursor.getString(++i);
+			boolean activoAG = cursor.getInt(++i) > 0;
+			double latitud = cursor.getDouble(++i);
+			double longitud = cursor.getDouble(++i);
+			float radio = cursor.getFloat(++i);
+			//
+			Objeto o = new Objeto(id, nombre, descripcion, orden, prioridad, creacion, modificado, limite, idPadre);
+			o.setAvisoGeo(new AvisoGeo(id, textoAG, activoAG, latitud, longitud, radio));
+			o.setAvisoTem(DbAvisoTem.newObj(id, textoAT, activoAT, mes, diames, diasem, hora, minuto));
+			return o;
 		}
 	};
 
@@ -91,12 +142,14 @@ public class DbObjeto
 				Log.e(TAG, "saveAll:e:------------------------------------------------------------------ DB == NULL");
 				return;
 			}
-			db.delete(DbObjeto.TABLE, "", null);
-			db.delete(DbAvisoGeo.TABLE, "", null);
-			db.delete(DbAvisoTem.TABLE, "", null);
+			db.delete(DbObjeto.TABLE, null);
+			db.delete(DbAvisoGeo.TABLE, null);
+			db.delete(DbAvisoTem.TABLE, null);
 			for(Objeto o : lista)
 			{
 				db.insert(DbObjeto.TABLE, code(o));
+				DbAvisoGeo.save(db, o.getAvisoGeo());
+				DbAvisoTem.save(db, o.getAvisoTem());
 			}
 			//TOdO: insertar avisos
 			//DbAvisoGeo.saveAll(db, lista);

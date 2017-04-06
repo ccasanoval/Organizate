@@ -49,70 +49,31 @@ public class AvisoTem extends AvisoAbs
 
 	//TODO : limitar a 8 que es el maximo numero de bytes de INTEGER en SQLite
 	public static final int MAX_FECHAS = 8;
-	public long getMesesDb(){return code(_aMes);}
-	public long getDiasMesDb(){return code(_aDiaMes);}
-	public long getDiasSemanaDb(){return code(_aDiaSemana);}
-	public long getHorasDb(){return code(_aHora);}
-	public long getMinutosDb(){return code(_aMinuto);}
-	public void setMesesDb(long v){_aMes=decode(v);}
-	public void setDiasMesDb(long v){_aDiaMes=decode(v);}
-	public void setDiasSemanaDb(long v){_aDiaSemana=decode(v);}
-	public void setHorasDb(long v){_aHora=decode(v);}
-	public void setMinutosDb(long v){_aMinuto=decode(v);}
-	//
-	public AvisoTem(String id, String texto, boolean activo, long mes, long diaMes, long diaSem, long hora, long minuto)
+
+	public AvisoTem(){}//NO BORRAR: Necesario para sugar
+	public AvisoTem(String id, String msg){_id = id; _sTexto = msg;}
+	public AvisoTem(String id, String texto, boolean activo, byte[] mes, byte[] diaMes, byte[] diaSem, byte[] hora, byte[] minuto)
 	{
 		_id = id;
 		_sTexto = texto;
 		_bActivo = activo;
-		_aMes=decode(mes);
-		_aDiaMes=decode(diaMes);
-		_aDiaSemana=decode(diaSem);
-		_aHora=decode(hora);
-		_aMinuto=decode(minuto);
-	}
-	//
-	private static long code(byte[] ab)
-	{
-		if(ab == null || ab.length == 0)return 0L;
-		long res = 0;
-		for(int i=0; i < MAX_FECHAS && i < ab.length; i++)
-		{
-			res = res << 8;
-			res += ab[i];
-		}
-		return res;
-	}
-	private static byte[] decode(long l)
-	{
-		if(l == 0)return new byte[0];
-		int i;
-		byte[] ab = new byte[8];
-		for(i=0; i < MAX_FECHAS; i++)
-		{
-			ab[i] = (byte)(l & 0xff);
-			l = l >> 8;
-			if(l == 0)break;
-		}
-		byte[] res = new byte[i+1];
-		for(i=0; i < res.length; i++)res[i]=ab[i];
-		return res;
+		_aMes=(mes);
+		_aDiaMes=(diaMes);
+		_aDiaSemana=(diaSem);
+		_aHora=(hora);
+		_aMinuto=(minuto);
 	}
 
-
-	public AvisoTem(){}//NO BORRAR: Necesario para sugar
-	public AvisoTem(String s){_sTexto = s;}
-
-	/// MES
+	/// MES ----------------------------------------------------------------------------------------
 	public void addMes(byte v)
 	{
-		if( !contains(_aMes, v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
-			_aMes = add(_aMes, v);
 		if(v == TODO)
 		{
 			_aMes = new byte[0];
 			_aMes = add(_aMes, v);
 		}
+		else if(_aMes.length < MAX_FECHAS && !contains(_aMes, v) && v >= Calendar.JANUARY && v <= Calendar.DECEMBER)
+			_aMes = add(_aMes, v);
 	}
 	public void delMes(byte v)
 	{
@@ -124,16 +85,16 @@ public class AvisoTem extends AvisoAbs
 		return _aMes;//.clone();
 	}
 
-	/// DIA MES
+	/// DIA MES ------------------------------------------------------------------------------------
 	public void addDiaMes(byte v)
 	{
-		if( !contains(_aDiaMes, v) && v > 0 && v < 32)
-			_aDiaMes = add(_aDiaMes, v);
 		if(v == TODO)
 		{
 			_aDiaMes = new byte[0];
 			_aDiaMes = add(_aDiaMes, v);
 		}
+		else if(_aDiaMes.length < MAX_FECHAS && !contains(_aDiaMes, v) && v > 0 && v < 32)
+			_aDiaMes = add(_aDiaMes, v);
 	}
 	public void delDiaMes(byte v)
 	{
@@ -145,16 +106,16 @@ public class AvisoTem extends AvisoAbs
 		return _aDiaMes;//.clone();
 	}
 
-	/// DIA SEMANA
+	/// DIA SEMANA ---------------------------------------------------------------------------------
 	public void addDiaSemana(byte v)
 	{
-		if( !contains(_aDiaSemana, v) && v >= Calendar.SUNDAY && v <= Calendar.SATURDAY)
-			_aDiaSemana = add(_aDiaSemana, v);
 		if(v == TODO)
 		{
 			_aDiaSemana = new byte[0];
 			_aDiaSemana = add(_aDiaSemana, v);
 		}
+		else if(_aDiaSemana.length < MAX_FECHAS && !contains(_aDiaSemana, v) && v >= Calendar.SUNDAY && v <= Calendar.SATURDAY)
+			_aDiaSemana = add(_aDiaSemana, v);
 	}
 	public void delDiaSemana(byte v)
 	{
@@ -166,16 +127,16 @@ public class AvisoTem extends AvisoAbs
 		return _aDiaSemana;//.clone();
 	}
 
-	/// HORA
+	/// HORA ---------------------------------------------------------------------------------------
 	public void addHora(byte v)
 	{
-		if( !contains(_aHora, v) && v >= 0 && v <= 23)
-			_aHora = add(_aHora, v);
 		if(v == TODO)
 		{
 			_aHora = new byte[0];
 			_aHora = add(_aHora, v);
 		}
+		else if(_aHora.length < MAX_FECHAS && !contains(_aHora, v) && v >= 0 && v <= 23)
+			_aHora = add(_aHora, v);
 	}
 	public void delHora(byte v)
 	{
@@ -187,10 +148,10 @@ public class AvisoTem extends AvisoAbs
 		return _aHora;//.clone();
 	}
 
-	/// MINUTO
+	/// MINUTO -------------------------------------------------------------------------------------
 	public void addMinuto(byte v)
 	{
-		if( !contains(_aMinuto, v) && v >= 0 && v <= 59)
+		if(_aMinuto.length < MAX_FECHAS && !contains(_aMinuto, v) && v >= 0 && v <= 59)
 			_aMinuto = add(_aMinuto, v);
 	}
 	public void delMinuto(byte v)

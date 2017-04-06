@@ -70,7 +70,7 @@ public class ActMain extends AppCompatActivity
 	private static ExpandableListView _expListView;
 
 	@Inject BriteDatabase db;
-	private Subscription subscription;
+	private Subscription subTarea;//, subAvisoTem, subAvisoGeo;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -78,13 +78,13 @@ public class ActMain extends AppCompatActivity
 	{
 		super.onDestroy();
 	}
+	//______________________________________________________________________________________________
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-		try
-		{
-		subscription = db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
+
+		subTarea = db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
 			.mapToList(DbObjeto.MAPPER)
 			.observeOn(AndroidSchedulers.mainThread())
 			.doOnError(new Action1<Throwable>()
@@ -92,38 +92,81 @@ public class ActMain extends AppCompatActivity
 				@Override
 				public void call(Throwable throwable)
 				{
-					Log.e(TAG, "onResume:createQuery:doOnError------------------------------------------------"+throwable);
+					Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+throwable);
 				}
 			})
 			.subscribe(new Action1<List<Objeto>>()
 			{
 				@Override
-				public void call(List<Objeto> objetos)
+				public void call(List<Objeto> lista)
 				{
 					try
 					{
-						Objeto.conectarHijos(objetos);
-						Log.e(TAG, "onResume:createQuery:subscribe------------------------------------------------"+objetos.size());
+						Objeto.conectarHijos(lista);
+						Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
 						//for(Objeto o : lista)Log.e(TAG, "onResume:-----------"+o);
 					}
 					catch(Exception e)
 					{
-						objetos = new ArrayList<>();
+						lista = new ArrayList<>();
 					}
-					App.setLista(ActMain.this, objetos);
-					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, objetos));
+					App.setLista(ActMain.this, lista);
+					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, lista));
 				}
 			});
-		}
+
+		/*subAvisoGeo = db.createQuery(DbAvisoGeo.TABLE, DbAvisoGeo.QUERY)
+				.mapToList(DbAvisoGeo.MAPPER)
+				.observeOn(AndroidSchedulers.mainThread())
+				.doOnError(new Action1<Throwable>()
+				{
+					@Override
+					public void call(Throwable throwable)
+					{
+						Log.e(TAG, "onResume:createQuery:doOnError:AvisoGeo------------------------------------------------"+throwable);
+					}
+				})
+				.subscribe(new Action1<List<AvisoGeo>>()
+				{
+					@Override
+					public void call(List<AvisoGeo> lista)
+					{
+						App.setListaAvisoGeo(ActMain.this, lista);
+						//sync con la carga de tareas para no ejecutar esto primero?????
+					}
+				});
+		subAvisoTem = db.createQuery(DbAvisoTem.TABLE, DbAvisoTem.QUERY)
+				.mapToList(DbAvisoTem.MAPPER)
+				.observeOn(AndroidSchedulers.mainThread())
+				.doOnError(new Action1<Throwable>()
+				{
+					@Override
+					public void call(Throwable throwable)
+					{
+						Log.e(TAG, "onResume:createQuery:doOnError:AvisoGeo------------------------------------------------"+throwable);
+					}
+				})
+				.subscribe(new Action1<List<AvisoTem>>()
+				{
+					@Override
+					public void call(List<AvisoTem> lista)
+					{
+						App.setListaAvisoTem(ActMain.this, lista);
+					}
+				});*/
+		/*}
 		catch(Exception e)
 		{
 			Log.e(TAG, "onResume:e:-----------------------------------------------------------------",e);
-		}
+		}*/
 	}
+	//______________________________________________________________________________________________
 	@Override public void onPause()
 	{
 		super.onPause();
-		subscription.unsubscribe();
+		subTarea.unsubscribe();
+		//subAvisoGeo.unsubscribe();
+		//subAvisoTem.unsubscribe();
 	}
 
 	//______________________________________________________________________________________________

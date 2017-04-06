@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -13,10 +14,6 @@ import java.util.UUID;
 public final class DbOpenHelper extends SQLiteOpenHelper
 {
 	private static final int VERSION = 1;
-
-	// TODO : mover a DbObjeto ?
-
-
 
 	public DbOpenHelper(Context context)
 	{
@@ -42,7 +39,8 @@ public final class DbOpenHelper extends SQLiteOpenHelper
 		db.delete(DbObjeto.TABLE, "", null);
 		//
 		ContentValues cv = new ContentValues();
-		cv.put(DbObjeto.ID, UUID.randomUUID().toString());
+		String id1 = UUID.randomUUID().toString();
+		cv.put(DbObjeto.ID, id1);
 		cv.put(DbObjeto.CREACION, (new Date()).getTime());
 		cv.put(DbObjeto.MODIFICADO, (new Date()).getTime());
 		cv.put(DbObjeto.LIMITE, (new Date()).getTime() + 60*60*60*24);
@@ -50,11 +48,14 @@ public final class DbOpenHelper extends SQLiteOpenHelper
 		cv.put(DbObjeto.PRIORIDAD, 1);
 		cv.put(DbObjeto.NOMBRE, "Item 1");
 		cv.put(DbObjeto.DESCRIPCION, "desc 1");
-		cv.put(DbObjeto.ID_PADRE, 0);
+		cv.put(DbObjeto.ID_PADRE, (String)null);
 		long i1 = db.insert(DbObjeto.TABLE, null, cv);
 			//new Objeto(1, "Item1", "desc1", 1, 1, new Date(), new Date(), new Date(), 0));
 Log.e("TAG", "+++++++++++++++ "+i1+"   ==   "+cv.get(DbObjeto.ID));
-		cv.put(DbObjeto.ID, UUID.randomUUID().toString());
+
+
+		String id2 = UUID.randomUUID().toString();
+		cv.put(DbObjeto.ID, id2);
 		cv.put(DbObjeto.CREACION, (new Date()).getTime());
 		cv.put(DbObjeto.MODIFICADO, (new Date()).getTime());
 		cv.put(DbObjeto.LIMITE, (new Date()).getTime() + 60*60*60*24);
@@ -62,10 +63,11 @@ Log.e("TAG", "+++++++++++++++ "+i1+"   ==   "+cv.get(DbObjeto.ID));
 		cv.put(DbObjeto.PRIORIDAD, 2);
 		cv.put(DbObjeto.NOMBRE, "Item 1B");
 		cv.put(DbObjeto.DESCRIPCION, "desc 1B");
-		cv.put(DbObjeto.ID_PADRE, i1);
-		long i1b = db.insert(DbObjeto.TABLE, null, cv);
+		cv.put(DbObjeto.ID_PADRE, id1);
+		db.insert(DbObjeto.TABLE, null, cv);
 
-		cv.put(DbObjeto.ID, UUID.randomUUID().toString());
+		String id3 = UUID.randomUUID().toString();
+		cv.put(DbObjeto.ID, id3);
 		cv.put(DbObjeto.CREACION, (new Date()).getTime());
 		cv.put(DbObjeto.MODIFICADO, (new Date()).getTime());
 		cv.put(DbObjeto.LIMITE, (new Date()).getTime() + 60*60*60*24);
@@ -73,8 +75,8 @@ Log.e("TAG", "+++++++++++++++ "+i1+"   ==   "+cv.get(DbObjeto.ID));
 		cv.put(DbObjeto.PRIORIDAD, 5);
 		cv.put(DbObjeto.NOMBRE, "Item 1BB");
 		cv.put(DbObjeto.DESCRIPCION, "desc 1BB");
-		cv.put(DbObjeto.ID_PADRE, i1b);
-		long i1b1 = db.insert(DbObjeto.TABLE, null, cv);
+		cv.put(DbObjeto.ID_PADRE, id2);
+		db.insert(DbObjeto.TABLE, null, cv);
 
 		cv.put(DbObjeto.ID, UUID.randomUUID().toString());
 		cv.put(DbObjeto.CREACION, (new Date()).getTime());
@@ -84,7 +86,7 @@ Log.e("TAG", "+++++++++++++++ "+i1+"   ==   "+cv.get(DbObjeto.ID));
 		cv.put(DbObjeto.PRIORIDAD, 3);
 		cv.put(DbObjeto.NOMBRE, "Item 2");
 		cv.put(DbObjeto.DESCRIPCION, "desc 2");
-		cv.put(DbObjeto.ID_PADRE, 0);
+		cv.put(DbObjeto.ID_PADRE, (String)null);
 		long i2 = db.insert(DbObjeto.TABLE, null, cv);
 
 		cv.put(DbObjeto.ID, UUID.randomUUID().toString());
@@ -95,8 +97,27 @@ Log.e("TAG", "+++++++++++++++ "+i1+"   ==   "+cv.get(DbObjeto.ID));
 		cv.put(DbObjeto.PRIORIDAD, 3);
 		cv.put(DbObjeto.NOMBRE, "Item 3");
 		cv.put(DbObjeto.DESCRIPCION, "desc 3");
-		cv.put(DbObjeto.ID_PADRE, 0);
+		cv.put(DbObjeto.ID_PADRE, (String)null);
 		long i3 = db.insert(DbObjeto.TABLE, null, cv);
+
+		///---------
+
+		cv = new ContentValues();
+		cv.put(DbAvisoTem.ID, id1);
+		cv.put(DbAvisoTem.ACTIVO, true);
+		cv.put(DbAvisoTem.TEXTO, "TEST de Aviso!");
+		cv.put(DbAvisoTem.HORA, new byte[]{21, 22, 23});
+		cv.put(DbAvisoTem.MINUTO, new byte[]{55});
+		db.insert(DbAvisoTem.TABLE, null, cv);
+
+		cv = new ContentValues();
+		cv.put(DbAvisoGeo.ID, id1);
+		cv.put(DbAvisoGeo.ACTIVO, true);
+		cv.put(DbAvisoGeo.TEXTO, "TEST de Aviso!");
+		cv.put(DbAvisoGeo.LATITUD, 40.0);
+		cv.put(DbAvisoGeo.LONGITUD, 3.0);
+		cv.put(DbAvisoGeo.RADIO, 50.0);
+		db.insert(DbAvisoGeo.TABLE, null, cv);
 	}
 
 	@Override

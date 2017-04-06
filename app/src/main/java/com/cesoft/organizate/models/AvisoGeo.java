@@ -60,9 +60,7 @@ public class AvisoGeo extends AvisoAbs
 	public AvisoGeo(String s){_sTexto = s;}
 	public AvisoGeo(String id, String texto, boolean activo, double lat, double lon, float rad)
 	{
-		_id=id; _sTexto=texto; _bActivo=activo;
-		_lat=lat; _lon=lon; _rad=rad;
-
+		_id=id; _sTexto=texto; _bActivo=activo; _lat=lat; _lon=lon; _rad=rad;
 	}
 	public String toString(){return String.format(Locale.ENGLISH, "{id=%s, txt=%s, act=%b, _dtAct=%s, Pos=%f/%f:%.0f}", getId(), _sTexto, _bActivo, _dtActivo, _lat, _lon, _rad);}
 

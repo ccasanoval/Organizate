@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.cesoft.organizate.util.Log;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -40,7 +41,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -50,8 +50,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Locale;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraChangeListener, OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
+public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCameraIdleListener, OnMapReadyCallback,
+		GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, ResultCallback<Status>
 {
+	private static final String TAG = ActAvisoGeoEdit.class.getSimpleName();
 	private static final int DELAY_LOCATION = 60000;
 	private AvisoGeo _a;
 	private TextView _txtAviso;
@@ -133,9 +135,10 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		{
 			_a = this.getIntent().getParcelableExtra(AvisoGeo.class.getName());
 			setValores();
-		} catch(Exception e)
+		}
+		catch(Exception e)
 		{
-			System.err.println("ActAvisoGeoEdit:onCreate:e:" + e);
+			Log.e(TAG, "onCreate:e:-----------------------------------------------------------------", e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -160,6 +163,8 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 		_txtAviso.setText(_a.getTexto());
 		_swtActivo.setChecked(_a.isActivo());
 		_radio = _a.getRadio();//TODO:radio por defecto en settings
+		//_lblPosicion.setText();
+		Log.e(TAG, "---------------------------------------------------------------");
 		for(int i = 0; i < _adRadio.length; i++)
 		{
 			if(_radio == _adRadio[i])
@@ -262,15 +267,6 @@ public class ActAvisoGeoEdit extends AppCompatActivity implements GoogleMap.OnCa
 	}
 
 	//______________________________________________________________________________________________
-	// PARA GoogleMap.OnCameraChangeListener
-	@Override
-	public void onCameraChange(CameraPosition position)
-	{
-		if(_a != null && (_a.getLatitud() != 0 || _a.getLongitud() != 0))
-			_Map.addCircle(new CircleOptions().center(new LatLng(_a.getLatitud(), _a.getLongitud())).radius(_a.getRadio()).fillColor(0x40ff0000).strokeColor(Color.TRANSPARENT).strokeWidth(2));
-	}
-
-	//______________________________________________________________________________________________
 	//// 4 ConnectionCallbacks
 	@Override
 	public void onConnected(Bundle bundle)
@@ -355,4 +351,11 @@ System.err.println(String.format(Locale.ENGLISH, "%f, %f   -  %f : %f", location
 		});
 	}
 
+	@Override
+	public void onCameraIdle()
+	{
+		//gooleMap.setOnCameraIdleListener(mClusterManager);
+		if(_a != null && (_a.getLatitud() != 0 || _a.getLongitud() != 0))
+			_Map.addCircle(new CircleOptions().center(new LatLng(_a.getLatitud(), _a.getLongitud())).radius(_a.getRadio()).fillColor(0x40ff0000).strokeColor(Color.TRANSPARENT).strokeWidth(2));
+	}
 }

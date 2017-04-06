@@ -458,7 +458,7 @@ Log.e(TAG, "--------------------------------"+_o);
 		Intent i = new Intent(this, ActAvisoEdit.class);
 		AvisoTem a = _o.getAvisoTem();
 		if(a == null)
-			a = new AvisoTem(getStringAviso());
+			a = new AvisoTem(_o.getId(), getStringAviso());
 		i.putExtra(AvisoTem.class.getName(), a);
 		startActivityForResult(i, AVISO);
 	}

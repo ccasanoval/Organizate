@@ -1,7 +1,5 @@
 package com.cesoft.organizate;
 
-import java.util.ArrayList;
-
 import android.os.Handler;
 import android.widget.RemoteViews;
 import android.app.PendingIntent;
@@ -11,17 +9,18 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.IBinder;
 
-import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.util.Log;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 04/01/2016.
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesServiceUpdateWidget extends Service
 {
+	private static final String TAG = "CesServUpdWdgt";
 	private static Handler _h = null;
 	private static Runnable _r = null;
 	private static final int _DELAY = 5*60*1000;
-	private static Long _id = -1L;
+	//private static Long _id = -1L;
 
 	//______________________________________________________________________________________________
 	@Override
@@ -36,7 +35,7 @@ public class CesServiceUpdateWidget extends Service
 				@Override
 				public void run()
 				{
-					System.err.println("-----RUN WIDGET-----");
+					Log.e(TAG,"-----RUN WIDGET-----");
 					cambiarTextoWidget(intent);
 					_h.postDelayed(_r, _DELAY);
 				}
@@ -60,7 +59,7 @@ public class CesServiceUpdateWidget extends Service
 		try
 		{
 			String s="";
-			ArrayList<Objeto> lista;// = new ArrayList<>();
+			//ArrayList<Objeto> lista;// = new ArrayList<>();
 			//Iterator<DbObjeto> it =(Iterator<DbObjeto>)DbObjeto.findAll(DbObjeto.class);while(it.hasNext())lista.add(it.next());
 			/*lista = (ArrayList<DbObjeto>)DbObjeto.findWithQuery(DbObjeto.class, "select * from DbObjeto where _padre is not null and _i_prioridad > 3 order by _i_prioridad desc");
 			if(lista == null || lista.size() < 1)
@@ -107,7 +106,7 @@ public class CesServiceUpdateWidget extends Service
 		}
 		catch(Exception e)
 		{
-			System.err.println("CesServiceUpdateWidget:onStartCommand:e: "+e);
+			Log.e(TAG,"CesServiceUpdateWidget:onStartCommand:e: "+e);
 		}
 	}
 }

@@ -25,6 +25,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -237,13 +238,29 @@ public class ActAvisoEdit extends AppCompatActivity
 	}
 	private void addItem(int iTipo, byte nValor)
 	{
+		String msg = "Maximo numero de items";
 		switch(iTipo)//TODO: Que otra manera hay? Pasar logica a AvisoTem
 		{
-		case MES:		_a.addMes(nValor);break;
-		case DIA_MES:	_a.addDiaMes(nValor);break;
-		case DIA_SEMANA:_a.addDiaSemana(nValor);break;
-		case HORA:		_a.addHora(nValor);break;
-		case MINUTO:	_a.addMinuto(nValor);break;
+		case MES:
+			if(_a.isLimitMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			else _a.addMes(nValor);
+			break;
+		case DIA_MES:
+			if(_a.isLimitDiaMes()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			else _a.addDiaMes(nValor);
+			break;
+		case DIA_SEMANA:
+			if(_a.isLimitDiaSemana()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			else _a.addDiaSemana(nValor);
+			break;
+		case HORA:
+			if(_a.isLimitHora()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			else _a.addHora(nValor);
+			break;
+		case MINUTO:
+			if(_a.isLimitMinuto()) Toast.makeText(this, msg, Toast.LENGTH_LONG).show();//TODO i18n
+			else _a.addMinuto(nValor);
+			break;
 		}
 	}
 

@@ -113,14 +113,14 @@ public class NivelUnoListAdapter extends BaseExpandableListAdapter
 /*
 dev.measure(android.view.View.MeasureSpec.UNSPECIFIED, android.view.View.MeasureSpec.UNSPECIFIED);
 int height = dev.getMeasuredHeight();
-System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
+Log.e(TAG,"zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 		/* NADIE LO LLAMA ¿?
 		dev.setOnChildClickListener(new ExpandableListView.OnChildClickListener()
 		{
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
 			{
-				System.err.println("********---------------------------------***" + _lista[groupPosition].getHijos()[childPosition].toString());
+				Log.e(TAG,"********---------------------------------***" + _lista[groupPosition].getHijos()[childPosition].toString());
 				return true;
 			}
 		});*/
@@ -240,7 +240,7 @@ System.err.println("zzzzzzzzz---------------------zzzzzzzzzzzzz n1:"+height);*/
 					rowCtr[2] += ao[j].getHijos().length;
 			}
 		}
-//System.err.println("calculateRowCount---------------------" + level1 + " / " + level2view + "------------" + rowCtr[0]+":"+rowCtr[1]+":"+rowCtr[2] + "::::" + (level2view != null ? level2view.getCount() : 0));
+//Log.e(TAG,"calculateRowCount---------------------" + level1 + " / " + level2view + "------------" + rowCtr[0]+":"+rowCtr[1]+":"+rowCtr[2] + "::::" + (level2view != null ? level2view.getCount() : 0));
 		return rowCtr;
     }
 }

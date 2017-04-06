@@ -204,7 +204,7 @@ Log.e(TAG, "--------------------------------"+_o);
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActEdit:onCreate:e:"+e);
+			Log.e(TAG,"ActEdit:onCreate:e:"+e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -480,12 +480,12 @@ Log.e(TAG, "--------------------------------"+_o);
 		if(requestCode == AVISO)
 		{
 			_o.setAvisoTem((AvisoTem) data.getParcelableExtra(AvisoTem.class.getName()));
-System.err.println("onActivityResult----------A:" + _o.getAvisoTem());
+Log.e(TAG,"onActivityResult----------A:" + _o.getAvisoTem());
 		}
 		else if(requestCode == AVISO_GEO)
 		{
 			_o.setAvisoGeo((AvisoGeo)data.getParcelableExtra(AvisoGeo.class.getName()));
-System.err.println("onActivityResult----------AG:" + _o.getAvisoGeo());
+Log.e(TAG,"onActivityResult----------AG:" + _o.getAvisoGeo());
 		}
 	}
 

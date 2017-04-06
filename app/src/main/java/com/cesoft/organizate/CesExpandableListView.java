@@ -3,6 +3,8 @@ package com.cesoft.organizate;
 import android.content.Context;
 import android.widget.ExpandableListView;
 
+import com.cesoft.organizate.util.Log;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class CesExpandableListView extends ExpandableListView
 {
@@ -25,7 +27,7 @@ public class CesExpandableListView extends ExpandableListView
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-	System.err.println("AAA" + "-----------" + rows2 + " ("+ROW_HEIGHT2+")..." + rows3+ " ("+ROW_HEIGHT3+") ------" + (rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "---" + heightMeasureSpec + "::::" + getBottom());
+Log.e("CesExpaListView", "AAA" + "-----------" + rows2 + " ("+ROW_HEIGHT2+")..." + rows3+ " ("+ROW_HEIGHT3+") ------" + (rows2 * ROW_HEIGHT2 + rows3 * ROW_HEIGHT3) + "---" + heightMeasureSpec + "::::" + getBottom());
 		setMeasuredDimension(getMeasuredWidth(), rows2 * ROW_HEIGHT2 + rows3*ROW_HEIGHT3);
     }
 

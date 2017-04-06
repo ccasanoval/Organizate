@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.cesoft.organizate.models.AvisoAbs;
+import com.cesoft.organizate.util.Log;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,6 +23,7 @@ import com.cesoft.organizate.models.AvisoAbs;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActAvisoDlg extends Activity
 {
+	private static final String TAG = ActAvisoDlg.class.getSimpleName();
 	private static final int CLOSE_DLG = 0;
 	private static final long CLOSE_TIME = 60*1000;
 
@@ -95,7 +97,7 @@ public class ActAvisoDlg extends Activity
 		}
 		catch(Exception e)
 		{
-			System.err.println("ActAvisoDlg:onCreate:e:"+e);
+			Log.e(TAG, "onCreate:e:-----------------------------------------------------------------",e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -110,10 +112,10 @@ public class ActAvisoDlg extends Activity
 	}
 
 	//______________________________________________________________________________________________
-	static class CESHandler extends Handler
+	private static class CESHandler extends Handler
 	{
 		private ActAvisoDlg _win;
-		public CESHandler(ActAvisoDlg win){_win = win;}
+		CESHandler(ActAvisoDlg win){_win = win;}
 		@Override
 		public void handleMessage(Message msg)
 		{

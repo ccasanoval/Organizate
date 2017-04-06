@@ -1,6 +1,7 @@
 package com.cesoft.organizate.db;
 
 import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
 import com.cesoft.organizate.util.Log;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -65,22 +66,6 @@ public class DbObjeto
 	{
 		@Override public Objeto call(final Cursor cursor)
 		{
-			/*
-			String id = Db.getString(cursor, ID);
-			String nombre = Db.getString(cursor, NOMBRE);
-			String descripcion = Db.getString(cursor, DESCRIPCION);
-			int orden = Db.getInt(cursor, ORDEN);
-			int prioridad = Db.getInt(cursor, PRIORIDAD);
-			Date creacion = new Date(Db.getLong(cursor, CREACION));
-			Date modificado = new Date(Db.getLong(cursor, MODIFICADO));
-			Date limite = new Date(Db.getLong(cursor, LIMITE));
-			String idPadre = Db.getString(cursor, ID_PADRE);
-
-			//String texto = Db.
-			Log.e(TAG, "----------------------------- columns: "+cursor.getColumnCount());
-			for(int i=0; i < cursor.getColumnCount(); i++)
-					Log.e(TAG, "cols: "+cursor.getColumnName(i));
-			*/
 			int i = -1;
 			// Objeto
 			String id = cursor.getString(++i);//TODO: array ordenado por cambios...
@@ -93,18 +78,21 @@ public class DbObjeto
 			String descripcion = cursor.getString(++i);
 			String idPadre = cursor.getString(++i);
 			// AvisoTem
-			//String idAT = cursor.getString(++i);
-			++i;
+			++i;//String idAT = cursor.getString(++i);
 			String textoAT = cursor.getString(++i);
 			boolean activoAT = cursor.getInt(++i) > 0;
-			long mes = cursor.getLong(++i);
-			long diames = cursor.getLong(++i);
-			long diasem = cursor.getLong(++i);
-			long hora = cursor.getLong(++i);
-			long minuto = cursor.getLong(++i);
+			byte[] mes = cursor.getBlob(++i);
+			byte[] diames = cursor.getBlob(++i);
+			byte[] diasem = cursor.getBlob(++i);
+			byte[] hora = cursor.getBlob(++i);
+			byte[] minuto = cursor.getBlob(++i);
+			if(mes == null)mes = new byte[0];
+			if(diames == null)diames = new byte[0];
+			if(diasem == null)diasem = new byte[0];
+			if(hora == null)hora = new byte[0];
+			if(minuto == null)minuto = new byte[0];
 			// AvisoGeo
-			//String idAG = cursor.getString(++i);
-			++i;
+			++i;//String idAG = cursor.getString(++i);
 			String textoAG = cursor.getString(++i);
 			boolean activoAG = cursor.getInt(++i) > 0;
 			double latitud = cursor.getDouble(++i);
@@ -113,7 +101,7 @@ public class DbObjeto
 			//
 			Objeto o = new Objeto(id, nombre, descripcion, orden, prioridad, creacion, modificado, limite, idPadre);
 			o.setAvisoGeo(new AvisoGeo(id, textoAG, activoAG, latitud, longitud, radio));
-			o.setAvisoTem(DbAvisoTem.newObj(id, textoAT, activoAT, mes, diames, diasem, hora, minuto));
+			o.setAvisoTem(new AvisoTem(id, textoAT, activoAT, mes, diames, diasem, hora, minuto));
 			return o;
 		}
 	};
@@ -151,9 +139,6 @@ public class DbObjeto
 				DbAvisoGeo.save(db, o.getAvisoGeo());
 				DbAvisoTem.save(db, o.getAvisoTem());
 			}
-			//TOdO: insertar avisos
-			//DbAvisoGeo.saveAll(db, lista);
-			//DbAvisoTem.saveAll(db, lista);
 		}
 		catch(Exception e)
 		{
@@ -164,59 +149,4 @@ public class DbObjeto
 	{
 		db.delete(TABLE, "WHERE "+ID+" LIKE ?", o.getId());
 	}
-	//______________________________________________________________________________________________
-	/*public static long save(Objeto o)
-	{
-		try
-		{
-			ContentValues cv = new ContentValues();
-			cv.put(DbObjeto.ID, o.getId());//UUID.randomUUID().toString());
-			cv.put(DbObjeto.CREACION, o.getCreacion().getTime());
-			cv.put(DbObjeto.MODIFICADO, o.getModificado().getTime());
-			cv.put(DbObjeto.LIMITE, o.getLimite().getTime());
-			cv.put(DbObjeto.ORDEN, o.getOrden());
-			cv.put(DbObjeto.PRIORIDAD, o.getPrioridad());
-			cv.put(DbObjeto.NOMBRE, o.getNombre());
-			cv.put(DbObjeto.DESCRIPCION, o.getDescripcion());
-			cv.put(DbObjeto.ID_PADRE, o.getIdPadre());
-			long i1 = db.insert(DbObjeto.TABLE, null, cv);
-			//
-			if(o.getAvisoTem() != null)DbAvisoTem.save(o.getAvisoTem());
-			if(o.getAvisoGeo() != null)DbAvisoGeo.save(o.getAvisoGeo());
-			return 0;
-		}
-		catch(Exception e)
-		{
-			Log.e("DbObjeto", "save:e:------------------------------------------------------------"+e);
-			return -1;
-		}
-	}
-	public static void delTodo()
-	{
-		try
-		{
-			DbObjeto.deleteAll(DbObjeto.class);
-			AvisoTem.deleteAll(AvisoTem.class);
-			AvisoGeo.deleteAll(AvisoGeo.class);
-		}
-		catch(Exception e){System.err.println("DbObjeto:delTodo:e:"+e);}
-	}
-	//@Override
-	public boolean delete()
-	{
-		if(_avisoTem != null)_avisoTem.delete();
-		if(_avisoGeo != null)_avisoGeo.delete();
-		for(DbObjeto o1 : getHijos())
-			o1.delete();
-		return super.delete();
-		return true;
-	}
-
-	//______________________________________________________________________________________________
-	public static Objeto getById(String id)
-	{
-		//return DbObjeto.findById(DbObjeto.class, Long.parseLong(id));
-		return null;
-	}*/
-
 }

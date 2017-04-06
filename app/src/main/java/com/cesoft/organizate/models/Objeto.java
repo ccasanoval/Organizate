@@ -2,8 +2,6 @@ package com.cesoft.organizate.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -66,7 +64,7 @@ public class Objeto implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	public void addHijo(Objeto hijo)
+	private void addHijo(Objeto hijo)
 	{
 		if(equals(hijo))return;
 		boolean isRepetido = false;
@@ -83,7 +81,7 @@ public class Objeto implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	public void delHijo(Objeto hijo)
+	private void delHijo(Objeto hijo)
 	{
 		boolean isEliminado = false;
 		int len = _hijos.length;
@@ -99,7 +97,7 @@ public class Objeto implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	public int getNivel()
+	private int getNivel()
 	{
 		int i=NIVEL1;
 		Objeto o = _padre;
@@ -118,11 +116,11 @@ public class Objeto implements Parcelable
 	public String getIdPadre(){return _idPadre;}
 	public void setIdPadre(String v){_idPadre=v;}
 	public Integer getOrden(){return _iOrden;}
-	public void setOrden(Integer iOrden){_iOrden = iOrden;}
+	//public void setOrden(Integer iOrden){_iOrden = iOrden;}
 	public Date getCreacion(){return _dtCreacion;}
 	public void setCreacion(Date dtCreacion){_dtCreacion = dtCreacion;}
 	public Date getLimite(){return _dtLimite;}
-	public void setLimite(Date dtLimite){_dtLimite = dtLimite;}
+	//public void setLimite(Date dtLimite){_dtLimite = dtLimite;}
 	public Date getModificado(){return _dtModificado;}
 	public void setModificado(Date dtModificado){_dtModificado = dtModificado;}
 	public Integer getPrioridad(){return _iPrioridad;}
@@ -132,7 +130,7 @@ public class Objeto implements Parcelable
 	public String getDescripcion(){return _sDescripcion;}
 	public void setDescripcion(String sDescripcion){_sDescripcion = sDescripcion;}
 	public Objeto getPadre(){return _padre;}
-	public void setPadre(Objeto padre){_padre = padre;}
+	private void setPadre(Objeto padre){_padre = padre;}
 	public Objeto[] getHijos(){return _hijos;}
 	//public void setHijos(DbObjeto[] hijos){_hijos = hijos;}
 	public AvisoTem getAvisoTem(){return _avisoTem;}
@@ -256,81 +254,6 @@ public class Objeto implements Parcelable
 	}
 
 	//______________________________________________________________________________________________
-	// BBDD
-	//@Override
-	public long save()
-	{
-		try
-		{
-			if(_avisoTem != null)_avisoTem.save();
-			if(_avisoGeo != null)_avisoGeo.save();
-			//return super.save();
-			return -1;
-		}
-		catch(Exception e)
-		{
-			System.err.println("DbObjeto:save:e:"+e+" : "+this);
-			return -1;
-		}
-	}
-	public static void delTodo()
-	{
-		try
-		{
-			/*DbObjeto.deleteAll(DbObjeto.class);
-			AvisoTem.deleteAll(AvisoTem.class);
-			AvisoGeo.deleteAll(AvisoGeo.class);*/
-		}
-		catch(Exception e){System.err.println("DbObjeto:delTodo:e:"+e);}
-	}
-	//@Override
-	public boolean delete()
-	{
-		/*if(_avisoTem != null)_avisoTem.delete();
-		if(_avisoGeo != null)_avisoGeo.delete();
-		for(DbObjeto o1 : getHijos())
-			o1.delete();
-		return super.delete();*/
-		return true;
-	}
-
-	//______________________________________________________________________________________________
-	public static Objeto getById(String id)
-	{
-		//return DbObjeto.findById(DbObjeto.class, Long.parseLong(id));
-		return null;
-	}
-
-
-	/*public static final String TABLE = "tarea";
-	public static final String QUERY = "SELECT * FROM "+TABLE+" ";
-
-	public static final String ID = "_id";
-	public static final String NOMBRE = "nombre";
-	public static final String DESCRIPCION = "descripcion";
-	public static final String ORDEN = "orden";
-	public static final String PRIORIDAD = "prioridad";
-	public static final String CREACION = "creacion";
-	public static final String MODIFICADO = "modificado";
-	public static final String LIMITE = "limite";
-	public static final String ID_PADRE = "id_padre";*/
-	//----------------------------------------------------------------------------------------------
-	/*public static Func1<Cursor, Objeto> MAPPER = new Func1<Cursor, Objeto>()
-	{
-		@Override public Objeto call(final Cursor cursor)
-		{
-			String id = Db.getString(cursor, ID);
-			String nombre = Db.getString(cursor, NOMBRE);
-			String descripcion = Db.getString(cursor, DESCRIPCION);
-			int orden = Db.getInt(cursor, ORDEN);
-			int prioridad = Db.getInt(cursor, PRIORIDAD);
-			Date creacion = new Date(Db.getLong(cursor, CREACION));
-			Date modificado = new Date(Db.getLong(cursor, MODIFICADO));
-			Date limite = new Date(Db.getLong(cursor, LIMITE));
-			String idPadre = Db.getString(cursor, ID_PADRE);
-			return new Objeto(id, nombre, descripcion, orden, prioridad, creacion, modificado, limite, idPadre);
-		}
-	};*/
 	public Objeto(String id, String nombre, String descripcion, int orden, int prioridad, Date creacion, Date modificado, Date limite, String idPadre)
 	{
 		_id = id;
@@ -346,5 +269,16 @@ public class Objeto implements Parcelable
 		//_avisoGeo = in.readParcelable(AvisoGeo.class.getClassLoader());
 		//_padre = _padre;
 		//_hijos = in.createTypedArray(DbObjeto.CREATOR);
+	}
+
+	//______________________________________________________________________________________________
+	public static boolean hayAvisoActivo(List<Objeto> lista)
+	{
+		for(Objeto o : lista)
+		{
+			if(o.getAvisoTem() != null && o.getAvisoTem().isActivo())return true;
+			if(o.getAvisoGeo() != null && o.getAvisoGeo().isActivo())return true;
+		}
+		return false;
 	}
 }

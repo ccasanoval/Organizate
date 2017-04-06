@@ -18,6 +18,7 @@ import android.speech.tts.TextToSpeech;
 import android.support.v4.app.NotificationCompat;
 
 import com.cesoft.organizate.models.AvisoAbs;
+import com.cesoft.organizate.util.Log;
 
 import java.util.HashMap;
 import java.util.Locale;
@@ -27,6 +28,7 @@ import java.util.Locale;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Util
 {
+	private static final String TAG = Util.class.getSimpleName();
 	//______________________________________________________________________________________________
 	// NOTIFICATION UTILS
 	//______________________________________________________________________________________________
@@ -35,7 +37,7 @@ public class Util
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		if(prefs.getBoolean("notifications_new_message", true))//true o false ha de coincidir con lo que tengas en pref_notificacion.xml
 		{
-System.err.println("-----------------------------Ding Dong!!!!!!!!!");
+Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 			String sound = prefs.getString("notifications_new_message_ringtone", "");
 			if( ! sound.isEmpty())
 				playSound(c, Uri.parse(sound));
@@ -152,7 +154,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	@SuppressWarnings("deprecation")
 	private static void ttsUnder20(TextToSpeech tts, String texto)
 	{
-		//System.err.println("------ttsUnder20");
+		//Log.e(TAG,"------ttsUnder20");
     	HashMap<String, String> map = new HashMap<>();
     	map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "MessageId");
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, map);
@@ -161,7 +163,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 	private static void ttsGreater21(Context c, TextToSpeech tts, String texto)
 	{
-		//System.err.println("------ttsGreater21");
+		//Log.e(TAG,"------ttsGreater21");
     	String utteranceId=c.hashCode() + "";
 		//if(status == TextToSpeech.SUCCESS) {
     	tts.speak(texto, TextToSpeech.QUEUE_FLUSH, null, utteranceId);
@@ -173,7 +175,7 @@ System.err.println("-----------------------------Ding Dong!!!!!!!!!");
 	public static boolean isAutoArranque(Context c)
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-System.err.println("isAutoArranque------"+prefs.getBoolean("is_auto_arranque", true));
+Log.e(TAG,"isAutoArranque------"+prefs.getBoolean("is_auto_arranque", true));
 		return prefs.getBoolean("is_auto_arranque", true);
 	}
 

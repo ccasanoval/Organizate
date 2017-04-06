@@ -2,6 +2,8 @@ package com.cesoft.organizate.models;
 
 import android.os.Parcel;
 
+import com.cesoft.organizate.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,6 +15,7 @@ import java.util.Locale;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class AvisoGeo extends AvisoAbs
 {
+	private static final String TAG = AvisoGeo.class.getSimpleName();
 	/*@Ignore
 	protected Objeto _o;
 		public Objeto getObjeto(){return _o;}
@@ -111,25 +114,10 @@ public class AvisoGeo extends AvisoAbs
 	//______________________________________________________________________________________________
 	public long save()
 	{
-System.err.println("SAVING AVISO GEO:------" + this);
+Log.e(TAG,"SAVING AVISO GEO:------" + this);
 		//TODO
 		return -1;
 		//return super.save();
-	}
-
-	//______________________________________________________________________________________________
-	public static Iterator<AvisoGeo> getActivos()
-	{
-		//TODO
-		return null;
-		//return AvisoGeo.findAsIterator(AvisoGeo.class, "_B_ACTIVO > 0");
-	}
-	//______________________________________________________________________________________________
-	public static AvisoGeo getById(String id)
-	{
-		//TODO
-		return null;
-		//return AvisoGeo.findById(AvisoGeo.class, Long.parseLong(id));
 	}
 
 }

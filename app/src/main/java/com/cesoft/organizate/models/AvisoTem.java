@@ -1,15 +1,18 @@
 package com.cesoft.organizate.models;
 
 import android.os.Parcel;
+
+import com.cesoft.organizate.util.Log;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 
 // Created by Cesar_Casanova on 12/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class AvisoTem extends AvisoAbs
 {
+	private static final String TAG = AvisoTem.class.getSimpleName();
 	/*@Ignore
 	protected Objeto _o;
 		public Objeto getObjeto(){return _o;}
@@ -23,7 +26,7 @@ public class AvisoTem extends AvisoAbs
 	}
 
 	//@ Ignore
-	protected Date _dtActivo = new Date(0);//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
+	private Date _dtActivo = new Date(0);//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	public void desactivarPorHoy()
 	{
 		_dtActivo = Calendar.getInstance().getTime();
@@ -47,10 +50,14 @@ public class AvisoTem extends AvisoAbs
 	private byte[] _aMinuto = new byte[0];
 	// Sugar no guarda array list... ArrayList<Integer> _aMes = new ArrayList<>();
 
-	//TODO : limitar a 8 que es el maximo numero de bytes de INTEGER en SQLite
-	public static final int MAX_FECHAS = 8;
+	private static final int MAX_FECHAS = 20;
+	public boolean isLimitMes(){return _aMes.length >= MAX_FECHAS;}
+	public boolean isLimitDiaMes(){return _aDiaMes.length >= MAX_FECHAS;}
+	public boolean isLimitDiaSemana(){return _aDiaSemana.length >= MAX_FECHAS;}
+	public boolean isLimitHora(){return _aHora.length >= MAX_FECHAS;}
+	public boolean isLimitMinuto(){return _aMinuto.length >= MAX_FECHAS;}
 
-	public AvisoTem(){}//NO BORRAR: Necesario para sugar
+	//public AvisoTem(){}//NO BORRAR: Necesario para sugar
 	public AvisoTem(String id, String msg){_id = id; _sTexto = msg;}
 	public AvisoTem(String id, String texto, boolean activo, byte[] mes, byte[] diaMes, byte[] diaSem, byte[] hora, byte[] minuto)
 	{
@@ -169,7 +176,7 @@ public class AvisoTem extends AvisoAbs
 
 
 	///----- PARCELABLE
-	public AvisoTem(Parcel in)
+	private AvisoTem(Parcel in)
 	{
 		setId(in.readString());
 		//
@@ -228,7 +235,7 @@ public class AvisoTem extends AvisoAbs
 	//______________________________________________________________________________________________
 	public long save()
 	{
-		System.err.println("Aviso:save:------------" + this);
+		Log.e(TAG,"Aviso:save:------------" + this);
 		java.util.Arrays.sort(_aMes);//quickSort(_aMes, 0, _aMes.length - 1);
 		java.util.Arrays.sort(_aDiaMes);
 		java.util.Arrays.sort(_aDiaSemana);
@@ -239,22 +246,13 @@ public class AvisoTem extends AvisoAbs
 	}
 
 	//______________________________________________________________________________________________
-	public static Iterator<AvisoTem> getActivos()
-	{
-		//return AvisoTem.findAsIterator(AvisoTem.class, "_B_ACTIVO > 0");// .findAll(AvisoTem.class);
-		return null;//TODO
-	}
-
-	//______________________________________________________________________________________________
 	public boolean isDueTime()
 	{
 		Calendar now = Calendar.getInstance();
-System.err.println("isDueTime-----"+this.getTexto()+"****************************************************************------now=" + now.getTime() + " _dtActivo="+(_dtActivo.getTime())+" : ");
+Log.e(TAG,"isDueTime-----"+this.getTexto()+"****************************************************************------now=" + now.getTime() + " _dtActivo="+(_dtActivo.getTime())+" : ");
 
 		if(_dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia
 			return false;
-
-System.err.println("isDueTime-----------5 ");
 
 		byte[] aMeses = getMeses();
 		byte[] aDiasMes = getDiasMes();
@@ -269,7 +267,7 @@ System.err.println("isDueTime-----------5 ");
 					break;
 			if(!b)return false;
 		}
-//System.err.println("isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
+//Log.e(TAG,"isDueTime-----------6 dm:" + now.get(Calendar.DAY_OF_MONTH));
 		if(aDiasMes.length > 0 && aDiasMes[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
@@ -278,7 +276,7 @@ System.err.println("isDueTime-----------5 ");
 					break;
 			if(!b)return false;
 		}
-//System.err.println("isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
+//Log.e(TAG,"isDueTime-----------7 ds:" + now.get(Calendar.DAY_OF_WEEK));
 		if(aDiasSemana.length > 0 && aDiasSemana[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
@@ -287,7 +285,7 @@ System.err.println("isDueTime-----------5 ");
 					break;
 			if(!b)return false;
 		}
-//System.err.println("isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
+//Log.e(TAG,"isDueTime-----------8 hor:" + now.get(Calendar.HOUR_OF_DAY) + " : " + now.get(Calendar.HOUR));
 		if(aHoras.length > 0 && aHoras[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
@@ -296,14 +294,14 @@ System.err.println("isDueTime-----------5 ");
 					break;
 			if(!b)return false;
 		}
-//System.err.println("isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
+//Log.e(TAG,"isDueTime-----------9 min:" + now.get(Calendar.MINUTE));
 		if(aMinutos.length > 0 && aMinutos[0] != AvisoTem.TODO)
 		{
 			boolean b = false;
 			for(byte minuto : aMinutos)
 				if(b = (now.get(Calendar.MINUTE)-2 <= minuto && now.get(Calendar.MINUTE)+2 >= minuto) )
 					break;
-//				else System.err.println("AvisoTem:isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
+//				else Log.e(TAG,"AvisoTem:isDueTime-----------PPP:"+now.get(Calendar.MINUTE)+":::"+minuto);
 			if(!b)return false;
 		}
 		return true;

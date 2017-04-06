@@ -5,28 +5,25 @@ import com.cesoft.organizate.util.Log;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import android.content.ContentValues;
-import android.database.Cursor;
-
-import rx.functions.Func1;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-public class DbAvisoGeo
+class DbAvisoGeo
 {
 	public static final String TAG = DbAvisoGeo.class.getSimpleName();
 
-	public static final String TABLE = "avisogeo";
-	public static final String QUERY = "SELECT * FROM "+TABLE+" ";
+	static final String TABLE = "avisogeo";
+	//public static final String QUERY = "SELECT * FROM "+TABLE+" ";
 
-	public static final String ID = "_id";
-	public static final String TEXTO = "texto";
-	public static final String ACTIVO = "activo";
-	public static final String LATITUD = "latitud";
-	public static final String LONGITUD = "longitud";
-	public static final String RADIO = "radio";
+	static final String ID = "_id";
+	static final String TEXTO = "texto";
+	static final String ACTIVO = "activo";
+	static final String LATITUD = "latitud";
+	static final String LONGITUD = "longitud";
+	static final String RADIO = "radio";
 	//public static final String ID_PADRE = "id_padre";
 
-	public static final String SQL_CREATE_TABLE =
+	static final String SQL_CREATE_TABLE =
 			"CREATE TABLE "+ TABLE+" ( "
 					+ ID		+ " TEXT   NOT NULL   PRIMARY KEY, "
 					+ TEXTO		+ " TEXT, "
@@ -36,11 +33,11 @@ public class DbAvisoGeo
 					+ RADIO		+ " REAL "
 					//+ ID_PADRE	+ " TEXT   REFERENCES "+DbObjeto.TABLE+" ("+DbObjeto.ID+") "
 					+" )";
-	public static final String SQL_CREATE_INDEX =
+	static final String SQL_CREATE_INDEX =
 			"CREATE UNIQUE INDEX idx_id_"+TABLE+" ON "+TABLE+" ("+ID+")";
 
 	//----------------------------------------------------------------------------------------------
-	public static Func1<Cursor, AvisoGeo> MAPPER = new Func1<Cursor, AvisoGeo>()
+	/*public static rx.functions.Func1<Cursor, AvisoGeo> MAPPER = new rx.functions.Func1<Cursor, AvisoGeo>()
 	{
 		@Override public AvisoGeo call(final Cursor cursor)
 		{
@@ -52,7 +49,7 @@ public class DbAvisoGeo
 			double rad = Db.getDouble(cursor, RADIO);
 			return new AvisoGeo(id, texto, activo, lat, lon, (float)rad);
 		}
-	};
+	};*/
 
 	//______________________________________________________________________________________________
 	private static ContentValues code(AvisoGeo o)

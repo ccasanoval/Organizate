@@ -24,6 +24,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.cesoft.organizate.util.Log;
+
 import java.util.List;
 
 /**
@@ -37,6 +39,7 @@ import java.util.List;
 //TODO: Utilizar sugar para guardar config, asi puedes exportar todo de una vez?
 public class ActConfig extends PreferenceActivity //AppCompatActivity
 {
+	private static final String TAG = ActConfig.class.getSimpleName();
 	/*@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
@@ -222,7 +225,8 @@ public class ActConfig extends PreferenceActivity //AppCompatActivity
 			// Trigger the listener immediately with the preference's current value.
 			sBindPreferenceSummaryToValueListener.onPreferenceChange(preference, PreferenceManager.getDefaultSharedPreferences(preference.getContext()).getString(preference.getKey(), ""));
 		}
-		catch(Exception e){System.err.println("ActConfig:bindPreferenceSummaryToValue:e:"+e);}//Para secciones que no hacen nada, como 'sobre esta app...'
+		catch(Exception e){
+			Log.e(TAG, "bindPreferenceSummaryToValue:e:"+e);}//Para secciones que no hacen nada, como 'sobre esta app...'
 	}
 
 	// This method stops fragment injection in malicious applications. Make sure to deny any unknown fragments here.
@@ -246,7 +250,7 @@ public class ActConfig extends PreferenceActivity //AppCompatActivity
 				PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
 				Preference customPref = findPreference("version");//Look at pref_general.xml
 				customPref.setSummary(String.format(getString(R.string.app_vers), pInfo.versionName));
-			}catch(Exception e){System.err.println("ActConfig:GeneralPreferenceFragment:onCreate:e:"+e);}
+			}catch(Exception e){Log.e(TAG, "GeneralPreferenceFragment:onCreate:e:"+e);}
 
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences to their values.
 			// When their values change, their summaries are updated to reflect the new value, per the Android Design guidelines.

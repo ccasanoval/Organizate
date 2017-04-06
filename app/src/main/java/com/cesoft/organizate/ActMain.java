@@ -1,6 +1,5 @@
 package com.cesoft.organizate;
 
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,8 +10,8 @@ import android.view.View;
 import android.widget.ExpandableListView;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -67,17 +66,12 @@ public class ActMain extends AppCompatActivity
 {
 	private static final String TAG = ActMain.class.getSimpleName();
 
-	private static ExpandableListView _expListView;
-
 	@Inject BriteDatabase db;
 	private Subscription subTarea;//, subAvisoTem, subAvisoGeo;
+	private ExpandableListView _expListView;
 
 	//______________________________________________________________________________________________
-	@Override
-	protected void onDestroy()
-	{
-		super.onDestroy();
-	}
+	//@Override protected void onDestroy(){super.onDestroy();}
 	//______________________________________________________________________________________________
 	@Override
 	public void onResume()
@@ -93,6 +87,7 @@ public class ActMain extends AppCompatActivity
 				public void call(Throwable throwable)
 				{
 					Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+throwable);
+					Toast.makeText(ActMain.this, "Error al cargar lista de tareas", Toast.LENGTH_LONG).show();//TODO i18n
 				}
 			})
 			.subscribe(new Action1<List<Objeto>>()
@@ -100,18 +95,17 @@ public class ActMain extends AppCompatActivity
 				@Override
 				public void call(List<Objeto> lista)
 				{
-					try
-					{
-						Objeto.conectarHijos(lista);
-						Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
-						//for(Objeto o : lista)Log.e(TAG, "onResume:-----------"+o);
-					}
-					catch(Exception e)
-					{
-						lista = new ArrayList<>();
-					}
+					Toast.makeText(ActMain.this, "Cargando...", Toast.LENGTH_SHORT).show();//TODO i18n
+					Objeto.conectarHijos(lista);
+					Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
+					//	lista = new ArrayList<>();
 					App.setLista(ActMain.this, lista);
 					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, lista));
+
+					if(Objeto.hayAvisoActivo(lista))
+						CesServiceAviso.start(ActMain.this);
+					else
+						CesServiceAviso.stop();
 				}
 			});
 
@@ -177,16 +171,13 @@ public class ActMain extends AppCompatActivity
 		setContentView(R.layout.activity_main);
 		//-----
 		startHuevo();
-		startAvisoService();
 		//------
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
 
 		App.getComponent(this).inject(this);
-
 //datosTEST();
 //datosTESTgeo();
 //createGeofencesTEST();
-		cargarLista();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -237,29 +228,15 @@ public class ActMain extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	private void cargarLista()
-	{
-		/*ArrayList<DbObjeto> lista;
-		try
-		{
-			lista = DbObjeto.conectarHijos(DbObjeto.findAll(DbObjeto.class));
-		} catch(Exception e)
-		{
-			lista = new ArrayList<>();
-		}
-		ActEdit.setLista(lista);
-		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));*/
-	}
-
-	//______________________________________________________________________________________________
+	/* innecesario por RxJava & SQLBrite
 	public void refrescarLista()
 	{
-		/*Iterator<DbObjeto> it = DbObjeto.findAll(DbObjeto.class);
+		Iterator<DbObjeto> it = DbObjeto.findAll(DbObjeto.class);
 		ArrayList<DbObjeto> lista = DbObjeto.conectarHijos(it);//Por que no funciona con la lista pasada????? Lo deja duplicado y el nuevo no es editable???
 		ActEdit.setLista(lista);
 		_expListView.setAdapter(new NivelUnoListAdapter(this.getApplicationContext(), _expListView, lista));
-		_expListView.refreshDrawableState();*/
-	}
+		_expListView.refreshDrawableState();
+	}*/
 
 	//______________________________________________________________________________________________
 	public void startHuevo()
@@ -293,12 +270,7 @@ public class ActMain extends AppCompatActivity
 		});
 	}
 
-	//______________________________________________________________________________________________
-	public void startAvisoService()
-	{
-		Intent i = new Intent(this, CesServiceAviso.class);
-		startService(i);
-	}
+}
 
 
 
@@ -326,10 +298,10 @@ public class ActMain extends AppCompatActivity
 		ag.setGeoPosicion(40.4170875, -3.5746174, 500);
 		ag.save();
 
-		}catch(Exception e){System.err.println("datosTESTgeo:e:"+e);}
+		}catch(Exception e){Log.e(TAG,"datosTESTgeo:e:"+e);}
 	}
 */
-	//______________________________________________________________________________________________
+//______________________________________________________________________________________________
 	/*private static void datosTEST()
 	{
 		int i=0;
@@ -410,5 +382,3 @@ public class ActMain extends AppCompatActivity
 			}
 		}
 	}*/
-}
-

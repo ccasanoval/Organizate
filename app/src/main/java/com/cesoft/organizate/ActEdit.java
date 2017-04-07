@@ -5,12 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;//TODO: Check support libraries : need, do i use it?
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
@@ -67,11 +68,6 @@ public class ActEdit extends AppCompatActivity
 	private static final String HIJO = "   - ";
 	private static final String SEP = "::";
 
-	/*private List<Objeto> _lista;
-		public void setLista(List<Objeto> lista){_lista = lista;}
-	ActMain _act;
-		public void setParentAct(ActMain act){_act = act;}*/
-
 	@Inject	BriteDatabase db;
 
 	//______________________________________________________________________________________________
@@ -88,12 +84,6 @@ public class ActEdit extends AppCompatActivity
 	private EditText	_txtDescripcion;
 	private RatingBar	_rbPrioridad;
 
-	//______________________________________________________________________________________________
-	/*@Override
-	protected void onStart()
-	{
-		super.onStart();
-	}*/
 
 	//______________________________________________________________________________________________
 	@Override
@@ -215,8 +205,6 @@ public class ActEdit extends AppCompatActivity
 		//------------------------------------------------------------------------------------------
     }
 
-	//____________________________________________________________________________________________________________________________________________________
-
 	//______________________________________________________________________________________________
 	private void setValoresNuevo()
 	{
@@ -246,7 +234,7 @@ public class ActEdit extends AppCompatActivity
 	}
 
 	//______________________________________________________________________________________________
-	// DB SAVE
+	// SAVE
 	private void saveValores()
 	{
 		_o.setNombre(_txtNombre.getText().toString());
@@ -270,58 +258,10 @@ public class ActEdit extends AppCompatActivity
 
 		//BBDD---------------------------------------------------------
 		DbObjeto.saveAll(db, lista);
-
-		/*
-		clearDataBase();
-		if(_lista != null && _lista.size() > 0)
-			for(Objeto o : _lista)
-				o.save();*/
-		//_act.refrescarLista();//TODO:Listener?? todoListAdapter.notifyDataSetChanged();
-		//_act.selectObjeto(_o);///TODO: Seleccoionar item
 		ActEdit.this.finish();
 	}
 
 	//______________________________________________________________________________________________
-	//public static void clearDataBase()	{		Objeto.delTodo();	}
-
-	//______________________________________________________________________________________________
-	// Reordena padres
-	/*private void fixPadres()
-	{
-		App app = (App)getApplication();
-		if(   !(_o.getPadre() == null && _idPadre == Objeto.TOP_NODE)
-			&& (_o.getPadre() == null || _o.getPadre().getId() != _idPadre))
-		{
-			if(_o.getPadre() != null)_o.getPadre().delHijo(_o);
-			for(Objeto o1 : app._lista)
-			{
-				if(o1.getId().equals(_idPadre))
-				{
-					o1.addHijo(_o);
-					_o.setPadre(o1);
-					break;
-				}
-				else if(o1.getHijos().length > 0)
-				{
-					boolean b=false;
-					for(Objeto o2 : o1.getHijos())
-					{
-						if(o2.getId().equals(_idPadre))
-						{
-							o2.addHijo(_o);
-							_o.setPadre(o2);
-							b=true;
-							break;
-						}
-					}
-					if(b)break;
-				}
-			}
-		}
-	}*/
-
-	//______________________________________________________________________________________________
-
 	private void borrar(final View v)
 	{
 		AlertDialog.Builder dialog = new AlertDialog.Builder(ActEdit.this);
@@ -374,14 +314,21 @@ public class ActEdit extends AppCompatActivity
 	{
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, padreArray)
 		{
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent)
+            @NonNull
+			@Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent)
 			{
                 // setting the ID and text for every items in the list
                 String item = getItem(position);
-                String[] itemArr = item.split(SEP);
-                String text = itemArr[0];
-                String id = itemArr[1];
+				String text="=", id="0";
+				if(item != null)
+				{
+                	String[] itemArr = item.split(SEP);
+                	text = itemArr[0];
+                	id = itemArr[1];
+				}
+				else
+					Log.e(TAG, "padreAdapter:e:***************************************************** ITEM = NULL");
 
                 // visual settings for the list item
                 TextView listItem = new TextView(ActEdit.this);
@@ -396,7 +343,7 @@ public class ActEdit extends AppCompatActivity
         };
     }
 	//______________________________________________________________________________________________
-	class PadreDropdownOnItemClickListener implements AdapterView.OnItemClickListener
+	private class PadreDropdownOnItemClickListener implements AdapterView.OnItemClickListener
 	{
 		@Override
 		public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3)
@@ -467,8 +414,7 @@ public class ActEdit extends AppCompatActivity
 	{
 		Intent i = new Intent(this, ActAvisoEdit.class);
 		AvisoTem a = _o.getAvisoTem();
-		if(a == null)
-			a = new AvisoTem(_o.getId(), getStringAviso());
+		if(a == null)a = new AvisoTem(_o.getId(), getStringAviso());
 		i.putExtra(AvisoTem.class.getName(), a);
 		startActivityForResult(i, AVISO);
 	}
@@ -477,8 +423,7 @@ public class ActEdit extends AppCompatActivity
 	{
 		Intent i = new Intent(this, ActAvisoGeoEdit.class);
 		AvisoGeo a = _o.getAvisoGeo();
-		if(a == null)
-			a = new AvisoGeo(getStringAviso());
+		if(a == null)a = new AvisoGeo(getStringAviso());
 		i.putExtra(AvisoGeo.class.getName(), a);
 		startActivityForResult(i, AVISO_GEO);
 	}
@@ -489,7 +434,7 @@ public class ActEdit extends AppCompatActivity
 		if(resultCode != RESULT_OK)return;
 		if(requestCode == AVISO)
 		{
-			_o.setAvisoTem((AvisoTem) data.getParcelableExtra(AvisoTem.class.getName()));
+			_o.setAvisoTem((AvisoTem)data.getParcelableExtra(AvisoTem.class.getName()));
 Log.e(TAG,"onActivityResult----------A:" + _o.getAvisoTem());
 		}
 		else if(requestCode == AVISO_GEO)

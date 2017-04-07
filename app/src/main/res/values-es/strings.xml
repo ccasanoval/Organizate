@@ -11,8 +11,8 @@
 	<string name="eliminar">Eliminar</string>
 	<string name="nuevo">Añadir</string>
 	<string name="volver">Volver</string>
-	<string name="editar_aviso">Editar Aviso</string>
-	<string name="editar_aviso_geo">Editar Aviso Geo</string>
+	<string name="editar_aviso">Alerta Tiempo:</string>
+	<string name="editar_aviso_geo">Alerta Geo:</string>
 
 	<string name="nombre">Nombre</string>
 	<string name="descripcion">Descripción</string>

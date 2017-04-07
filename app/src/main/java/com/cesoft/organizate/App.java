@@ -2,19 +2,18 @@ package com.cesoft.organizate;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 
 import com.cesoft.organizate.di.DaggerTodoComponent;
 import com.cesoft.organizate.di.TodoComponent;
 import com.cesoft.organizate.di.TodoModule;
-import com.cesoft.organizate.models.AvisoGeo;
-import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
 
 import java.util.List;
 
 import timber.log.Timber;
 
-public final class App extends Application
+public final class App extends MultiDexApplication//Application
 {
 	private TodoComponent mainComponent;
 	private List<Objeto> _lista;//TODO: mejor en un modulo de datos globales!!!

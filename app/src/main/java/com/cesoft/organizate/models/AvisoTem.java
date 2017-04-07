@@ -249,7 +249,7 @@ public class AvisoTem extends AvisoAbs
 	public boolean isDueTime()
 	{
 		Calendar now = Calendar.getInstance();
-Log.e(TAG,"isDueTime-----"+this.getTexto()+"****************************************************************------now=" + now.getTime() + " _dtActivo="+(_dtActivo.getTime())+" : ");
+//Log.e(TAG,"isDueTime-----"+this.getTexto()+"****************************************************************------now=" + now.getTime() + " _dtActivo="+(_dtActivo.getTime())+" : ");
 
 		if(_dtActivo.getTime() + 24*60*60*1000 > now.getTimeInMillis())//Aun no ha pasado un dia
 			return false;

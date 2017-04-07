@@ -20,6 +20,7 @@ import android.content.Intent;
 //TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo=> activar solo cuando guarde...?
 public class CesServiceAvisoGeo extends IntentService
 {
+	private static final String TAG = CesServiceAvisoGeo.class.getSimpleName();//"CesSvcAGeo";
 	public CesServiceAvisoGeo()
 	{
 		super("GeofenceIntentService");
@@ -55,10 +56,9 @@ public class CesServiceAvisoGeo extends IntentService
 				break;
 			default:
 				notificationTitle = "Geofence Unknown";
-Log.e("CesSvcAGeo","onHandleIntent------------------------------------------------------------------Geofence Unknown");
 				break;
 			}
-Log.e("CesSvcAGeo","onHandleIntent------------------------------------------------------------------"+notificationTitle);
+Log.e(TAG,"onHandleIntent------------------------------------------------------------------"+notificationTitle);
 			GeofencingEvent geofenceEvent = GeofencingEvent.fromIntent(intent);
 			List<Geofence> geofences = geofenceEvent.getTriggeringGeofences();
 			for(Geofence geof : geofences)
@@ -69,10 +69,10 @@ Log.e("CesSvcAGeo","onHandleIntent----------------------------------------------
 				{
 					if(o.getId().equals(id))
 					{
-						Log.e("CesSvcAGeo", "checkAvisos:----ACTIVA EL AVISO GEO*****************************************************" + o);
+						Log.e(TAG, "checkAvisos:----ACTIVA EL AVISO GEO*****************************************************" + o);
 						Intent i = new Intent(getBaseContext(), ActEdit.class);
 						i.putExtra(Objeto.class.getName(), o);
-						Util.showAviso(getBaseContext(), getString(R.string.aviso_tem), o.getAvisoTem(), i);
+						Util.showAviso(getBaseContext(), getString(R.string.editar_aviso_geo), o.getAvisoGeo(), i);
 						break;
 					}
 				}

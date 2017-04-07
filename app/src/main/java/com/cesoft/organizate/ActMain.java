@@ -7,7 +7,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,18 +18,13 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.List;
 
-
-import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.Objeto;
 import com.cesoft.organizate.svc.CesServiceAviso;
-import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
+// ./gradlew -PFirebaseServiceAccountFilePath=xxxxx.json :app:firebaseUploadReleaseProguardMapping
 
 // PLAY STORE DEVELOPER CONSOLE : https://play.google.com/apps/publish/?hl=es&dev_acc=11164117065791896000
 //MAP API CREDENTIAL: https://console.developers.google.com/apis/credentials?project=shining-medium-121911
@@ -47,6 +41,7 @@ https://developers.google.com/identity/sign-in/android/start?hl=en
 https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
 */
 
+//TODO: add notifications.....
 
 //TODO: importar y exportar por correo
 //TODO: Mejorar widget: Botones para navegar por tareas y mejorar aspecto :https://developer.android.com/design/patterns/widgets.html
@@ -71,105 +66,23 @@ public class ActMain extends AppCompatActivity
 {
 	private static final String TAG = ActMain.class.getSimpleName();
 
-	@Inject BriteDatabase db;
-	private Subscription subTarea;//, subAvisoTem, subAvisoGeo;
+	@Inject	PreMain _presenter;
 	private ExpandableListView _expListView;
 
-	//______________________________________________________________________________________________
-	//@Override protected void onDestroy(){super.onDestroy();}
+
 	//______________________________________________________________________________________________
 	@Override
 	public void onResume()
 	{
 		super.onResume();
-
-		subTarea = db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
-			.mapToList(DbObjeto.MAPPER)
-			.observeOn(AndroidSchedulers.mainThread())
-			.doOnError(new Action1<Throwable>()
-			{
-				@Override
-				public void call(Throwable throwable)
-				{
-					Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+throwable);
-					Toast.makeText(ActMain.this, getString(R.string.error_carga_lista), Toast.LENGTH_LONG).show();
-				}
-			})
-			.subscribe(new Action1<List<Objeto>>()
-			{
-				@Override
-				public void call(List<Objeto> lista)
-				{
-					Toast.makeText(ActMain.this, getString(R.string.cargando), Toast.LENGTH_SHORT).show();
-					Objeto.conectarHijos(lista);
-					Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
-					//	lista = new ArrayList<>();
-					App.setLista(ActMain.this, lista);
-					_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, lista));
-
-					if(Objeto.hayAvisoActivo(lista) && pideGPS())
-					{
-						CesServiceAviso.start(ActMain.this);
-					}
-					else
-					{
-						CesServiceAviso.stop();
-					}
-				}
-			});
-
-		/*subAvisoGeo = db.createQuery(DbAvisoGeo.TABLE, DbAvisoGeo.QUERY)
-				.mapToList(DbAvisoGeo.MAPPER)
-				.observeOn(AndroidSchedulers.mainThread())
-				.doOnError(new Action1<Throwable>()
-				{
-					@Override
-					public void call(Throwable throwable)
-					{
-						Log.e(TAG, "onResume:createQuery:doOnError:AvisoGeo------------------------------------------------"+throwable);
-					}
-				})
-				.subscribe(new Action1<List<AvisoGeo>>()
-				{
-					@Override
-					public void call(List<AvisoGeo> lista)
-					{
-						App.setListaAvisoGeo(ActMain.this, lista);
-						//sync con la carga de tareas para no ejecutar esto primero?????
-					}
-				});
-		subAvisoTem = db.createQuery(DbAvisoTem.TABLE, DbAvisoTem.QUERY)
-				.mapToList(DbAvisoTem.MAPPER)
-				.observeOn(AndroidSchedulers.mainThread())
-				.doOnError(new Action1<Throwable>()
-				{
-					@Override
-					public void call(Throwable throwable)
-					{
-						Log.e(TAG, "onResume:createQuery:doOnError:AvisoGeo------------------------------------------------"+throwable);
-					}
-				})
-				.subscribe(new Action1<List<AvisoTem>>()
-				{
-					@Override
-					public void call(List<AvisoTem> lista)
-					{
-						App.setListaAvisoTem(ActMain.this, lista);
-					}
-				});*/
-		/*}
-		catch(Exception e)
-		{
-			Log.e(TAG, "onResume:e:-----------------------------------------------------------------",e);
-		}*/
+		_presenter.subscribe(this);
+		//com.google.firebase.crash.FirebaseCrash.report(new Exception("Crash reporting test"));
 	}
 	//______________________________________________________________________________________________
 	@Override public void onPause()
 	{
 		super.onPause();
-		subTarea.unsubscribe();
-		//subAvisoGeo.unsubscribe();
-		//subAvisoTem.unsubscribe();
+		_presenter.unsubscribe();
 	}
 
 	//______________________________________________________________________________________________
@@ -178,20 +91,16 @@ public class ActMain extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		App.getComponent(this).inject(this);
 		//-----
 		startHuevo();
 		//------
 		_expListView = (ExpandableListView)findViewById(R.id.elv_todo);
-
-		App.getComponent(this).inject(this);
-//datosTEST();
-//datosTESTgeo();
-//createGeofencesTEST();
 		//------
 		//En layout debes anadir app:layout_behavior="@string/appbar_scrolling_view_behavior" para que el toolbar no se coma el listview
 		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-
+		//
 		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
 		if(fab != null)
 		fab.setOnClickListener(new View.OnClickListener()
@@ -218,19 +127,10 @@ public class ActMain extends AppCompatActivity
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item)
 	{
-		// Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
+		//TODO: Handle action bar item clicks here. The action bar will automatically handle clicks on the Home/Up button, so long as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		//noinspection SimplifiableIfStatement
-		/*if(id == R.id.nuevo)
-		{
-			Intent intent = new Intent(this, ActEdit.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
-		}*/
 		if(id == R.id.config)
 		{
-			//Intent intent = new Intent(this, ActConfig.class);
-			//startActivity(intent);
 			startActivityForResult(new Intent(this, ActConfig.class), 69);
 		}
 		return super.onOptionsItemSelected(item);
@@ -298,8 +198,15 @@ public class ActMain extends AppCompatActivity
 		CesServiceAviso.stop();
 		CesServiceAviso.start(ActMain.this);
 	}
-}
 
+
+	//----------------------------------------------------------------------------------------------
+	public void showData(List<Objeto> lista)
+	{
+		Toast.makeText(this, getString(R.string.cargando), Toast.LENGTH_SHORT).show();
+		_expListView.setAdapter(new NivelUnoListAdapter(ActMain.this.getApplicationContext(), _expListView, lista));
+	}
+}
 
 
 /*
@@ -409,4 +316,6 @@ public class ActMain extends AppCompatActivity
 					ao2[l].save();
 			}
 		}
-	}*/
+	}
+
+	*/

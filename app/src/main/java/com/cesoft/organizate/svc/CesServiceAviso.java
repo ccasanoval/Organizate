@@ -73,7 +73,7 @@ public class CesServiceAviso extends IntentService
 			long tmCheck = System.currentTimeMillis() - 2*DELAY_LOAD;
 			while(_bRun)
 			{
-Log.e(TAG, "onHandleIntent:looping------------------------------------------------------------------");
+Log.e(TAG, "---------------- LOOP ------------------------------------------------------------------");
 				if(tmLoad + DELAY_LOAD < System.currentTimeMillis())
 				{
 					cargarListaTem();
@@ -100,6 +100,7 @@ Log.e(TAG, "onHandleIntent:looping----------------------------------------------
 			if(_GeofenceStore != null)_GeofenceStore.clear();
 			ArrayList<Geofence> aGeofences = new ArrayList<>();
 			List<Objeto> lista = App.getLista(this);
+			if(lista != null)
 			for(Objeto o : lista)
 			{
 				if(o.getAvisoGeo() != null && o.getAvisoGeo().isActivo())
@@ -132,7 +133,7 @@ Log.e(TAG, "-------------------------------cargarListaGeo 9:" + _listaGeo.size()
 			for(Objeto o : lista)
 				if(o.getAvisoTem() != null && o.getAvisoTem().isActivo())
 					_lista.add(o);
-Log.e(TAG, "------*********************************************------------------cargarLista:"+_lista.size());
+//Log.e(TAG, "------*********************************************------------------cargarLista:"+_lista.size());
 		}
 		catch(Exception e)
 		{

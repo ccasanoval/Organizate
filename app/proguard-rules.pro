@@ -15,4 +15,4 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
--keep class com.cesoft.organizate.models.** { *; }
+#-keep class com.cesoft.organizate.models.** { *; }

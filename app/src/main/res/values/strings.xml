@@ -1,7 +1,6 @@
 <resources>
 	<string name="app_name">Organize!</string>
 
-	
 	<string name="app_lice" translatable="false">2016 Cesar Casanova ( CESoft )\nCreative Commons NC-SA</string>
 	<string name="app_vers" translatable="false">2016 - Ver. %s</string>
 	<string name="app_lice_tit">Licence</string>
@@ -16,8 +15,10 @@
 	<string name="eliminar">Remove</string>
 	<string name="nuevo">Add</string>
 	<string name="volver">Get Back</string>
-	<string name="editar_aviso">Time Alert:</string>
-	<string name="editar_aviso_geo">Geo Alert:</string>
+	<string name="editar_aviso_tem">Edit the Warning</string>
+	<string name="editar_aviso_geo">Edit the GeoWarning</string>
+	<string name="aviso_tem">Date Alert:</string>
+	<string name="aviso_geo">Geo Alert:</string>
 
 	<string name="nombre">Name</string>
 	<string name="descripcion">Description</string>
@@ -67,7 +68,6 @@
 	<string name="pref_header_general">About this App…</string>
 	<string name="pref_title_is_auto_arranque">Start Alerts at Boot</string>
 	<string name="pref_title_send_by_email">Export to eMail</string>
-	<string name="aviso_tem">Date Alert</string>
 	<string name="title_activity_act_config">Settings</string>
 
 	<string name="error_carga_lista">Error while loading tasks list</string>

@@ -16,11 +16,11 @@ class DbAvisoGeo
 	//public static final String QUERY = "SELECT * FROM "+TABLE+" ";
 
 	static final String ID = "_id";
-	static final String TEXTO = "texto";
-	static final String ACTIVO = "activo";
-	static final String LATITUD = "latitud";
-	static final String LONGITUD = "longitud";
-	static final String RADIO = "radio";
+	private static final String TEXTO = "texto";
+	private static final String ACTIVO = "activo";
+	private static final String LATITUD = "latitud";
+	private static final String LONGITUD = "longitud";
+	private static final String RADIO = "radio";
 	//public static final String ID_PADRE = "id_padre";
 
 	static final String SQL_CREATE_TABLE =

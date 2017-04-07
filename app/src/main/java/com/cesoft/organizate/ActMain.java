@@ -24,22 +24,7 @@ import com.cesoft.organizate.svc.CesServiceAviso;
 import javax.inject.Inject;
 
 
-// ./gradlew -PFirebaseServiceAccountFilePath=xxxxx.json :app:firebaseUploadReleaseProguardMapping
-
-// PLAY STORE DEVELOPER CONSOLE : https://play.google.com/apps/publish/?hl=es&dev_acc=11164117065791896000
-//MAP API CREDENTIAL: https://console.developers.google.com/apis/credentials?project=shining-medium-121911
-//GOOGLE API SIGN : https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
-//LAUNCH SIGNED APK : https://www.jetbrains.com/idea/help/generating-a-signed-release-apk-through-an-artifact.html
-
-/*
-GoogleService failed to initialize, status: 10, Missing an expected resource: 'R.string.google_app_id' for initializing Google services.
-Possible causes are missing google-services.json or com.google.gms.google-services gradle plugin.
-Scheduler not set. Not logging error/warn.
-Uploading is not possible. App measurement disabled
-
-https://developers.google.com/identity/sign-in/android/start?hl=en
-https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=Default%20Demo%20App&cntpkg=com.google.samples.quickstart.signin&cnturl=https:%2F%2Fdevelopers.google.com%2Fidentity%2Fsign-in%2Fandroid%2Fstart%3Fconfigured%3Dtrue&cntlbl=Continue%20with%20Try%20Sign-In
-*/
+// ./gradlew -PFirebaseServiceAccountFilePath=./app/crashreporting.json :app:firebaseUploadArchivedProguardMapping
 
 //TODO: add notifications.....
 
@@ -54,13 +39,11 @@ https://developers.google.com/mobile/add?platform=android&cntapi=signin&cntapp=D
 //TODO: proguard ?
 
 //TODO:Settings dialog: Widget Time change? Desactivar por (hoy|hora|...)
-//TODO: No debería rodar servicio de aviso si no hay avisos, activar cuando se cree alguno...? Los avisos que no tienen configuracion deberían borrarse o ignorarse... saltarian a todas horas...
 
 //TODO: Private but free git host? gitHub make ur code public...
 
 //TODO: mejorar sistema de fecha de aviso: lista de fecha-horas  y mejorar aspecto botones...
 //TODO: Revisar "no molestar por hoy"
-//TODO: Toolbar en settings : problema, se cambio modo de barra por lista...
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class ActMain extends AppCompatActivity
 {

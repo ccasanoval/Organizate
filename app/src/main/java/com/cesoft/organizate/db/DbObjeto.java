@@ -20,15 +20,15 @@ public class DbObjeto
 {
 	private static final String TAG = DbObjeto.class.getSimpleName();
 
-	static final String ID = "_id";
-	static final String NOMBRE = "nombre";
-	static final String DESCRIPCION = "descripcion";
-	static final String ORDEN = "orden";
-	static final String PRIORIDAD = "prioridad";
-	static final String CREACION = "creacion";
-	static final String MODIFICADO = "modificado";
-	static final String LIMITE = "limite";
-	static final String ID_PADRE = "id_padre";
+	private static final String ID = "_id";
+	private static final String NOMBRE = "nombre";
+	private static final String DESCRIPCION = "descripcion";
+	private static final String ORDEN = "orden";
+	private static final String PRIORIDAD = "prioridad";
+	private static final String CREACION = "creacion";
+	private static final String MODIFICADO = "modificado";
+	private static final String LIMITE = "limite";
+	private static final String ID_PADRE = "id_padre";
 
 	public static final String TABLE = "tarea";
 	//public static final String QUERY = "SELECT * FROM "+TABLE+" ";
@@ -106,6 +106,7 @@ public class DbObjeto
 		}
 	};
 
+	//----------------------------------------------------------------------------------------------
 	private static ContentValues code(Objeto o)
 	{
 		ContentValues cv = new ContentValues();
@@ -145,8 +146,9 @@ public class DbObjeto
 			Log.e(TAG, "saveAll:e:------------------------------------------------------------------", e);
 		}
 	}
+	//----------------------------------------------------------------------------------------------
 	public static void delete(BriteDatabase db, Objeto o)
 	{
-		db.delete(TABLE, "WHERE "+ID+" LIKE ?", o.getId());
+		db.delete(TABLE, ID+" LIKE ?", o.getId());
 	}
 }

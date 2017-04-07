@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -31,20 +30,18 @@ import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
 
-import com.cesoft.organizate.db.DbObjeto;
 import com.cesoft.organizate.models.AvisoGeo;
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.models.Objeto;
-import com.cesoft.organizate.util.Util;
-import com.squareup.sqlbrite.BriteDatabase;
 
 import javax.inject.Inject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //http://www.androidhive.info/2015/09/android-material-design-snackbar-example/
@@ -64,27 +61,46 @@ public class ActEdit extends AppCompatActivity
 {
 	private static final String TAG = ActEdit.class.getSimpleName();
 
-	private static final String PADRE = "+ ";
-	private static final String HIJO = "   - ";
-	private static final String SEP = "::";
-
-	@Inject	BriteDatabase db;
+	@Inject	PreEdit _presenter;
 
 	//______________________________________________________________________________________________
 	private String[]	_popUpContents;
     private PopupWindow	_popupPadre;
-    private Button		_btnPadre;
-	private ImageButton _btnEliminar;
-	private ImageButton _btnHablar;
 
 	private boolean		_isNuevo=false;
 	private String		_idPadre = Objeto.TOP_NODE;
 	private Objeto		_o;
-	private EditText	_txtNombre;
-	private EditText	_txtDescripcion;
-	private RatingBar	_rbPrioridad;
+
+	@BindView(R.id.txtNombre)		EditText	_txtNombre;
+	@BindView(R.id.txtDescripcion)	EditText	_txtDescripcion;
+	@BindView(R.id.rbPrioridad)		RatingBar	_rbPrioridad;
+
+	@BindView(R.id.btnEliminar)		ImageButton	_btnEliminar;
+	@BindView(R.id.btnHablar)		ImageButton	_btnHablar;
+	@OnClick(R.id.btnEliminar)		void btnEliminar(View v){ borrar(v); }
+	@OnClick(R.id.btnHablar)		void btnHablar(){ showAvisoGeo(); }
+
+	@OnClick(R.id.btnAviso)			void btnAviso(){ showAviso(); }
+	@OnClick(R.id.btnAvisoGeo)		void btnAvisoGeo(){ showAvisoGeo(); }
+	@OnClick(R.id.fab)				void btnAtras(){ finish(); }
+
+	@BindView(R.id.btnPadre)		Button		_btnPadre;
+	@OnClick(R.id.btnPadre)			void btnPadre(View v){ _popupPadre.showAsDropDown(v, -7, 0); }
 
 
+	//______________________________________________________________________________________________
+	@Override
+	public void onResume()
+	{
+		super.onResume();
+		_presenter.subscribe(this);
+	}
+	//______________________________________________________________________________________________
+	@Override public void onPause()
+	{
+		super.onPause();
+		_presenter.unsubscribe();
+	}
 	//______________________________________________________________________________________________
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -93,99 +109,19 @@ public class ActEdit extends AppCompatActivity
 		setContentView(R.layout.act_edit);
 
 		App.getComponent(this).inject(this);
+		ButterKnife.bind(this);
+		_presenter.subscribe(this);
 
-		_txtNombre = (EditText)findViewById(R.id.txtNombre);
-		_txtDescripcion = (EditText)findViewById(R.id.txtDescripcion);
-		_rbPrioridad = (RatingBar)findViewById(R.id.rbPrioridad);
-
-		_rbPrioridad.setNumStars(5);
-		_btnEliminar = (ImageButton)findViewById(R.id.btnEliminar);
-		_btnHablar = (ImageButton)findViewById(R.id.btnHablar);
-		ImageButton	btnAviso = (ImageButton)findViewById(R.id.btnAviso);
-		ImageButton	btnAvisoGeo = (ImageButton)findViewById(R.id.btnAvisoGeo);
-
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+		setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 		//
 		ActionBar actionBar = getSupportActionBar();
 		if(actionBar!=null)actionBar.setDisplayHomeAsUpEnabled(true);
-		//
-		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-		//------------------------------------------------------------------------------------------
-		fab.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View view)
-			{
-				ActEdit.this.finish();
-			}
-		});
-		_btnEliminar.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				borrar(v);
-			}
-		});
-		_btnHablar.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				Util.hablar(getApplicationContext(), String.format(Locale.getDefault(), "Prioridad %d, %s, %s", _o.getPrioridad(), _o.getNombre(), _o.getDescripcion()));
-			}
-		});
-		btnAviso.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				showAviso();
-			}
-		});
-		btnAvisoGeo.setOnClickListener(new View.OnClickListener()
-		{
-			@Override
-			public void onClick(View v)
-			{
-				showAvisoGeo();
-			}
-		});
-		//------------------------------------------------------------------------------------------
 
-		List<String> lst = new ArrayList<>();
-		lst.add(this.getBaseContext().getString(R.string.nodo_padre)+SEP+Objeto.TOP_NODE);
-		List<Objeto> lista = App.getLista(this);
-		if(lista != null && lista.size()>0)
-		for(Objeto o : Objeto.filtroN(lista, Objeto.NIVEL1))
-		{
-			lst.add(PADRE + o.getNombre() + SEP + o.getId());
-			if(o.getHijos().length > 0)
-				for(Objeto o2 : o.getHijos())
-					lst.add(HIJO + o2.getNombre() + SEP + o2.getId());
-		}
-		/*ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, lst);
-        AutoCompleteTextView txtPadre = (AutoCompleteTextView)findViewById(R.id.txtPadre);
-        txtPadre.setAdapter(adapter);*/
+		List<String> lst = _presenter.get();
+
         _popUpContents = new String[lst.size()];
         lst.toArray(_popUpContents);
         _popupPadre = popupPadre();
-        View.OnClickListener handler = new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				switch(v.getId())
-				{
-				case R.id.btnPadre:
-					_popupPadre.showAsDropDown(v, -7, 0);
-					break;
-				}
-			}
-		};
-        _btnPadre = (Button)findViewById(R.id.btnPadre);
-        _btnPadre.setOnClickListener(handler);
-
 
 		//------------------------------------------------------------------------------------------
 		try
@@ -199,7 +135,7 @@ public class ActEdit extends AppCompatActivity
 		}
 		catch(Exception e)
 		{
-			Log.e(TAG,"ActEdit:onCreate:e:"+e);
+			Log.e(TAG,"ActEdit:onCreate:e:----------------------------------------------------------",e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -242,22 +178,7 @@ public class ActEdit extends AppCompatActivity
 		_o.setPrioridad((int) _rbPrioridad.getRating());
 		_o.setModificado(new Date());
 		_o.setIdPadre(_idPadre);
-		List<Objeto> lista = App.getLista(this);
-		if(_isNuevo)
-		{
-			_o.setId(UUID.randomUUID().toString());
-			_o.setCreacion(new Date());
-			lista.add(_o);
-		}
-		else
-		{
-			lista.set(lista.indexOf(_o), _o);
-		}
-
-		_o.fixPadres(lista);
-
-		//BBDD---------------------------------------------------------
-		DbObjeto.saveAll(db, lista);
+		_presenter.save(_o, _isNuevo);
 		ActEdit.this.finish();
 	}
 
@@ -272,9 +193,8 @@ public class ActEdit extends AppCompatActivity
 			@Override
 			public void onClick(DialogInterface dialog, int which)
 			{
-				DbObjeto.delete(db, _o);
+				_presenter.del(_o);
 				Snackbar.make(v, R.string.eliminar, Snackbar.LENGTH_LONG).show();
-				//_act.refrescarLista();
 				ActEdit.this.finish();
 			}
 		});
@@ -320,15 +240,8 @@ public class ActEdit extends AppCompatActivity
 			{
                 // setting the ID and text for every items in the list
                 String item = getItem(position);
-				String text="=", id="0";
-				if(item != null)
-				{
-                	String[] itemArr = item.split(SEP);
-                	text = itemArr[0];
-                	id = itemArr[1];
-				}
-				else
-					Log.e(TAG, "padreAdapter:e:***************************************************** ITEM = NULL");
+				String text = _presenter.getTexto(item);
+				String id   = _presenter.getId(item);
 
                 // visual settings for the list item
                 TextView listItem = new TextView(ActEdit.this);
@@ -361,12 +274,12 @@ public class ActEdit extends AppCompatActivity
 			act._popupPadre.dismiss();
 
 			// get the text and set it as the button text
-			String selectedItemText = ((TextView)v).getText().toString();
-			selectedItemText = selectedItemText.replace(HIJO, "").replace(PADRE, "");
-			act._btnPadre.setText(selectedItemText);
+			String id = _presenter.getSelectedId(((TextView)v).getText().toString());
+			/*String selectedItemText = ((TextView)v).getText().toString();
+			selectedItemText = selectedItemText.replace(HIJO, "").replace(PADRE, "");*/
+			act._btnPadre.setText(id);
 			// get the id
 			_idPadre = v.getTag().toString();
-			//Toast.makeText(mContext, "ID is: " + _idPadre, Toast.LENGTH_SHORT).show();
 		}
 	}
 

@@ -72,7 +72,7 @@ Log.e(TAG,"onHandleIntent-------------------------------------------------------
 						Log.e(TAG, "checkAvisos:----ACTIVA EL AVISO GEO*****************************************************" + o);
 						Intent i = new Intent(getBaseContext(), ActEdit.class);
 						i.putExtra(Objeto.class.getName(), o);
-						Util.showAviso(getBaseContext(), getString(R.string.editar_aviso_geo), o.getAvisoGeo(), i);
+						Util.showAviso(getBaseContext(), getString(R.string.aviso_geo), o.getAvisoGeo(), i);
 						break;
 					}
 				}

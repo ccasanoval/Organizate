@@ -11,8 +11,10 @@
 	<string name="eliminar">Eliminar</string>
 	<string name="nuevo">Añadir</string>
 	<string name="volver">Volver</string>
-	<string name="editar_aviso">Alerta Tiempo:</string>
-	<string name="editar_aviso_geo">Alerta Geo:</string>
+	<string name="editar_aviso_tem">Editar Alerta Fecha</string>
+	<string name="editar_aviso_geo">Editar Alerta Geo</string>
+	<string name="aviso_tem">Alerta Fecha:</string>
+	<string name="aviso_geo">Alerta Geo:</string>
 
 	<string name="nombre">Nombre</string>
 	<string name="descripcion">Descripción</string>
@@ -53,7 +55,6 @@
 	<string name="geofen_in">Entrando en zona de Aviso</string>
 	<string name="geofen_out">Fuera de zona de Aviso</string>
 	<string name="geofen_dwell">En zona de Aviso</string>
-	<string name="aviso_tem">Aviso de tiempo</string>
 
 	<string name="config">Preferencias</string>
 	<string name="title_activity_act_config">Configuración</string>
@@ -80,6 +81,6 @@
 
 	<string name="error_carga_lista">Error al cargar la lista de tareas</string>
 	<string name="cargando">Cargando…</string>
-	<string name="max_num_items">Máximo numero de items alcanzado</string>
+
 
 </resources>

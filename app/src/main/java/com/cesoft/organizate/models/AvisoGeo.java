@@ -6,8 +6,6 @@ import com.cesoft.organizate.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -16,19 +14,8 @@ import java.util.Locale;
 public class AvisoGeo extends AvisoAbs
 {
 	private static final String TAG = AvisoGeo.class.getSimpleName();
-	/*@Ignore
-	protected Objeto _o;
-		public Objeto getObjeto(){return _o;}
-		public void setObjeto(Objeto o){_o=o;}*/
-	public Objeto getObjeto()
-	{//TODO
-		/*List<Objeto> ao = Objeto.find(Objeto.class, "_AVISO_GEO = ?", getId().toString());
-		if(ao.size() > 0)return ao.get(0);*/
-		return null;
-	}
 
-	//@ Ignore
-	protected Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
+	private Date _dtActivo;//Fecha para desactivar un dia //TODO: variable con periodo a aguardar para siguiente aviso: 1h, 1 dia...
 	public void desactivarPorHoy()
 	{
 		_dtActivo = Calendar.getInstance().getTime();
@@ -59,7 +46,7 @@ public class AvisoGeo extends AvisoAbs
 	}
 
 	///-----
-	public AvisoGeo(){}//NO BORRAR: Necesario para sugar
+	//public AvisoGeo(){}//NO BORRAR: Necesario para sugar
 	public AvisoGeo(String s){_sTexto = s;}
 	public AvisoGeo(String id, String texto, boolean activo, double lat, double lon, float rad)
 	{
@@ -69,7 +56,7 @@ public class AvisoGeo extends AvisoAbs
 
 
 	///----- PARCELABLE
-	protected AvisoGeo(Parcel in)
+	private AvisoGeo(Parcel in)
 	{
 		setId(in.readString());
 		//

@@ -80,7 +80,6 @@ class CesGeofenceStore implements ConnectionCallbacks, OnConnectionFailedListene
 				return;
 			PendingResult<Status> pendingResult = LocationServices.GeofencingApi.addGeofences(_GoogleApiClient, _GeofencingRequest, _PendingIntent);
 			pendingResult.setResultCallback(this);// Set the result callbacks listener to this class.
-Log.e(TAG, "onConnected-3---------------------------------------------------------------------------");
 		}
 	}
 	@Override

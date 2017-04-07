@@ -1,6 +1,5 @@
 package com.cesoft.organizate;
 
-import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 import timber.log.Timber;
 
-public final class App extends MultiDexApplication//Application
+public final class App extends MultiDexApplication//android.app.Application  Al meter firebase...
 {
 	private TodoComponent mainComponent;
 	private List<Objeto> _lista;//TODO: mejor en un modulo de datos globales!!!

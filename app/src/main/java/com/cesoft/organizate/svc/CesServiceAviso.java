@@ -58,7 +58,6 @@ public class CesServiceAviso extends IntentService
 	public CesServiceAviso()
 	{
 		super("OrganizateAviso");
-		//SugarContext.init(this);
 		INSTANCE = this;
 	}
 
@@ -113,7 +112,7 @@ Log.e(TAG, "---------------- LOOP ----------------------------------------------
 							.build());
 				}
 			}
-Log.e(TAG, "-------------------------------cargarListaGeo 9:" + _listaGeo.size());
+//Log.e(TAG, "-------------------------------cargarListaGeo 9:-----------------------------------" + _listaGeo.size());
 			//aGeofences =
 			_GeofenceStore = new CesGeofenceStore(this, aGeofences);
 		}

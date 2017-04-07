@@ -6,7 +6,6 @@ import com.cesoft.organizate.util.Log;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 
 // Created by Cesar_Casanova on 12/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////

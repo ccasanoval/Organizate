@@ -33,7 +33,7 @@
 		</activity>
 		<activity
 			android:name=".ActAvisoEdit"
-			android:label="@string/editar_aviso"
+			android:label="@string/editar_aviso_tem"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity

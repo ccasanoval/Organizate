@@ -16,13 +16,13 @@ class DbAvisoTem
 	//static final String QUERY = "SELECT * FROM "+TABLE+" ";
 
 	static final String ID = "_id";
-	static final String TEXTO = "texto";
-	static final String ACTIVO = "activo";
-	static final String MES = "mes";
-	static final String DIA_MES = "diames";
-	static final String DIA_SEMANA = "diasem";
-	static final String HORA = "hora";
-	static final String MINUTO = "minuto";
+	private static final String TEXTO = "texto";
+	private static final String ACTIVO = "activo";
+	private static final String MES = "mes";
+	private static final String DIA_MES = "diames";
+	private static final String DIA_SEMANA = "diasem";
+	private static final String HORA = "hora";
+	private static final String MINUTO = "minuto";
 	//public static final String ID_PADRE = "id_padre";
 
 	static final String SQL_CREATE_TABLE =

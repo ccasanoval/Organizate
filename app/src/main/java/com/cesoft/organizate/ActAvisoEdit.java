@@ -4,12 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +31,10 @@ import java.util.Calendar;
 import com.cesoft.organizate.models.AvisoTem;
 import com.cesoft.organizate.util.Log;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -55,8 +57,9 @@ public class ActAvisoEdit extends AppCompatActivity
 	private PopupWindow[] _apw;
 	private Button[] _btn;
 
-	private TextView _txtAviso;
-	private Switch _swtActivo;
+	@BindView(R.id.txtAviso)	TextView _txtAviso;
+	@BindView(R.id.bActivo)		Switch _swtActivo;
+	@OnClick(R.id.fab)			void btnAtras(){ finish(); }
 
 	//______________________________________________________________________________________________
 	@Override
@@ -64,14 +67,14 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.act_aviso_edit);
+		ButterKnife.bind(this);
 
-		Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-		setSupportActionBar(toolbar);
+		setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 		//
 		ActionBar actionBar = getSupportActionBar();
 		if(actionBar!=null)actionBar.setDisplayHomeAsUpEnabled(true);
 		//
-		FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
+		/*FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
 		if(fab != null)
 			fab.setOnClickListener(new View.OnClickListener()
 			{
@@ -81,9 +84,8 @@ public class ActAvisoEdit extends AppCompatActivity
 					ActAvisoEdit.this.finish();
 				}
 			});
-
 		_txtAviso = (TextView)findViewById(R.id.txtAviso);
-		_swtActivo = (Switch)findViewById(R.id.bActivo);
+		_swtActivo = (Switch)findViewById(R.id.bActivo);*/
 
 		//------------------------------------------------------------------------------------------
 		// PopUp
@@ -146,7 +148,7 @@ public class ActAvisoEdit extends AppCompatActivity
 		}
 		catch(Exception e)
 		{
-			Log.e(TAG, "ActAvisoEdit:onCreate:e:"+e);
+			Log.e(TAG, "ActAvisoEdit:onCreate:e:----------------------------------------------------", e);
 			this.finish();
 		}
 		//------------------------------------------------------------------------------------------
@@ -195,8 +197,7 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
 		byte valor = Byte.parseByte(tag.toString());
 		if(valor == AvisoTem.NADA)return null;
-		LayoutInflater inflater = LayoutInflater.from(ActAvisoEdit.this);
-		final View item = inflater.inflate(R.layout.aviso_item, null, false);
+		final View item = View.inflate(this, R.layout.aviso_item, null);
 		//item.setTag(tag);
 		TextView lbl = (TextView)item.findViewById(R.id.lbl);
 		lbl.setText(texto);
@@ -347,7 +348,7 @@ public class ActAvisoEdit extends AppCompatActivity
 					}
 			);
         	// some other visual settings
-        	DisplayMetrics metrics = getResources().getDisplayMetrics();
+        	//DisplayMetrics metrics = getResources().getDisplayMetrics();
         	popupWindow.setWidth(250);
 			popupWindow.setFocusable(true);
         	popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -361,15 +362,16 @@ public class ActAvisoEdit extends AppCompatActivity
 	{
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, padreArray)
 		{
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent)
+            @NonNull
+			@Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent)
 			{
 				String id;
 				String text;
 
                 // setting the ID and text for every items in the list
                 String item = getItem(position);
-				if(item.contains(SEP))
+				if(item != null && item.contains(SEP))
 				{
                 	String[] itemArr = item.split(SEP);
                 	text = itemArr[0];

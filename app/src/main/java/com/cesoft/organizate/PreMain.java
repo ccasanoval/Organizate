@@ -67,7 +67,6 @@ public class PreMain
 
 					Objeto.conectarHijos(lista);
 					android.util.Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
-					//	lista = new ArrayList<>();
 					App.setLista(_app, lista);
 
 					_view.showData(lista);

@@ -1,6 +1,8 @@
 package com.cesoft.organizate;
 
 import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.util.Log;
+import com.cesoft.organizate.util.Util;
 
 import android.Manifest;
 import android.content.Intent;
@@ -25,8 +27,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import com.cesoft.organizate.util.Log;
-import com.cesoft.organizate.util.Util;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;

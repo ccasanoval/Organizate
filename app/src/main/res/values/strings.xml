@@ -10,6 +10,7 @@
 	<string name="guardar">Save</string>
 	<string name="aviso">Alert!</string>
 	<string name="cerrar">Close</string>
+	<string name="hablar">Priority %1$d, %2$s, %3$s</string>
 
 	<string name="editar">Edit</string>
 	<string name="eliminar">Remove</string>

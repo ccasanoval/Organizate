@@ -26,14 +26,6 @@ public class CesServiceAvisoGeo extends IntentService
 		super("GeofenceIntentService");
 		//android.util.Log.v(TAG, "Constructor.");private final String TAG = this.getClass().getCanonicalName();
 	}
-	public void onCreate()
-	{
-		super.onCreate();
-	}
-	public void onDestroy()
-	{
-		super.onDestroy();
-	}
 
 	@Override
 	protected void onHandleIntent(Intent intent)
@@ -65,6 +57,7 @@ Log.e(TAG,"onHandleIntent-------------------------------------------------------
 			{
 				List<Objeto> lista = App.getLista(this);//es mejor consulta en bbdd ???
 				String id = geof.getRequestId();
+				if(lista != null)
 				for(Objeto o : lista)
 				{
 					if(o.getId().equals(id))
@@ -76,6 +69,7 @@ Log.e(TAG,"onHandleIntent-------------------------------------------------------
 						break;
 					}
 				}
+				if(lista == null)Log.e(TAG, "checkAvisos:----LISTA AVISO GEO == NULL !!!! *****************************************************");
 			}
 		}
 	}

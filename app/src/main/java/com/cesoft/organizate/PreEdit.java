@@ -49,6 +49,10 @@ public class PreEdit
 	private static final String SEP = "::";
 	List<String> get()
 	{
+		return get(null);
+	}
+	List<String> get(String id)
+	{
 		//return App.getLista(_app);
 		List<String> lst = new ArrayList<>();
 		lst.add(_app.getString(R.string.nodo_padre)+SEP+Objeto.TOP_NODE);
@@ -56,10 +60,12 @@ public class PreEdit
 		if(lista != null && lista.size()>0)
 		for(Objeto o : Objeto.filtroN(lista, Objeto.NIVEL1))
 		{
+			if(id != null && id.equals(o.getId()))continue;
 			lst.add(PADRE + o.getNombre() + SEP + o.getId());
 			if(o.getHijos().length > 0)
 				for(Objeto o2 : o.getHijos())
-					lst.add(HIJO + o2.getNombre() + SEP + o2.getId());
+					if(id == null || !id.equals(o2.getId()))
+						lst.add(HIJO + o2.getNombre() + SEP + o2.getId());
 		}
 		return lst;
 	}

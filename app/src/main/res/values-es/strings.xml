@@ -6,6 +6,7 @@
 
 	<string name="aviso">Aviso!</string>
 	<string name="cerrar">Cerrar</string>
+	<string name="hablar">Prioridad %1$d, %2$s, %3$s</string>
 
 	<string name="editar">Editar</string>
 	<string name="eliminar">Eliminar</string>
@@ -81,6 +82,8 @@
 
 	<string name="error_carga_lista">Error al cargar la lista de tareas</string>
 	<string name="cargando">Cargando…</string>
+	<string name="guardar">Guardar</string>
+	<string name="max_num_items">Alcanzado máximo número de elementos</string>
 
 
 </resources>

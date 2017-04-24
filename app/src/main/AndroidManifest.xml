@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-		  package="com.cesoft.organizate">
+		  package="com.cesoft.organizate2">
 
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.INTERNET"/>
@@ -14,11 +14,11 @@
 		android:label="@string/app_name"
 		android:roundIcon="@mipmap/ic_launcher"
 		android:supportsRtl="true"
-		android:name=".App"
+		android:name="com.cesoft.organizate2.App"
 		android:theme="@style/AppTheme">
 
 		<activity
-			android:name=".ActMain"
+			android:name="com.cesoft.organizate2.ActMain"
 			android:label="@string/app_name"
 			android:theme="@style/AppTheme.NoActionBar">
 			<intent-filter>
@@ -27,35 +27,35 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".ActEdit"
+			android:name="com.cesoft.organizate2.ActEdit"
 			android:label="@string/editar"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".ActAvisoEdit"
+			android:name="com.cesoft.organizate2.ActAvisoEdit"
 			android:label="@string/editar_aviso_tem"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".ActAvisoGeoEdit"
+			android:name="com.cesoft.organizate2.ActAvisoGeoEdit"
 			android:label="@string/editar_aviso_geo"
 			android:theme="@style/AppTheme.NoActionBar">
 		</activity>
 		<activity
-			android:name=".ActAvisoDlg"
+			android:name="com.cesoft.organizate2.ActAvisoDlg"
 			android:label="@string/app_name"
 			android:theme="@android:style/Theme.Dialog">
 		</activity>
 		<activity
-			android:name=".ActSplash"
+			android:name="com.cesoft.organizate2.ActSplash"
 			android:theme="@style/Theme.Transparent">
 		</activity>
 		<activity
-			android:name=".ActConfig"
+			android:name="com.cesoft.organizate2.ActConfig"
 			android:label="@string/title_activity_act_config">
 		</activity>
 
-		<receiver android:name=".svc.CesWidgetProvider">
+		<receiver android:name="com.cesoft.organizate2.svc.CesWidgetProvider">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
 				<action android:name="com.cesoftware.cestodo1.CesWidgetProvider.ACTION_WIDGET_SHOWAPP"/>
@@ -84,10 +84,10 @@
 		</receiver>
 
 		<service
-			android:name=".svc.CesServiceAviso"
+			android:name="com.cesoft.organizate2.svc.CesServiceAviso"
 			android:exported="false"/>
 		<service
-			android:name=".svc.CesServiceAvisoGeo"
+			android:name="com.cesoft.organizate2.svc.CesServiceAvisoGeo"
 			android:exported="false"/>
 
 		<!-- meta-data

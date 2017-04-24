@@ -38,7 +38,7 @@ public class Util
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
 		if(prefs.getBoolean("notifications_new_message", true))//true o false ha de coincidir con lo que tengas en pref_notificacion.xml
 		{
-Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
+Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");//TODO: Se llama dos veces!!!!!!!!!!!!
 			String sound = prefs.getString("notifications_new_message_ringtone", "");
 			if( ! sound.isEmpty())
 				playSound(c, Uri.parse(sound));
@@ -68,7 +68,7 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
     }
 
 	//______________________________________________________________________________________________
-	private static void showLights(Context c, int color)
+	/*private static void showLights(Context c, int color)
 	{
 		NotificationManager notif = (NotificationManager)c.getSystemService(Context.NOTIFICATION_SERVICE);
 		notif.cancel(1); // clear previous notification
@@ -77,7 +77,7 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 		notification.ledOnMS = 1000;
 		notification.flags |= Notification.FLAG_SHOW_LIGHTS;
 		notif.notify(1, notification);
-	}
+	}*/
 
 	//______________________________________________________________________________________________
 	// NOTIFICATION
@@ -134,6 +134,16 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 	private static TextToSpeech tts = null;
 	public static void hablar(final Context c, String texto)
 	{
+		iniHablar(c);
+		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+    		ttsGreater21(c, tts, texto);
+		else
+    		ttsUnder20(tts, texto);
+
+	}
+	public static void iniHablar(final Context c)
+	{
 		if(tts == null)
 		tts = new TextToSpeech(c.getApplicationContext(), new TextToSpeech.OnInitListener()
 		{
@@ -145,12 +155,6 @@ Log.e(TAG,"-----------------------------Ding Dong!!!!!!!!!");
 					tts.setLanguage(Locale.getDefault());//new Locale("es", "ES");Locale.forLanguageTag("ES")
 			}
 		});
-		//tts.speak(s, TextToSpeech.QUEUE_FLUSH, null);//DEPRECATED
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-    		ttsGreater21(c, tts, texto);
-		else
-    		ttsUnder20(tts, texto);
-
 	}
 	//______________________________________________________________________________________________
 	@SuppressWarnings("deprecation")

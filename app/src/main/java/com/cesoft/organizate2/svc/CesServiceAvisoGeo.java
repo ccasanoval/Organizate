@@ -1,13 +1,13 @@
-package com.cesoft.organizate2.svc;
+package com.cesoft.organizate.svc;
 
 import java.util.List;
 
-import com.cesoft.organizate2.ActEdit;
-import com.cesoft.organizate2.App;
-import com.cesoft.organizate2.R;
-import com.cesoft.organizate2.util.Util;
-import com.cesoft.organizate2.models.Objeto;
-import com.cesoft.organizate2.util.Log;
+import com.cesoft.organizate.ActEdit;
+import com.cesoft.organizate.App;
+import com.cesoft.organizate.R;
+import com.cesoft.organizate.util.Util;
+import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.util.Log;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 

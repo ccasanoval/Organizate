@@ -1,4 +1,4 @@
-package com.cesoft.organizate2;
+package com.cesoft.organizate;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,10 +32,12 @@ import android.widget.TextView;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-import com.cesoft.organizate2.models.AvisoGeo;
-import com.cesoft.organizate2.models.AvisoTem;
-import com.cesoft.organizate2.models.Objeto;
+import com.cesoft.organizate.models.AvisoGeo;
+import com.cesoft.organizate.models.AvisoTem;
+import com.cesoft.organizate.models.Objeto;
+import com.cesoft.organizate.util.Util;
 
 import javax.inject.Inject;
 
@@ -43,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+//TODO: guardar de una sola vez...
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //http://www.androidhive.info/2015/09/android-material-design-snackbar-example/
 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -78,7 +81,12 @@ public class ActEdit extends AppCompatActivity
 	@BindView(R.id.btnEliminar)		ImageButton	_btnEliminar;
 	@BindView(R.id.btnHablar)		ImageButton	_btnHablar;
 	@OnClick(R.id.btnEliminar)		void btnEliminar(View v){ borrar(v); }
-	@OnClick(R.id.btnHablar)		void btnHablar(){ showAvisoGeo(); }
+	@OnClick(R.id.btnHablar)		void btnHablar()
+	{
+		Util.hablar(getApplicationContext(),
+			String.format(Locale.getDefault(),
+				getString(R.string.hablar), _o.getPrioridad(), _o.getNombre(), _o.getDescripcion()));
+	}
 
 	@OnClick(R.id.btnAviso)			void btnAviso(){ showAviso(); }
 	@OnClick(R.id.btnAvisoGeo)		void btnAvisoGeo(){ showAvisoGeo(); }
@@ -88,6 +96,13 @@ public class ActEdit extends AppCompatActivity
 	@OnClick(R.id.btnPadre)			void btnPadre(View v){ _popupPadre.showAsDropDown(v, -7, 0); }
 
 
+	//______________________________________________________________________________________________
+	@Override
+	public void onStart()
+	{
+		super.onStart();
+		Util.iniHablar(this);
+	}
 	//______________________________________________________________________________________________
 	@Override
 	public void onResume()
@@ -110,7 +125,7 @@ public class ActEdit extends AppCompatActivity
 
 		App.getComponent(this).inject(this);
 		ButterKnife.bind(this);
-		//_presenter.subscribe();
+		//_presenter.subscribe(this);
 
 		setSupportActionBar((Toolbar)findViewById(R.id.toolbar));
 		//

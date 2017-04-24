@@ -21,7 +21,7 @@ To do so, add this line to proguard-rules.pro:
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 public class Objeto implements Parcelable
 {
-	private static final String TAG = Objeto.class.getSimpleName();
+	//private static final String TAG = Objeto.class.getSimpleName();
 	public static final int NIVEL1 = 0;
 	public static final String TOP_NODE = null;
 
@@ -114,7 +114,7 @@ public class Objeto implements Parcelable
 	public String getId(){return _id;}
 	public void setId(String v){_id=v;}
 	public String getIdPadre(){return _idPadre;}
-	public void setIdPadre(String v){_idPadre=v;}
+	public void setIdPadre(String v){if(_id==null || !_id.equals(v))_idPadre=v;}
 	public Integer getOrden(){return _iOrden;}
 	//public void setOrden(Integer iOrden){_iOrden = iOrden;}
 	public Date getCreacion(){return _dtCreacion;}

@@ -1,4 +1,4 @@
-package com.cesoft.organizate;
+package com.cesoft.organizate2;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -34,10 +34,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import com.cesoft.organizate.models.AvisoGeo;
-import com.cesoft.organizate.models.AvisoTem;
-import com.cesoft.organizate.models.Objeto;
-import com.cesoft.organizate.util.Util;
+import com.cesoft.organizate2.models.AvisoGeo;
+import com.cesoft.organizate2.models.AvisoTem;
+import com.cesoft.organizate2.models.Objeto;
+import com.cesoft.organizate2.util.Util;
 
 import javax.inject.Inject;
 

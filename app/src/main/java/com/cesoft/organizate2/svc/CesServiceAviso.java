@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.cesoft.organizate2.ActEdit;
 import com.cesoft.organizate2.App;
@@ -14,10 +16,8 @@ import com.cesoft.organizate2.util.Util;
 import com.cesoft.organizate2.models.AvisoGeo;
 import com.cesoft.organizate2.models.Objeto;
 import com.cesoft.organizate2.util.Log;
-import com.google.android.gms.location.Geofence;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.google.android.gms.location.Geofence;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,14 +27,12 @@ import java.util.List;
 public class CesServiceAviso extends IntentService
 {
 	private static final String TAG = CesServiceAviso.class.getSimpleName();
-	private static final int GEOFEN_DWELL_TIME = 2*60000;//TODO:customize in settings...
-	private static final long DELAY_LOAD = 5*60*1000;//TODO: ajustar
-	private static final long DELAY_CHECK = 2*60*1000;
+	private static final int GEOFEN_DWELL_TIME = 5*60000;//TODO:customize in settings...
+	private static final long DELAY_LOAD = 10*60*1000;//TODO: ajustar
+	private static final long DELAY_CHECK = 5*60*1000;
 
 	private ArrayList<Objeto> _lista = new ArrayList<>();
-
 	private CesGeofenceStore _GeofenceStore;
-	//private ArrayList<AvisoGeo> _listaGeo = new ArrayList<>();
 
 	private static CesServiceAviso INSTANCE = null;
 	private boolean _bRun = true;

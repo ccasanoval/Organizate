@@ -9,7 +9,6 @@ import com.squareup.sqlbrite.BriteDatabase;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +34,9 @@ public class DbObjeto
 	private static final String LIMITE = "limite";
 	private static final String ID_PADRE = "id_padre";
 
-	public static final String TABLE = "tarea";
+	private static final String TABLE = "tarea";
 	//public static final String QUERY = "SELECT * FROM "+TABLE+" ";
-	public static final String QUERY =
+	private static final String QUERY =
 			"SELECT * "
 					//+DbObjeto.TABLE+".*, "
 					//+DbAvisoTem.TABLE+".*, "
@@ -67,7 +66,7 @@ public class DbObjeto
 			"CREATE INDEX idx_padre_id_"+TABLE+" ON "+DbObjeto.TABLE+" ("+DbObjeto.ID_PADRE+")";
 
 	//----------------------------------------------------------------------------------------------
-	public static Func1<Cursor, Objeto> MAPPER = new Func1<Cursor, Objeto>()
+	private static Func1<Cursor, Objeto> MAPPER = new Func1<Cursor, Objeto>()
 	{
 		@Override public Objeto call(final Cursor cursor)
 		{
@@ -192,5 +191,30 @@ public class DbObjeto
 					listener.onDatos(l);
 				}
 			});
+	}
+
+	public static Subscription getLista(BriteDatabase db, final Listener<Objeto> listener)
+	{
+		return db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
+				.mapToList(DbObjeto.MAPPER)
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribeOn(Schedulers.io())
+				.doOnError(new Action1<Throwable>()
+				{
+					@Override
+					public void call(Throwable err)
+					{
+						listener.onError(err);
+					}
+				})
+				.subscribe(new Action1<List<Objeto>>()
+				{
+					@Override
+					public void call(List<Objeto> lista)
+					{
+						Objeto.conectarHijos(lista);
+						listener.onDatos(lista);
+					}
+				});
 	}
 }

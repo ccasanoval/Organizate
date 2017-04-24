@@ -8,6 +8,7 @@ import com.cesoft.organizate2.R;
 import com.cesoft.organizate2.util.Util;
 import com.cesoft.organizate2.models.Objeto;
 import com.cesoft.organizate2.util.Log;
+
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
@@ -21,14 +22,12 @@ import android.os.SystemClock;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 /// Created by Cesar_Casanova on 27/01/2016
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//TODO: Si no hay avisos en bbdd quitar servicio, solo cuando se añada uno, activarlo=> activar solo cuando guarde...?
 public class CesServiceAvisoGeo extends IntentService
 {
-	private static final String TAG = CesServiceAvisoGeo.class.getSimpleName();//"CesSvcAGeo";
+	private static final String TAG = CesServiceAvisoGeo.class.getSimpleName();
 	public CesServiceAvisoGeo()
 	{
 		super("GeofenceIntentService");
-		//android.util.Log.v(TAG, "Constructor.");private final String TAG = this.getClass().getCanonicalName();
 	}
 	//public void onCreate(){super.onCreate();}
 	//public void onDestroy(){super.onDestroy();}

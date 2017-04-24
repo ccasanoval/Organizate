@@ -14,9 +14,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Presenter Main
@@ -48,36 +46,29 @@ class PreMain
 	void subscribe(ActMain view)
 	{
 		_view = view;
-		_subscripcion = _db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
-			.mapToList(DbObjeto.MAPPER)
-			.observeOn(AndroidSchedulers.mainThread())
-			.subscribeOn(Schedulers.io())
-			.doOnError(new Action1<Throwable>()
+		_subscripcion = DbObjeto.getLista(_db, new DbObjeto.Listener<Objeto>()
+		{
+			@Override
+			public void onError(Throwable err)
 			{
-				@Override
-				public void call(Throwable throwable)
-				{
-					android.util.Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+throwable);
-					Toast.makeText(_app, _app.getString(R.string.error_carga_lista), Toast.LENGTH_LONG).show();//TODO: to view
-				}
-			})
-			.subscribe(new Action1<List<Objeto>>()
+				android.util.Log.e(TAG, "onResume:createQuery:doOnError:Tarea------------------------------------------------"+err);
+				Toast.makeText(_app, _app.getString(R.string.error_carga_lista), Toast.LENGTH_LONG).show();//TODO: to view
+			}
+			@Override
+			public void onDatos(List<Objeto> lista)
 			{
-				@Override
-				public void call(List<Objeto> lista)
-				{
-					Objeto.conectarHijos(lista);
-					//android.util.Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
-					App.setLista(_app, lista);
+				Objeto.conectarHijos(lista);
+				//android.util.Log.e(TAG, "onResume:createQuery:subscribe:Tarea:------------------------------------------------"+lista.size());
+				App.setLista(_app, lista);
 
-					_view.showData(lista);
+				_view.showData(lista);
 
-					if(Objeto.hayAvisoActivo(lista) && _view.pideGPS())
-						CesServiceAviso.start(_app);
-					else
-						CesServiceAviso.stop();
-				}
-			});
+				if(Objeto.hayAvisoActivo(lista) && _view.pideGPS())
+					CesServiceAviso.start(_app);
+				else
+					CesServiceAviso.stop();
+			}
+		});
 	}
 
 	//----------------------------------------------------------------------------------------------

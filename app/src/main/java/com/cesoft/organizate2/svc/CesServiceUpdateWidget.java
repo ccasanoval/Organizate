@@ -24,10 +24,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Subscription;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Created by Cesar_Casanova on 04/01/2016.
@@ -120,41 +116,6 @@ public class CesServiceUpdateWidget extends Service
 					setWidget(sTarea);
 				}
 			});
-/*
-					//--------------
-					_db.createQuery(DbObjeto.TABLE, DbObjeto.QUERY)
-							.mapToList(DbObjeto.MAPPER)
-							.observeOn(Schedulers.immediate())
-							.subscribeOn(Schedulers.immediate())
-							.doOnError(new Action1<Throwable>()
-							{
-								@Override
-								public void call(Throwable throwable)
-								{
-									android.util.Log.e(TAG, "cambiarTextoWidget:e:------------------------------------------------" + throwable);
-									setWidget(context.getString(R.string.sintareas));
-								}
-							})
-							.subscribe(new Action1<List<Objeto>>()
-							{
-								@Override
-								public void call(List<Objeto> l)
-								{
-									String sTarea = context.getString(R.string.sintareas);
-									Objeto.conectarHijos(l);
-									if(l.size() > 0)
-									{
-										App.setLista(context, l);
-
-										_iTarea++;
-										if(l.size() <= _iTarea) _iTarea = 0;
-										Objeto o = l.get(_iTarea);
-										sTarea = o.getNombre() + " : " + o.getDescripcion();
-									}
-									//android.util.Log.e(TAG, "************************-----------"+_iTarea+"-----"+sTarea+"--------------------------------"+l.size());
-									setWidget(sTarea);
-								}
-							});*/
 
 			//--------------
 			//stopSelf();

@@ -1,20 +1,14 @@
 package com.cesoft.organizate2;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.support.multidex.MultiDexApplication;
 
 import com.cesoft.organizate2.di.DaggerTodoComponent;
 import com.cesoft.organizate2.di.TodoComponent;
 import com.cesoft.organizate2.di.TodoModule;
 import com.cesoft.organizate2.models.Objeto;
-import com.cesoft.organizate2.svc.CesServiceUpdateWidget;
-import com.cesoft.organizate2.svc.CesWidgetProvider;
 
 import java.util.List;
-
 import timber.log.Timber;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
